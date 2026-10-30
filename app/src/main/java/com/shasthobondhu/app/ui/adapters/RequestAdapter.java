@@ -1,0 +1,48 @@
+package com.shasthobondhu.app.ui.adapters;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.shasthobondhu.app.data.local.entities.RequestEntity;
+import com.shasthobondhu.app.databinding.ItemRequestBinding;
+import java.util.List;
+
+public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
+    private List<RequestEntity> requests;
+
+    public RequestAdapter(List<RequestEntity> requests) {
+        this.requests = requests;
+    }
+
+    @NonNull
+    @Override
+    public RequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ItemRequestBinding binding = ItemRequestBinding.inflate(inflater, parent, false);
+        return new RequestViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RequestViewHolder holder, int position) {
+        RequestEntity request = requests.get(position);
+        holder.binding.tvPatientName.setText(request.patientName);
+        holder.binding.tvBloodGroup.setText(request.bloodGroup);
+        holder.binding.tvHospital.setText(request.hospitalName);
+        holder.binding.tvUrgency.setText(request.urgency);
+        holder.binding.tvStatus.setText(request.status);
+    }
+
+    @Override
+    public int getItemCount() {
+        return requests == null ? 0 : requests.size();
+    }
+
+    public static class RequestViewHolder extends RecyclerView.ViewHolder {
+        public final ItemRequestBinding binding;
+        public RequestViewHolder(ItemRequestBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+}

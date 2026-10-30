@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ShasthoBondhu</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_donors">Donors</string>
+    <string name="nav_requests">Requests</string>
+    <string name="nav_hospitals">Hospitals</string>
+    <string name="nav_medicines">Medicines</string>
+    
+    <!-- General -->
+    <string name="search_hint">Search...</string>
+    <string name="call_now">Call Now</string>
+    <string name="sms_now">SMS Now</string>
+    <string name="request_blood">Request Blood</string>
+    <string name="register_donor">Register as Donor</string>
+    <string name="no_data">No results found</string>
+    <string name="loading">Loading...</string>
+</resources>

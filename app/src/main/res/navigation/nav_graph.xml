@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.shasthobondhu.app.ui.fragments.home.HomeFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_home" />
+    
+    <fragment
+        android:id="@+id/nav_donors"
+        android:name="com.shasthobondhu.app.ui.fragments.donors.DonorFragment"
+        android:label="@string/nav_donors"
+        tools:layout="@layout/fragment_donors" />
+    
+    <fragment
+        android:id="@+id/nav_requests"
+        android:name="com.shasthobondhu.app.ui.fragments.requests.RequestFragment"
+        android:label="@string/nav_requests"
+        tools:layout="@layout/fragment_requests" />
+    
+    <fragment
+        android:id="@+id/nav_hospitals"
+        android:name="com.shasthobondhu.app.ui.fragments.hospitals.HospitalFragment"
+        android:label="@string/nav_hospitals"
+        tools:layout="@layout/fragment_hospitals" />
+    
+    <fragment
+        android:id="@+id/nav_medicines"
+        android:name="com.shasthobondhu.app.ui.fragments.medicines.MedicineFragment"
+        android:label="@string/nav_medicines"
+        tools:layout="@layout/fragment_medicines" />
+
+</navigation>
