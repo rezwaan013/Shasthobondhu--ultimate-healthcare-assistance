@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "2419062710",
+    "project_id": "shasthobondhu-d5bdf",
+    "storage_bucket": "shasthobondhu-d5bdf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2419062710:android:e5aefd645be69b19b23317",
+        "android_client_info": {
+          "package_name": "com.shasthobondhu.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz9k8T1YTY_oNJ8G1GDseaet5WwN_PPag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
