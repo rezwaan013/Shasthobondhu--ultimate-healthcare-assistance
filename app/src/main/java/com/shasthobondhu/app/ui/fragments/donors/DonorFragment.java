@@ -27,16 +27,16 @@ public class DonorFragment extends Fragment {
         binding.rvDonors.setAdapter(adapter);
 
         binding.btnSearchDonor.setOnClickListener(v -> {
-            String bloodGroup = binding.etBloodGroup.getText().toString();
-            // In a real implementation, we would call viewModel.setFilters() 
-            // and observe the LiveData. For this step, we demonstrate the flow.
-            viewModel.setFilters(bloodGroup, "Dhaka", "Dhaka");
+            String area = binding.etArea.getText().toString().trim();
+            String bloodGroup = binding.etBloodGroup.getText().toString().trim();
+            
+            viewModel.setAreaFilter(area);
+            viewModel.setBloodGroupFilter(bloodGroup);
         });
 
-        viewModel.getDonors().observe(getViewLifecycleOwner(), donors -> {
+        viewModel.getDonorsByBloodAndArea().observe(getViewLifecycleOwner(), donors -> {
             if (donors != null) {
-                adapter = new DonorAdapter(donors);
-                binding.rvDonors.setAdapter(adapter);
+                binding.rvDonors.setAdapter(new DonorAdapter(donors));
             }
         });
 

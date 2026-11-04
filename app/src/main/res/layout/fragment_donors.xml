@@ -9,16 +9,23 @@
         android:orientation="vertical"
         android:padding="16dp">
         <EditText
+            android:id="@+id/etArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Area (e.g. Mirpur, Dhaka)" />
+        <EditText
             android:id="@+id/etBloodGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Blood Group (e.g. A+)" />
+            android:hint="Enter Blood Group (e.g. A+)"
+            android:layout_marginTop="8dp" />
         <Button
             android:id="@+id/btnSearchDonor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Search Donors"
-            android:backgroundTint="@color/primary" />
+            android:backgroundTint="@color/primary"
+            android:layout_marginTop="8dp" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvDonors"
             android:layout_width="match_parent"

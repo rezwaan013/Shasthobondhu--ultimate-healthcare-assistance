@@ -14,8 +14,12 @@ public class DonorRepository {
         this.donorDao = donorDao;
     }
 
-    public LiveData<List<DonorEntity>> getDonors(String bloodGroup, String division, String district) {
-        return donorDao.searchDonors(bloodGroup, division, district);
+    public LiveData<List<DonorEntity>> getDonors(String bloodGroup, String division, String area) {
+        return donorDao.searchDonors(bloodGroup, division, area);
+    }
+
+    public LiveData<List<DonorEntity>> getDonorsByArea(String area) {
+        return donorDao.searchDonorsByArea(area);
     }
 
     public void addDonor(DonorEntity donor) {

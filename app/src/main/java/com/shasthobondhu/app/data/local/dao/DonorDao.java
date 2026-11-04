@@ -12,8 +12,11 @@ public interface DonorDao {
     @Insert
     void insert(DonorEntity donor);
 
-    @Query("SELECT * FROM donors WHERE bloodGroup = :bloodGroup AND (division = :division OR district = :district)")
-    LiveData<List<DonorEntity>> searchDonors(String bloodGroup, String division, String district);
+    @Query("SELECT * FROM donors WHERE bloodGroup = :bloodGroup AND (division = :division OR district = :district OR upazila = :area)")
+    LiveData<List<DonorEntity>> searchDonors(String bloodGroup, String division, String area);
+
+    @Query("SELECT * FROM donors WHERE (division = :area OR district = :area OR upazila = :area)")
+    LiveData<List<DonorEntity>> searchDonorsByArea(String area);
 
     @Query("SELECT * FROM donors")
     LiveData<List<DonorEntity>> getAllDonors();
