@@ -168,6 +168,8 @@ Nothing secret is stored in the app: Gmail credentials live only in the Cloud Fu
 * **Auth** — phone OTP plus email/password, roles **User/Donor** and **Pharmacy**.
 * **Offline first** — Room caches everything; screens expose loading / empty / error states.
 * **Localisation** — complete English (`values/`) and Bangla (`values-bn/`) string sets.
+* **Accessible visual modes** — a persistent forest-green light/dark theme, boxed service
+  selections and large touch targets tuned on a Samsung Android 14 device.
 
 ---
 

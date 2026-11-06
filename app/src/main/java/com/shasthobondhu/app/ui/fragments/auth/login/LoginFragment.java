@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment {
                     }
 
                     @Override
-                    public void onVerificationFailed(@NonNull com.google.firebase.auth.FirebaseException e) {
+                    public void onVerificationFailed(@NonNull com.google.firebase.FirebaseException e) {
                         showError(e.getMessage() != null ? e.getMessage() : getString(R.string.error_generic));
                     }
 

@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:icon="@android:drawable/ic_menu_home"
+        android:icon="@drawable/ic_nav_home"
         android:title="@string/nav_home" />
     <item
         android:id="@+id/nav_donors"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_nav_donors"
         android:title="@string/nav_donors" />
     <item
         android:id="@+id/nav_requests"
-        android:icon="@android:drawable/ic_menu_agenda"
+        android:icon="@drawable/ic_nav_requests"
         android:title="@string/nav_requests" />
     <item
         android:id="@+id/nav_hospitals"
-        android:icon="@android:drawable/ic_menu_directions"
+        android:icon="@drawable/ic_nav_hospitals"
         android:title="@string/nav_hospitals" />
     <item
         android:id="@+id/nav_medicines"
-        android:icon="@android:drawable/ic_menu_manage"
+        android:icon="@drawable/ic_nav_medicines"
         android:title="@string/nav_medicines" />
 </menu>

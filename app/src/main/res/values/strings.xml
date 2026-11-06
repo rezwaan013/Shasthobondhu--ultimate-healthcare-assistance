@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ShasthoBondhu</string>
+    <string name="brand_tagline">YOUR ULTIMATE HEALTH ASSISTANT</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="light_mode">Light mode</string>
 
     <!-- Navigation -->
     <string name="nav_home">Home</string>
@@ -82,6 +85,31 @@
     <!-- Home -->
     <string name="home_greeting">Your health, one tap away</string>
     <string name="home_subtitle">Find blood donors, emergency requests, hospitals and medicines across Bangladesh.</string>
+    <string name="home_choose_service">Choose a service</string>
+    <string name="home_donors_note">Find nearby blood donors</string>
+    <string name="home_requests_note">See urgent blood needs</string>
+    <string name="home_hospitals_note">Find care by area</string>
+    <string name="home_medicines_note">Check pharmacy stock</string>
+    <string name="home_account_title">Your ShasthoBondhu account</string>
+    <string name="home_account_note">Sign in to register as a donor, request blood or manage pharmacy stock.</string>
+
+    <!-- Feature screens -->
+    <string name="donors_title">Blood donors</string>
+    <string name="donors_subtitle">Filter by area and blood group. Leave a field empty to see everyone.</string>
+    <string name="hint_area">Area, district or upazila</string>
+    <string name="hint_blood_group">Blood group, for example A+</string>
+    <string name="search_donors">Search donors</string>
+    <string name="requests_title">Emergency requests</string>
+    <string name="requests_subtitle">Open requests near you appear first.</string>
+    <string name="create_request">Create emergency request</string>
+    <string name="hospitals_title">Hospitals and clinics</string>
+    <string name="hospitals_subtitle">Search by facility, area or service.</string>
+    <string name="hint_hospital_search">Hospital, area or service</string>
+    <string name="medicines_title">Medicine availability</string>
+    <string name="medicines_subtitle">Check participating pharmacies before you travel.</string>
+    <string name="hint_medicine_search">Medicine name</string>
+    <string name="call">Call</string>
+    <string name="contact">Contact</string>
 
     <!-- Notifications -->
     <string name="default_notification_channel_id">shastho_default</string>

@@ -3,7 +3,9 @@ package com.shasthobondhu.app.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.data.local.entities.MedicineEntity;
 import com.shasthobondhu.app.databinding.ItemMedicineBinding;
 import java.util.List;
@@ -30,8 +32,10 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
         holder.binding.tvPharmacyName.setText(medicine.pharmacyName);
         holder.binding.tvStockStatus.setText(medicine.stockStatus);
         
-        int color = medicine.stockStatus.equals("In Stock") ? 0xFF4CAF50 : 
-                   (medicine.stockStatus.equals("Low") ? 0xFFFFC107 : 0xFFF44336);
+        int color = ContextCompat.getColor(holder.itemView.getContext(),
+                medicine.stockStatus.equals("In Stock") ? R.color.success
+                        : (medicine.stockStatus.equals("Low")
+                        ? R.color.warning : R.color.emergency));
         holder.binding.tvStockStatus.setTextColor(color);
     }
 

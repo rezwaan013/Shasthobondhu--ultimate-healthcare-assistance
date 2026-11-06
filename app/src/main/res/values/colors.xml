@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#D32F2F</color>
-    <color name="primary_variant">#B71C1C</color>
-    <color name="secondary">#FFFFFF</color>
-    <color name="background">#F5F5F5</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="accent">#FF5252</color>
+    <!-- ShasthoBondhu: Bangladesh field green + one emergency red accent. -->
+    <color name="primary">#0B6B43</color>
+    <color name="primary_variant">#075235</color>
+    <color name="primary_container">#C9EAD5</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_primary_container">#073C27</color>
+
+    <color name="background">#E6F4EA</color>
+    <color name="surface">#F9FCFA</color>
+    <color name="surface_variant">#D5E9DC</color>
+    <color name="outline">#7AA58D</color>
+
+    <color name="text_primary">#102219</color>
+    <color name="text_secondary">#486557</color>
+    <color name="accent">#15945C</color>
+    <color name="emergency">#C83E45</color>
+    <color name="success">#1B7F4A</color>
+    <color name="warning">#A66F00</color>
+
+    <!-- Legacy alias retained for older layouts while they migrate to surface. -->
+    <color name="secondary">#F9FCFA</color>
 </resources>

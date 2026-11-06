@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace 'com.shasthobondhu.app'
     compileSdk 33
 
     defaultConfig {
@@ -38,6 +39,17 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
+    }
+}
+
+// Some AndroidX/Firebase dependencies pull different Kotlin runtime patch levels even
+// though this app is Java-only. Keeping all transitive Kotlin artifacts on one version
+// prevents duplicate-class failures with AGP 7.3.
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
     }
 }
 

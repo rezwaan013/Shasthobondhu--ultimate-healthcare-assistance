@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">স্বাস্থ্যবন্ধু</string>
+    <string name="brand_tagline">YOUR ULTIMATE HEALTH ASSISTANT</string>
+    <string name="dark_mode">ডার্ক মোড</string>
+    <string name="light_mode">লাইট মোড</string>
 
     <!-- Navigation -->
     <string name="nav_home">হোম</string>
@@ -82,6 +85,31 @@
     <!-- Home -->
     <string name="home_greeting">আপনার স্বাস্থ্য, এক ট্যাপ দূরে</string>
     <string name="home_subtitle">সারা বাংলাদেশে রক্তদাতা, জরুরি আবেদন, হাসপাতাল ও ঔষধ খুঁজুন।</string>
+    <string name="home_choose_service">সেবা বেছে নিন</string>
+    <string name="home_donors_note">কাছের রক্তদাতা খুঁজুন</string>
+    <string name="home_requests_note">জরুরি রক্তের প্রয়োজন দেখুন</string>
+    <string name="home_hospitals_note">এলাকা অনুযায়ী সেবা খুঁজুন</string>
+    <string name="home_medicines_note">ফার্মেসির স্টক দেখুন</string>
+    <string name="home_account_title">আপনার স্বাস্থ্যবন্ধু অ্যাকাউন্ট</string>
+    <string name="home_account_note">রক্তদাতা হতে, রক্ত চাইতে বা ফার্মেসির স্টক পরিচালনা করতে লগইন করুন।</string>
+
+    <!-- Feature screens -->
+    <string name="donors_title">রক্তদাতা</string>
+    <string name="donors_subtitle">এলাকা ও রক্তের গ্রুপ দিয়ে খুঁজুন। সবাইকে দেখতে ঘর খালি রাখুন।</string>
+    <string name="hint_area">এলাকা, জেলা বা উপজেলা</string>
+    <string name="hint_blood_group">রক্তের গ্রুপ, যেমন A+</string>
+    <string name="search_donors">রক্তদাতা খুঁজুন</string>
+    <string name="requests_title">জরুরি আবেদন</string>
+    <string name="requests_subtitle">কাছের খোলা আবেদন আগে দেখানো হয়।</string>
+    <string name="create_request">জরুরি আবেদন তৈরি করুন</string>
+    <string name="hospitals_title">হাসপাতাল ও ক্লিনিক</string>
+    <string name="hospitals_subtitle">প্রতিষ্ঠান, এলাকা বা সেবা দিয়ে খুঁজুন।</string>
+    <string name="hint_hospital_search">হাসপাতাল, এলাকা বা সেবা</string>
+    <string name="medicines_title">ঔষধের প্রাপ্যতা</string>
+    <string name="medicines_subtitle">যাওয়ার আগে ফার্মেসির স্টক দেখুন।</string>
+    <string name="hint_medicine_search">ঔষধের নাম</string>
+    <string name="call">কল</string>
+    <string name="contact">যোগাযোগ</string>
 
     <!-- Notifications -->
     <string name="default_notification_channel_id">shastho_default</string>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Shastho.Card.Box"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp">
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginBottom="5dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,26 +21,28 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:text="Hospital Name" />
+            tools:text="Dhaka Medical College" />
         <TextView
             android:id="@+id/tvHospitalAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
-            android:text="Hospital Address, Dhaka" />
+            tools:text="Bakshibazar, Dhaka" />
         <TextView
             android:id="@+id/tvHospitalServices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/primary"
-            android:text="ICU, Cardiology, Pediatrics" />
+            android:background="@drawable/bg_service_label"
+            android:padding="9dp"
+            android:textColor="@color/on_primary_container"
+            tools:text="General, Emergency, ICU" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCallHospital"
-            style="@style/Widget.Material3.Button.TextButton"
+            style="@style/Widget.Shastho.Button.Box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Call Now" />
+            android:text="@string/call_now" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

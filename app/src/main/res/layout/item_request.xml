@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Shastho.Card.Box"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp">
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginBottom="5dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,22 +23,26 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:text="Patient Name" />
+                android:textColor="@color/text_primary"
+                tools:text="Patient name" />
             <TextView
                 android:id="@+id/tvBloodGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/primary"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_emergency_label"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:textColor="@color/emergency"
                 android:textStyle="bold"
-                android:text="A+" />
+                tools:text="A+" />
         </RelativeLayout>
         <TextView
             android:id="@+id/tvHospital"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
-            android:text="City Hospital, Dhaka" />
+            tools:text="Dhaka Medical College" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,20 +54,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="URGENT"
-                android:textColor="@color/primary"
-                android:textStyle="bold" />
+                android:textColor="@color/emergency"
+                android:textStyle="bold"
+                tools:text="Critical" />
             <View
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:layout_marginHorizontal="8dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@color/outline" />
             <TextView
                 android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="Open" />
+                android:textColor="@color/text_secondary"
+                tools:text="Open" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

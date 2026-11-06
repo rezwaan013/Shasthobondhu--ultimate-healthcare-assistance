@@ -37,6 +37,14 @@ public class HomeFragment extends Fragment {
                 NavHostFragment.findNavController(this).navigate(R.id.nav_register));
         binding.btnForgotPassword.setOnClickListener(v ->
                 NavHostFragment.findNavController(this).navigate(R.id.nav_forgot_password));
+        binding.cardDonors.setOnClickListener(v ->
+                NavHostFragment.findNavController(this).navigate(R.id.nav_donors));
+        binding.cardRequests.setOnClickListener(v ->
+                NavHostFragment.findNavController(this).navigate(R.id.nav_requests));
+        binding.cardHospitals.setOnClickListener(v ->
+                NavHostFragment.findNavController(this).navigate(R.id.nav_hospitals));
+        binding.cardMedicines.setOnClickListener(v ->
+                NavHostFragment.findNavController(this).navigate(R.id.nav_medicines));
     }
 
     @Override

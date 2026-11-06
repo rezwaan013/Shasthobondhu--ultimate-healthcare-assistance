@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.shasthobondhu.app.databinding.ActivityMainBinding;
 import com.shasthobondhu.app.data.local.AppDatabase;
 import com.shasthobondhu.app.util.DataSeeder;
+import com.shasthobondhu.app.util.ThemeManager;
 
 import javax.inject.Inject;
 
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        updateThemeButton();
+        binding.btnThemeMode.setOnClickListener(v -> ThemeManager.toggle(this));
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
         if (navHostFragment == null) {
@@ -51,5 +55,11 @@ public class MainActivity extends AppCompatActivity {
             binding.bottomNavigation.setVisibility(isAuthScreen ? android.view.View.GONE
                     : android.view.View.VISIBLE);
         });
+    }
+
+    private void updateThemeButton() {
+        binding.btnThemeMode.setText(ThemeManager.isDarkMode(this)
+                ? R.string.light_mode
+                : R.string.dark_mode);
     }
 }
