@@ -1,6 +1,7 @@
 package com.shasthobondhu.app.data.local.entities;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "donors")
@@ -15,8 +16,19 @@ public class DonorEntity {
     public String upazila;
     public String lastDonationDate;
     public boolean isAvailable;
+    public String ownerUid;
 
-    public DonorEntity(String name, String phone, String bloodGroup, String division, String district, String upazila, String lastDonationDate, boolean isAvailable) {
+    @Ignore
+    public DonorEntity(String name, String phone, String bloodGroup, String division,
+                       String district, String upazila, String lastDonationDate,
+                       boolean isAvailable) {
+        this(name, phone, bloodGroup, division, district, upazila, lastDonationDate,
+                isAvailable, null);
+    }
+
+    public DonorEntity(String name, String phone, String bloodGroup, String division,
+                       String district, String upazila, String lastDonationDate,
+                       boolean isAvailable, String ownerUid) {
         this.name = name;
         this.phone = phone;
         this.bloodGroup = bloodGroup;
@@ -25,5 +37,6 @@ public class DonorEntity {
         this.upazila = upazila;
         this.lastDonationDate = lastDonationDate;
         this.isAvailable = isAvailable;
+        this.ownerUid = ownerUid;
     }
 }

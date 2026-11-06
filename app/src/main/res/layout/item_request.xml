@@ -70,5 +70,14 @@
                 android:textColor="@color/text_secondary"
                 tools:text="Open" />
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCallRequester"
+            style="@style/Widget.Shastho.Button.Box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="6dp"
+            android:text="@string/call_requester" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

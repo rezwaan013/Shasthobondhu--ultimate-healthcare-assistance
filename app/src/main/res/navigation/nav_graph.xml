@@ -71,4 +71,30 @@
         android:label="@string/nav_medicines"
         tools:layout="@layout/fragment_medicines" />
 
+    <!-- User actions -->
+    <fragment
+        android:id="@+id/nav_donor_register"
+        android:name="com.shasthobondhu.app.ui.fragments.donors.DonorRegisterFragment"
+        android:label="@string/donor_register_title"
+        tools:layout="@layout/fragment_donor_register" />
+
+    <fragment
+        android:id="@+id/nav_create_request"
+        android:name="com.shasthobondhu.app.ui.fragments.requests.CreateRequestFragment"
+        android:label="@string/create_request_title"
+        tools:layout="@layout/fragment_create_request" />
+
+    <!-- Owner dashboards -->
+    <fragment
+        android:id="@+id/nav_pharmacy_dashboard"
+        android:name="com.shasthobondhu.app.ui.fragments.pharmacy.PharmacyDashboardFragment"
+        android:label="@string/pharmacy_dashboard_title"
+        tools:layout="@layout/fragment_pharmacy_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_hospital_dashboard"
+        android:name="com.shasthobondhu.app.ui.fragments.hospital.HospitalDashboardFragment"
+        android:label="@string/hospital_dashboard_title"
+        tools:layout="@layout/fragment_hospital_dashboard" />
+
 </navigation>

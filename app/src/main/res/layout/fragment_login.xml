@@ -51,6 +51,29 @@
             android:textColor="@color/text_secondary"
             android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/tvOwnerNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_service_label"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/on_primary_container"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvDemoAccounts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_emergency_label"
+            android:padding="10dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleGroup"
             android:layout_width="match_parent"

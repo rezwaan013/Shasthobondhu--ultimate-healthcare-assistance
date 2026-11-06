@@ -13,7 +13,7 @@ import java.util.List;
 public interface DonorDao {
 
     @Insert
-    void insert(DonorEntity donor);
+    long insert(DonorEntity donor);
 
     /**
      * Filters by blood group and by any level of the area hierarchy
@@ -28,6 +28,9 @@ public interface DonorDao {
 
     @Query("SELECT * FROM donors ORDER BY name ASC")
     LiveData<List<DonorEntity>> getAllDonors();
+
+    @Query("SELECT * FROM donors WHERE ownerUid = :ownerUid LIMIT 1")
+    DonorEntity getByOwnerUid(String ownerUid);
 
     @Query("SELECT COUNT(*) FROM donors")
     int count();

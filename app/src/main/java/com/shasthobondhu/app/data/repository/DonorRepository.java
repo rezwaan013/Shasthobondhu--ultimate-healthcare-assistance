@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.shasthobondhu.app.data.local.dao.DonorDao;
 import com.shasthobondhu.app.data.local.entities.DonorEntity;
+import com.shasthobondhu.app.util.AppExecutors;
 
 import java.util.List;
 
@@ -27,6 +28,13 @@ public class DonorRepository {
     }
 
     public void addDonor(DonorEntity donor) {
-        donorDao.insert(donor);
+        AppExecutors.io(() -> donorDao.insert(donor));
+    }
+
+    public void addDonorAndNotify(DonorEntity donor, Runnable onSaved) {
+        AppExecutors.io(() -> {
+            donorDao.insert(donor);
+            AppExecutors.main(onSaved);
+        });
     }
 }

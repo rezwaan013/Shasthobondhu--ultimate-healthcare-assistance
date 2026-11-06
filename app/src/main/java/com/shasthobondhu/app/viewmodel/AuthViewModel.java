@@ -1,6 +1,7 @@
 package com.shasthobondhu.app.viewmodel;
 
 import android.app.Activity;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -14,32 +15,47 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.shasthobondhu.app.R;
+import com.shasthobondhu.app.data.local.dao.LocalUserDao;
+import com.shasthobondhu.app.data.local.entities.LocalUserEntity;
 import com.shasthobondhu.app.data.remote.FirebaseService;
+import com.shasthobondhu.app.util.AppExecutors;
+import com.shasthobondhu.app.util.PasswordHasher;
+import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.util.constants.AppConstants;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @HiltViewModel
 public class AuthViewModel extends ViewModel {
 
     private final FirebaseAuth auth;
     private final FirebaseFirestore db;
+    private final LocalUserDao localUserDao;
+    private final Context context;
 
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private final MutableLiveData<String> authError = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoginSuccess = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isRegistered = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> localMode = new MutableLiveData<>(false);
 
     @Inject
-    public AuthViewModel(FirebaseService firebaseService) {
+    public AuthViewModel(FirebaseService firebaseService, LocalUserDao localUserDao,
+                         @ApplicationContext Context context) {
         this.auth = firebaseService.getAuth();
         this.db = firebaseService.getDb();
+        this.localUserDao = localUserDao;
+        this.context = context.getApplicationContext();
+        this.localMode.setValue(SessionManager.isLocalMode(this.context));
     }
 
     public LiveData<Boolean> getLoading() {
@@ -58,10 +74,15 @@ public class AuthViewModel extends ViewModel {
         return isRegistered;
     }
 
+    public LiveData<Boolean> isLocalMode() {
+        return localMode;
+    }
+
     /** Sends a phone OTP. An Activity is required by Firebase for reCAPTCHA fallback. */
     public void sendOtp(@NonNull Activity activity, String phone,
                         PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks) {
         loading.setValue(true);
+        authError.setValue(null);
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(phone)
                 .setTimeout(60L, TimeUnit.SECONDS)
@@ -74,35 +95,33 @@ public class AuthViewModel extends ViewModel {
     /** Used when Firebase verifies the number instantly (no code entry required). */
     public void signInWithCredential(PhoneAuthCredential credential) {
         loading.setValue(true);
+        authError.setValue(null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
-                    loading.setValue(false);
-                    if (task.isSuccessful()) {
-                        isLoginSuccess.setValue(true);
+                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
+                        completePhoneLogin(auth.getCurrentUser());
                     } else {
-                        authError.setValue(task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Sign in failed");
+                        loading.setValue(false);
+                        authError.setValue(message(task.getException(), R.string.error_generic));
                     }
                 });
     }
 
     public void verifyOtp(String otp, String verificationId) {
         if (verificationId == null || verificationId.isEmpty()) {
-            authError.setValue("Verification session expired. Please request a new code.");
+            authError.setValue(context.getString(R.string.error_otp_expired));
             return;
         }
         loading.setValue(true);
+        authError.setValue(null);
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, otp);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
-                    loading.setValue(false);
-                    if (task.isSuccessful()) {
-                        isLoginSuccess.setValue(true);
+                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
+                        completePhoneLogin(auth.getCurrentUser());
                     } else {
-                        authError.setValue(task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Invalid OTP");
+                        loading.setValue(false);
+                        authError.setValue(message(task.getException(), R.string.error_invalid_otp));
                     }
                 });
     }
@@ -112,13 +131,16 @@ public class AuthViewModel extends ViewModel {
         authError.setValue(null);
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    loading.setValue(false);
-                    if (task.isSuccessful()) {
-                        isLoginSuccess.setValue(true);
+                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
+                        completeFirebaseLogin(auth.getCurrentUser());
                     } else {
-                        authError.setValue(task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Sign in failed");
+                        Exception error = task.getException();
+                        if (isBackendUnavailable(error)) {
+                            loginLocally(email, password);
+                        } else {
+                            loading.setValue(false);
+                            authError.setValue(message(error, R.string.error_sign_in));
+                        }
                     }
                 });
     }
@@ -126,53 +148,195 @@ public class AuthViewModel extends ViewModel {
     public void register(String name, String email, String password, String phone, String role) {
         loading.setValue(true);
         authError.setValue(null);
+        String safeRole = SessionManager.normalizeRole(role);
+
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        loading.setValue(false);
-                        authError.setValue(task.getException() != null
-                                ? task.getException().getMessage()
-                                : "Registration failed");
+                        Exception error = task.getException();
+                        if (isBackendUnavailable(error)) {
+                            registerLocally(name, email, password, phone, safeRole);
+                        } else {
+                            loading.setValue(false);
+                            authError.setValue(message(error, R.string.error_registration));
+                        }
                         return;
                     }
+
                     FirebaseUser user = auth.getCurrentUser();
                     if (user == null) {
                         loading.setValue(false);
-                        authError.setValue("Registration failed");
+                        authError.setValue(context.getString(R.string.error_registration));
                         return;
                     }
 
                     UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
                             .setDisplayName(name)
                             .build();
+                    user.updateProfile(profile);
 
                     Map<String, Object> document = new HashMap<>();
                     document.put("uid", user.getUid());
                     document.put("name", name);
                     document.put("email", email);
                     document.put("phone", phone);
-                    document.put("role", role);
+                    document.put("role", safeRole);
                     document.put("createdAt", System.currentTimeMillis());
 
-                    user.updateProfile(profile);
+                    SessionManager.cacheRole(context, email, safeRole);
                     db.collection(AppConstants.COLLECTION_USERS)
                             .document(user.getUid())
                             .set(document)
                             .addOnCompleteListener(saveTask -> {
-                                loading.setValue(false);
-                                if (saveTask.isSuccessful()) {
-                                    isRegistered.setValue(true);
-                                    isLoginSuccess.setValue(true);
-                                } else {
-                                    authError.setValue(saveTask.getException() != null
-                                            ? saveTask.getException().getMessage()
-                                            : "Could not save your profile");
-                                }
+                                // A failed profile save should not block a created account.
+                                finishSignIn(user.getUid(), name, email, phone, safeRole, false);
+                                isRegistered.setValue(true);
                             });
                 });
     }
 
+    public void logout() {
+        auth.signOut();
+        SessionManager.signOut(context);
+        localMode.setValue(false);
+    }
+
     public void clearError() {
         authError.setValue(null);
+    }
+
+    // ---------------------------------------------------------------------
+    // Firebase completion
+    // ---------------------------------------------------------------------
+
+    private void completePhoneLogin(FirebaseUser user) {
+        String phone = user.getPhoneNumber() == null ? "" : user.getPhoneNumber();
+        String name = user.getDisplayName() == null || user.getDisplayName().isEmpty()
+                ? phone : user.getDisplayName();
+        finishSignIn(user.getUid(), name, user.getEmail() == null ? "" : user.getEmail(),
+                phone, AppConstants.ROLE_USER, false);
+    }
+
+    private void completeFirebaseLogin(FirebaseUser user) {
+        String email = user.getEmail() == null ? "" : user.getEmail();
+        String cachedRole = SessionManager.getCachedRole(context, email);
+        String cachedName = user.getDisplayName() == null || user.getDisplayName().isEmpty()
+                ? email : user.getDisplayName();
+        String cachedPhone = user.getPhoneNumber() == null ? "" : user.getPhoneNumber();
+
+        db.collection(AppConstants.COLLECTION_USERS)
+                .document(user.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    String role = cachedRole;
+                    String name = cachedName;
+                    String phone = cachedPhone;
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String remoteRole = task.getResult().getString("role");
+                        if (remoteRole != null && !remoteRole.isEmpty()) {
+                            role = remoteRole;
+                        }
+                        String remoteName = task.getResult().getString("name");
+                        if (remoteName != null && !remoteName.isEmpty()) {
+                            name = remoteName;
+                        }
+                        String remotePhone = task.getResult().getString("phone");
+                        if (remotePhone != null && !remotePhone.isEmpty()) {
+                            phone = remotePhone;
+                        }
+                    }
+                    finishSignIn(user.getUid(), name, email, phone, role, false);
+                });
+    }
+
+    private void finishSignIn(String uid, String name, String email, String phone,
+                              String role, boolean isLocal) {
+        SessionManager.signIn(context, uid, name, email, phone, role, isLocal);
+        SessionManager.cacheRole(context, email, role);
+        localMode.setValue(isLocal);
+        loading.setValue(false);
+        isLoginSuccess.setValue(true);
+    }
+
+    // ---------------------------------------------------------------------
+    // Offline fallback (Firebase Email/Password not enabled yet)
+    // ---------------------------------------------------------------------
+
+    private void registerLocally(String name, String email, String password,
+                                 String phone, String role) {
+        AppExecutors.io(() -> {
+            LocalUserEntity existing = localUserDao.findByEmail(email);
+            if (existing != null) {
+                AppExecutors.main(() -> {
+                    loading.setValue(false);
+                    authError.setValue(context.getString(R.string.error_account_exists_local));
+                });
+                return;
+            }
+
+            String salt = PasswordHasher.newSalt();
+            String hash = PasswordHasher.hash(password, salt);
+            String uid = "local_" + UUID.randomUUID();
+            localUserDao.insert(new LocalUserEntity(uid, name, email, phone, role, hash, salt));
+
+            AppExecutors.main(() -> {
+                SessionManager.signIn(context, uid, name, email, phone, role, true);
+                SessionManager.cacheRole(context, email, role);
+                localMode.setValue(true);
+                loading.setValue(false);
+                isRegistered.setValue(true);
+                isLoginSuccess.setValue(true);
+            });
+        });
+    }
+
+    private void loginLocally(String email, String password) {
+        AppExecutors.io(() -> {
+            LocalUserEntity user = localUserDao.findByEmail(email);
+            if (user == null) {
+                AppExecutors.main(() -> {
+                    loading.setValue(false);
+                    authError.setValue(context.getString(R.string.error_no_local_account));
+                });
+                return;
+            }
+            if (!PasswordHasher.matches(password, user.passwordSalt, user.passwordHash)) {
+                AppExecutors.main(() -> {
+                    loading.setValue(false);
+                    authError.setValue(context.getString(R.string.error_wrong_password));
+                });
+                return;
+            }
+
+            AppExecutors.main(() -> {
+                SessionManager.signIn(context, user.uid, user.name, user.email, user.phone,
+                        user.role, true);
+                localMode.setValue(true);
+                loading.setValue(false);
+                isLoginSuccess.setValue(true);
+            });
+        });
+    }
+
+    private boolean isBackendUnavailable(Exception error) {
+        if (error == null || error.getMessage() == null) {
+            return false;
+        }
+        String message = error.getMessage();
+        return message.contains("CONFIGURATION_NOT_FOUND")
+                || message.contains("configuration not found")
+                || message.contains("OPERATION_NOT_ALLOWED")
+                || message.contains("API key not valid");
+    }
+
+    private String message(Exception error, int fallbackRes) {
+        String text = error == null ? null : error.getMessage();
+        if (text == null || text.trim().isEmpty()) {
+            return context.getString(fallbackRes);
+        }
+        if (text.contains("CONFIGURATION_NOT_FOUND")) {
+            return context.getString(R.string.error_firebase_not_configured);
+        }
+        return text;
     }
 }

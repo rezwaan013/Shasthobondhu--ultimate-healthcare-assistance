@@ -1,13 +1,20 @@
 package com.shasthobondhu.app.ui.adapters;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.data.local.entities.MedicineEntity;
 import com.shasthobondhu.app.databinding.ItemMedicineBinding;
+import com.shasthobondhu.app.util.DisplayUtils;
+import com.shasthobondhu.app.util.constants.AppConstants;
+
 import java.util.List;
 
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MedicineViewHolder> {
@@ -29,14 +36,31 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, int position) {
         MedicineEntity medicine = medicines.get(position);
         holder.binding.tvMedicineName.setText(medicine.name);
-        holder.binding.tvPharmacyName.setText(medicine.pharmacyName);
-        holder.binding.tvStockStatus.setText(medicine.stockStatus);
-        
+
+        String pharmacyLine = medicine.pharmacyName;
+        if (medicine.pharmacyArea != null && !medicine.pharmacyArea.trim().isEmpty()) {
+            pharmacyLine = pharmacyLine + " · " + medicine.pharmacyArea;
+        }
+        holder.binding.tvPharmacyName.setText(pharmacyLine);
+
+        holder.binding.tvStockStatus.setText(DisplayUtils.stockLabel(
+                holder.itemView.getContext(), medicine.stockStatus));
+
         int color = ContextCompat.getColor(holder.itemView.getContext(),
-                medicine.stockStatus.equals("In Stock") ? R.color.success
-                        : (medicine.stockStatus.equals("Low")
+                AppConstants.STOCK_IN.equals(medicine.stockStatus) ? R.color.success
+                        : (AppConstants.STOCK_LOW.equals(medicine.stockStatus)
                         ? R.color.warning : R.color.emergency));
         holder.binding.tvStockStatus.setTextColor(color);
+
+        holder.binding.btnContactPharmacy.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_DIAL,
+                    Uri.parse("tel:" + medicine.pharmacyPhone));
+            try {
+                v.getContext().startActivity(intent);
+            } catch (Exception ignored) {
+                // No dialer available.
+            }
+        });
     }
 
     @Override
@@ -46,6 +70,7 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
 
     public static class MedicineViewHolder extends RecyclerView.ViewHolder {
         public final ItemMedicineBinding binding;
+
         public MedicineViewHolder(ItemMedicineBinding binding) {
             super(binding.getRoot());
             this.binding = binding;

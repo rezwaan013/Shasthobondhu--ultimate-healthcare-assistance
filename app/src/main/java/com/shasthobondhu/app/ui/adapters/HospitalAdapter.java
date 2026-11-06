@@ -1,11 +1,16 @@
 package com.shasthobondhu.app.ui.adapters;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.shasthobondhu.app.data.local.entities.HospitalEntity;
 import com.shasthobondhu.app.databinding.ItemHospitalBinding;
+
 import java.util.List;
 
 public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.HospitalViewHolder> {
@@ -29,6 +34,15 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
         holder.binding.tvHospitalName.setText(hospital.name);
         holder.binding.tvHospitalAddress.setText(hospital.address);
         holder.binding.tvHospitalServices.setText(hospital.services);
+        holder.binding.tvHospitalPhone.setText(hospital.phone);
+        holder.binding.btnCallHospital.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + hospital.phone));
+            try {
+                v.getContext().startActivity(intent);
+            } catch (Exception ignored) {
+                // No dialer available.
+            }
+        });
     }
 
     @Override
@@ -38,6 +52,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
 
     public static class HospitalViewHolder extends RecyclerView.ViewHolder {
         public final ItemHospitalBinding binding;
+
         public HospitalViewHolder(ItemHospitalBinding binding) {
             super(binding.getRoot());
             this.binding = binding;

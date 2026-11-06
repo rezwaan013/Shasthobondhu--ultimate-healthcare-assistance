@@ -1,10 +1,14 @@
 package com.shasthobondhu.app.data.repository;
 
 import androidx.lifecycle.LiveData;
+
 import com.shasthobondhu.app.data.local.dao.RequestDao;
 import com.shasthobondhu.app.data.local.entities.RequestEntity;
-import javax.inject.Inject;
+import com.shasthobondhu.app.util.AppExecutors;
+
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class RequestRepository {
     private final RequestDao requestDao;
@@ -15,10 +19,21 @@ public class RequestRepository {
     }
 
     public LiveData<List<RequestEntity>> getRequests(String area) {
-        return requestDao.getOpenRequestsByArea(area);
+        return requestDao.getOpenRequestsByArea(area == null ? "" : area);
+    }
+
+    public LiveData<List<RequestEntity>> getAllOpenRequests() {
+        return requestDao.getOpenRequests();
     }
 
     public void createRequest(RequestEntity request) {
-        requestDao.insert(request);
+        AppExecutors.io(() -> requestDao.insert(request));
+    }
+
+    public void createRequestAndNotify(RequestEntity request, Runnable onSaved) {
+        AppExecutors.io(() -> {
+            requestDao.insert(request);
+            AppExecutors.main(onSaved);
+        });
     }
 }

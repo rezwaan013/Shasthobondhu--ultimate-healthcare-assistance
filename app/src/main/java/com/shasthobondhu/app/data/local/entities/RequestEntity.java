@@ -1,6 +1,7 @@
 package com.shasthobondhu.app.data.local.entities;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "blood_requests")
@@ -15,8 +16,19 @@ public class RequestEntity {
     public String urgency;
     public String contactPhone;
     public String status; // Open, Accepted, Fulfilled
+    public String requesterUid;
 
-    public RequestEntity(String patientName, String bloodGroup, int units, String hospitalName, String location, String urgency, String contactPhone, String status) {
+    @Ignore
+    public RequestEntity(String patientName, String bloodGroup, int units,
+                         String hospitalName, String location, String urgency,
+                         String contactPhone, String status) {
+        this(patientName, bloodGroup, units, hospitalName, location, urgency,
+                contactPhone, status, null);
+    }
+
+    public RequestEntity(String patientName, String bloodGroup, int units,
+                         String hospitalName, String location, String urgency,
+                         String contactPhone, String status, String requesterUid) {
         this.patientName = patientName;
         this.bloodGroup = bloodGroup;
         this.units = units;
@@ -25,5 +37,6 @@ public class RequestEntity {
         this.urgency = urgency;
         this.contactPhone = contactPhone;
         this.status = status;
+        this.requesterUid = requesterUid;
     }
 }

@@ -26,6 +26,7 @@ public class DonorViewModel extends ViewModel {
     private final MutableLiveData<String> areaFilter = new MutableLiveData<>("");
     private final MutableLiveData<String> bloodGroupFilter = new MutableLiveData<>("");
     private final MediatorLiveData<List<DonorEntity>> donors = new MediatorLiveData<>();
+    private final MutableLiveData<Boolean> saved = new MutableLiveData<>(false);
 
     private LiveData<List<DonorEntity>> currentSource;
 
@@ -61,5 +62,13 @@ public class DonorViewModel extends ViewModel {
 
     public LiveData<List<DonorEntity>> getDonors() {
         return donors;
+    }
+
+    public LiveData<Boolean> getSaved() {
+        return saved;
+    }
+
+    public void registerDonor(DonorEntity donor) {
+        repository.addDonorAndNotify(donor, () -> saved.setValue(true));
     }
 }
