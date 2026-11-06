@@ -14,4 +14,7 @@ public interface HospitalDao {
 
     @Query("SELECT * FROM hospitals WHERE name LIKE '%' || :query || '%' OR area LIKE '%' || :query || '%'")
     LiveData<List<HospitalEntity>> searchHospitals(String query);
+
+    @Query("SELECT COUNT(*) FROM hospitals")
+    int count();
 }

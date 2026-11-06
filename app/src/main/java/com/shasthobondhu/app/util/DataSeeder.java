@@ -1,54 +1,64 @@
 package com.shasthobondhu.app.util;
 
-import android.content.Context;
-import androidx.room.Room;
 import com.shasthobondhu.app.data.local.AppDatabase;
-import com.shasthobondhu.app.data.local.entities.*;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Inserts demo data the first time the app runs so every screen has
+ * something to show. Runs off the main thread and is idempotent.
+ */
 public class DataSeeder {
-    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public static void seedDatabase(Context context) {
-        executor.execute(() -> {
+    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+
+    private DataSeeder() {
+    }
+
+    public static void seedDatabase(AppDatabase db) {
+        if (db == null) {
+            return;
+        }
+        EXECUTOR.execute(() -> {
             try {
-                AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "shastho_bondhu_db")
-                        .fallbackToDestructiveMigration()
-                        .build();
-                
-                // Seed Donors
-                List<DonorEntity> donors = new ArrayList<>();
-                donors.add(new DonorEntity("Rahim Ahmed", "01711000000", "A+", "Dhaka", "Dhaka", "Mirpur", "2026-01-10", true));
-                donors.add(new DonorEntity("Karim Uddin", "01811000000", "O+", "Dhaka", "Dhaka", "Uttara", "2026-03-15", true));
-                donors.add(new DonorEntity("Sumi Akter", "01911000000", "B-", "Chattogram", "Chattogram", "Pahartali", "2026-05-20", true));
-                
-                for (DonorEntity d : donors) db.donorDao().insert(d);
+                if (db.donorDao().count() > 0) {
+                    return;
+                }
 
-                // Seed Requests
-                List<RequestEntity> requests = new ArrayList<>();
-                requests.add(new RequestEntity("Patient X", "A+", 2, "Dhaka Medical College", "Dhaka", "Critical", "01511000000", "Open"));
-                requests.add(new RequestEntity("Patient Y", "O-", 1, "Evercare Hospital", "Dhaka", "Urgent", "01611000000", "Open"));
-                
-                for (RequestEntity r : requests) db.requestDao().insert(r);
+                db.donorDao().insert(new com.shasthobondhu.app.data.local.entities.DonorEntity(
+                        "Rahim Ahmed", "+8801711000000", "A+", "Dhaka", "Dhaka", "Mirpur",
+                        "2026-01-10", true));
+                db.donorDao().insert(new com.shasthobondhu.app.data.local.entities.DonorEntity(
+                        "Karim Uddin", "+8801811000000", "O+", "Dhaka", "Dhaka", "Uttara",
+                        "2026-03-15", true));
+                db.donorDao().insert(new com.shasthobondhu.app.data.local.entities.DonorEntity(
+                        "Sumi Akter", "+8801911000000", "B-", "Chattogram", "Chattogram",
+                        "Pahartali", "2026-05-20", true));
 
-                // Seed Hospitals
-                List<HospitalEntity> hospitals = new ArrayList<>();
-                hospitals.add(new HospitalEntity("Dhaka Medical College", "Bakshibazar, Dhaka", "02-11111", "Dhaka", "General, Emergency, ICU"));
-                hospitals.add(new HospitalEntity("Evercare Hospital", "Bashundhara, Dhaka", "02-22222", "Dhaka", "Cardiology, Pediatrics, MRI"));
-                
-                for (HospitalEntity h : hospitals) db.hospitalDao().insert(h);
+                db.requestDao().insert(new com.shasthobondhu.app.data.local.entities.RequestEntity(
+                        "Patient X", "A+", 2, "Dhaka Medical College", "Dhaka", "Critical",
+                        "+8801511000000", "Open"));
+                db.requestDao().insert(new com.shasthobondhu.app.data.local.entities.RequestEntity(
+                        "Patient Y", "O-", 1, "Evercare Hospital", "Dhaka", "Urgent",
+                        "+8801611000000", "Open"));
 
-                // Seed Medicines
-                List<MedicineEntity> medicines = new ArrayList<>();
-                medicines.add(new MedicineEntity("Napa Extra", "Lazzah Pharmacy", "In Stock", "2026-10-29", "01700000000"));
-                medicines.add(new MedicineEntity("Omeprazole", "Pharmacy Care", "Low", "2026-10-28", "01800000000"));
-                medicines.add(new MedicineEntity("Insulin", "Health Plus", "Out of Stock", "2026-10-25", "01900000000"));
+                db.hospitalDao().insert(new com.shasthobondhu.app.data.local.entities.HospitalEntity(
+                        "Dhaka Medical College", "Bakshibazar, Dhaka", "+880211111",
+                        "Dhaka", "General, Emergency, ICU"));
+                db.hospitalDao().insert(new com.shasthobondhu.app.data.local.entities.HospitalEntity(
+                        "Evercare Hospital", "Bashundhara, Dhaka", "+880222222",
+                        "Dhaka", "Cardiology, Pediatrics, MRI"));
 
-                for (MedicineEntity m : medicines) db.medicineDao().insert(m);
-
+                db.medicineDao().insert(new com.shasthobondhu.app.data.local.entities.MedicineEntity(
+                        "Napa Extra", "Lazzah Pharmacy", "In Stock", "2026-10-29",
+                        "+8801700000000"));
+                db.medicineDao().insert(new com.shasthobondhu.app.data.local.entities.MedicineEntity(
+                        "Omeprazole", "Pharmacy Care", "Low", "2026-10-28",
+                        "+8801800000000"));
+                db.medicineDao().insert(new com.shasthobondhu.app.data.local.entities.MedicineEntity(
+                        "Insulin", "Health Plus", "Out of Stock", "2026-10-25",
+                        "+8801900000000"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

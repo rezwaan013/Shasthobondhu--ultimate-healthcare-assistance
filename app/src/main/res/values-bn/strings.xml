@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">স্বাস্থ্যবন্ধু</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">হোম</string>
+    <string name="nav_donors">রক্তদাতা</string>
+    <string name="nav_requests">আবেদন</string>
+    <string name="nav_hospitals">হাসপাতাল</string>
+    <string name="nav_medicines">ঔষধ</string>
+
+    <!-- General -->
+    <string name="search_hint">খুঁজুন…</string>
+    <string name="call_now">কল করুন</string>
+    <string name="sms_now">এসএমএস করুন</string>
+    <string name="request_blood">রক্তের আবেদন</string>
+    <string name="register_donor">রক্তদাতা হিসেবে নিবন্ধন</string>
+    <string name="no_data">কোনো ফলাফল পাওয়া যায়নি</string>
+    <string name="loading">লোড হচ্ছে…</string>
+    <string name="action_login">লগইন</string>
+    <string name="action_register">নিবন্ধন</string>
+    <string name="action_continue">চালিয়ে যান</string>
+    <string name="action_back">ফিরে যান</string>
+    <string name="error_generic">কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।</string>
+
+    <!-- Login -->
+    <string name="login_title">স্বাগতম</string>
+    <string name="login_subtitle">চালিয়ে যেতে লগইন করুন</string>
+    <string name="login_with_phone">ফোন</string>
+    <string name="login_with_email">ইমেইল</string>
+    <string name="hint_phone">ফোন নম্বর (যেমন +৮৮০১XXXXXXXXX)</string>
+    <string name="hint_email">ইমেইল ঠিকানা</string>
+    <string name="hint_password">পাসওয়ার্ড</string>
+    <string name="send_otp">OTP পাঠান</string>
+    <string name="email_login">লগইন</string>
+    <string name="forgot_password">পাসওয়ার্ড ভুলে গেছেন?</string>
+    <string name="no_account">অ্যাকাউন্ট নেই? </string>
+    <string name="otp_sent">আপনার ফোনে ৬ ডিজিটের OTP পাঠানো হয়েছে।</string>
+
+    <!-- OTP -->
+    <string name="otp_title">OTP যাচাই</string>
+    <string name="otp_subtitle">ফোনে পাঠানো ৬ ডিজিটের কোড দিন</string>
+    <string name="hint_otp">৬ ডিজিটের কোড</string>
+    <string name="verify_and_login">যাচাই করে লগইন</string>
+
+    <!-- Registration -->
+    <string name="register_title">অ্যাকাউন্ট তৈরি করুন</string>
+    <string name="register_subtitle">স্বাস্থ্যসেবা নেটওয়ার্কে যোগ দিন</string>
+    <string name="hint_full_name">পূর্ণ নাম</string>
+    <string name="hint_role">অ্যাকাউন্টের ধরন</string>
+    <string name="role_user">ব্যবহারকারী / রক্তদাতা</string>
+    <string name="role_pharmacy">ফার্মেসি</string>
+    <string name="already_have_account">অ্যাকাউন্ট আছে? </string>
+    <string name="register_success">অ্যাকাউন্ট তৈরি হয়েছে</string>
+
+    <!-- Forgot password -->
+    <string name="forgot_title">পাসওয়ার্ড রিসেট</string>
+    <string name="forgot_subtitle">আপনার জিমেইল ঠিকানায় ৬ ডিজিটের যাচাই কোড পাঠানো হবে।</string>
+    <string name="forgot_email_step">আপনার অ্যাকাউন্টের ইমেইল</string>
+    <string name="send_reset_code">৬ ডিজিটের কোড পাঠান</string>
+    <string name="send_reset_link">পরিবর্তে নিরাপদ রিসেট লিংক পাঠান</string>
+    <string name="reset_code_step">কোড এবং নতুন পাসওয়ার্ড দিন</string>
+    <string name="hint_verification_code">ইমেইলে পাওয়া ৬ ডিজিটের কোড</string>
+    <string name="hint_new_password">নতুন পাসওয়ার্ড</string>
+    <string name="hint_confirm_password">নতুন পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="action_reset_password">পাসওয়ার্ড রিসেট করুন</string>
+    <string name="resend_code">আবার কোড পাঠান</string>
+    <string name="resend_in">%1$d সেকেন্ড পরে আবার পাঠান</string>
+    <string name="reset_success_title">পাসওয়ার্ড পরিবর্তিত হয়েছে</string>
+    <string name="reset_success_message">আপনার পাসওয়ার্ড পরিবর্তন করা হয়েছে। এখন নতুন পাসওয়ার্ড দিয়ে লগইন করুন।</string>
+    <string name="action_back_to_login">লগইনে ফিরে যান</string>
+    <string name="code_sent_message">%1$s ঠিকানায় পাঠানো ৬ ডিজিটের কোড দিন</string>
+    <string name="link_sent_message">অ্যাকাউন্ট থাকলে %1$s ঠিকানায় একটি নিরাপদ লিংক পাঠানো হয়েছে।</string>
+    <string name="demo_code_label">ডেমো মোড — ইমেইল ব্যাকএন্ড কনফিগার করা নেই, তাই কোডটি এখানে দেখানো হচ্ছে:</string>
+    <string name="err_invalid_email">সঠিক ইমেইল ঠিকানা দিন</string>
+    <string name="err_invalid_password">পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে এবং একটি অক্ষর ও একটি সংখ্যা থাকতে হবে</string>
+    <string name="err_password_mismatch">পাসওয়ার্ড মিলছে না</string>
+    <string name="err_invalid_code">৬ ডিজিটের কোড দিন</string>
+    <string name="err_wrong_code">ভুল বা মেয়াদোত্তীর্ণ কোড। আবার চেষ্টা করুন।</string>
+    <string name="err_too_many_attempts">অনেকবার ভুল হয়েছে। নতুন কোড নিন।</string>
+
+    <!-- Home -->
+    <string name="home_greeting">আপনার স্বাস্থ্য, এক ট্যাপ দূরে</string>
+    <string name="home_subtitle">সারা বাংলাদেশে রক্তদাতা, জরুরি আবেদন, হাসপাতাল ও ঔষধ খুঁজুন।</string>
+
+    <!-- Notifications -->
+    <string name="default_notification_channel_id">shastho_default</string>
+    <string name="notification_channel_name">স্বাস্থ্যবন্ধু সতর্কতা</string>
+    <string name="notification_channel_desc">জরুরি রক্তের আবেদন ও আপডেট</string>
+</resources>

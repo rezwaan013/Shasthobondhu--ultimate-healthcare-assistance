@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+app/build/
+captures/
+
+# Android Studio
+.idea/
+*.iml
+local.properties
+.navigation/
+.externalNativeBuild/
+.cxx/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Firebase / secrets
+# NOTE: google-services.json is intentionally committed for this coursework project.
+#       Remove the exception below if the project becomes public with private keys.
+!app/google-services.json
+
+# Node (Cloud Functions)
+functions/node_modules/
+functions/.env

@@ -1,34 +1,55 @@
 package com.shasthobondhu.app;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.navigation.ui.NavigationUI;
+
 import com.shasthobondhu.app.databinding.ActivityMainBinding;
+import com.shasthobondhu.app.data.local.AppDatabase;
 import com.shasthobondhu.app.util.DataSeeder;
+
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
+    @Inject
+    AppDatabase database;
+
     private ActivityMainBinding binding;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // Initialize data seeding in background to prevent Main Thread crashes
-        DataSeeder.seedDatabase(this);
+
+        // Seed in the background so the UI thread is never blocked by Room.
+        DataSeeder.seedDatabase(database);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
+        if (navHostFragment == null) {
+            return;
+        }
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
 
-        BottomNavigationView bottomNav = binding.bottomNavigation;
-        androidx.navigation.ui.NavigationUI.setupWithNavController(bottomNav, navController);
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            int id = destination.getId();
+            boolean isAuthScreen = id == R.id.nav_login
+                    || id == R.id.nav_register
+                    || id == R.id.nav_otp_verify
+                    || id == R.id.nav_forgot_password;
+            binding.bottomNavigation.setVisibility(isAuthScreen ? android.view.View.GONE
+                    : android.view.View.VISIBLE);
+        });
     }
 }

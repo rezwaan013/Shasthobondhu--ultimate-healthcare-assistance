@@ -17,4 +17,7 @@ public interface RequestDao {
 
     @Query("SELECT * FROM blood_requests ORDER BY id DESC")
     LiveData<List<RequestEntity>> getAllRequests();
+
+    @Query("SELECT COUNT(*) FROM blood_requests")
+    int count();
 }

@@ -15,6 +15,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Base URL of the password-reset backend (see functions/index.js).
+        // Leave empty to use demo mode: the 6-digit code is generated locally and shown on screen.
+        // Override per machine with:  -PSHASSTHO_RESET_URL=https://your-host/  (or in gradle.properties)
+        def resetBaseUrl = project.findProperty("SHASSTHO_RESET_URL") ?: ""
+        buildConfigField "String", "PASSWORD_RESET_BASE_URL", "\"${resetBaseUrl}\""
     }
 
     buildTypes {
@@ -31,6 +37,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 
@@ -55,11 +62,11 @@ dependencies {
     // Room
     implementation 'androidx.room:room-runtime:2.5.2'
     annotationProcessor 'androidx.room:room-compiler:2.5.2'
-    implementation 'androidx.room:room-ktx:2.5.2'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.9'
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:32.2.0')

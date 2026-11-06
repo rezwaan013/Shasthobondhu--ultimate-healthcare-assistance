@@ -14,4 +14,7 @@ public interface MedicineDao {
 
     @Query("SELECT * FROM medicines WHERE name LIKE '%' || :query || '%'")
     LiveData<List<MedicineEntity>> searchMedicines(String query);
+
+    @Query("SELECT COUNT(*) FROM medicines")
+    int count();
 }

@@ -4,42 +4,60 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.shasthobondhu.app.databinding.FragmentDonorsBinding;
 import com.shasthobondhu.app.ui.adapters.DonorAdapter;
 import com.shasthobondhu.app.viewmodel.DonorViewModel;
+
+import java.util.ArrayList;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DonorFragment extends Fragment {
+
     private FragmentDonorsBinding binding;
     private DonorViewModel viewModel;
+    private DonorAdapter adapter;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentDonorsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentDonorsBinding.inflate(inflater, container, false);
-        
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         viewModel = new ViewModelProvider(this).get(DonorViewModel.class);
-        
-        DonorAdapter adapter = new DonorAdapter(new java.util.ArrayList<>());
-        binding.rvDonors.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(getContext()));
+
+        adapter = new DonorAdapter(new ArrayList<>());
+        binding.rvDonors.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvDonors.setAdapter(adapter);
 
         binding.btnSearchDonor.setOnClickListener(v -> {
-            String area = binding.etArea.getText().toString().trim();
-            String bloodGroup = binding.etBloodGroup.getText().toString().trim();
-            
-            viewModel.setAreaFilter(area);
-            viewModel.setBloodGroupFilter(bloodGroup);
+            viewModel.setAreaFilter(binding.etArea.getText() == null
+                    ? "" : binding.etArea.getText().toString());
+            viewModel.setBloodGroupFilter(binding.etBloodGroup.getText() == null
+                    ? "" : binding.etBloodGroup.getText().toString());
         });
 
-        viewModel.getDonorsByBloodAndArea().observe(getViewLifecycleOwner(), donors -> {
-            if (donors != null) {
-                binding.rvDonors.setAdapter(new DonorAdapter(donors));
-            }
-        });
+        viewModel.getDonors().observe(getViewLifecycleOwner(), donors ->
+                adapter.submit(donors));
+    }
 
-        return binding.getRoot();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
