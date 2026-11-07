@@ -34,6 +34,12 @@ public interface RequestDao {
             + "acceptedByName = :name WHERE id = :requestId AND status = 'Open'")
     int acceptRequest(int requestId, String uid, String name);
 
+    @Query("SELECT * FROM blood_requests WHERE remoteId = :remoteId LIMIT 1")
+    RequestEntity getByRemoteId(String remoteId);
+
+    @Query("SELECT * FROM blood_requests WHERE id = :requestId LIMIT 1")
+    RequestEntity getRequestById(int requestId);
+
     @Query("SELECT COUNT(*) FROM blood_requests")
     int count();
 }

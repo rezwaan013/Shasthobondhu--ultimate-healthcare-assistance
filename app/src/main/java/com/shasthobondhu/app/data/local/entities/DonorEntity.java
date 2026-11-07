@@ -16,6 +16,7 @@ public class DonorEntity {
     public String upazila;
     public String lastDonationDate;
     public boolean isAvailable;
+    public long availableAfterEpoch;
     public String ownerUid;
 
     @Ignore

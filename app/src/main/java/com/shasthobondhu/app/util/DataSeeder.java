@@ -36,13 +36,13 @@ public class DataSeeder {
 
                 db.donorDao().insert(new DonorEntity(
                         "Rahim Ahmed", "+8801711000000", "A+", "Dhaka", "Dhaka", "Mirpur",
-                        "2026-01-10", true));
+                        "10/01/2026", true));
                 db.donorDao().insert(new DonorEntity(
                         "Karim Uddin", "+8801811000000", "O+", "Dhaka", "Dhaka", "Uttara",
-                        "2026-03-15", true));
+                        "15/03/2026", true));
                 db.donorDao().insert(new DonorEntity(
                         "Sumi Akter", "+8801911000000", "B-", "Chattogram", "Chattogram",
-                        "Pahartali", "2026-05-20", true));
+                        "Pahartali", "20/05/2026", true));
 
                 db.requestDao().insert(new RequestEntity(
                         "Patient X", "A+", 2, "Dhaka Medical College", "Dhaka", "Critical",

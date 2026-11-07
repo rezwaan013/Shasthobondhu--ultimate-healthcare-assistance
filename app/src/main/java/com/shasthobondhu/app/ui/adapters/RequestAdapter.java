@@ -45,6 +45,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         holder.binding.tvHospital.setText(holder.itemView.getContext().getString(
                 com.shasthobondhu.app.R.string.request_hospital_location,
                 request.hospitalName, request.location));
+        holder.binding.tvPatientDetails.setText(request.patientDetails == null
+                ? holder.itemView.getContext().getString(R.string.no_patient_details)
+                : request.patientDetails);
+        holder.binding.tvNeededAt.setText(holder.itemView.getContext().getString(
+                R.string.needed_at,
+                request.neededDate == null ? "--" : request.neededDate,
+                request.neededTime == null ? "--" : request.neededTime));
         holder.binding.tvUrgency.setText(DisplayUtils.urgencyLabel(
                 holder.itemView.getContext(), request.urgency));
         holder.binding.tvStatus.setText(request.status);

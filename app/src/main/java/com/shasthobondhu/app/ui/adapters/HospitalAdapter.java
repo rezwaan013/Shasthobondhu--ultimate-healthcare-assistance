@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,13 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
         holder.binding.tvHospitalName.setText(hospital.name);
         holder.binding.tvHospitalAddress.setText(hospital.address);
         holder.binding.tvHospitalServices.setText(hospital.services);
+        boolean hasDoctors = hospital.doctors != null && !hospital.doctors.trim().isEmpty();
+        holder.binding.tvHospitalDoctors.setVisibility(hasDoctors ? View.VISIBLE : View.GONE);
+        if (hasDoctors) {
+            holder.binding.tvHospitalDoctors.setText(holder.itemView.getContext().getString(
+                    com.shasthobondhu.app.R.string.doctors_public_label,
+                    hospital.doctors.replace("||", "\n").replace("~~", " — ")));
+        }
         holder.binding.tvHospitalPhone.setText(hospital.phone);
         holder.binding.btnCallHospital.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + hospital.phone));

@@ -13,6 +13,7 @@ public class HospitalEntity {
     public String phone;
     public String area;
     public String services;
+    public String doctors;
     public String ownerUid;
 
     @Ignore

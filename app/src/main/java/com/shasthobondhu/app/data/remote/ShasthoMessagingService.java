@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -19,13 +18,10 @@ import com.shasthobondhu.app.R;
 /** Receives emergency blood-request pushes from Firebase Cloud Messaging. */
 public class ShasthoMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "ShasthoFCM";
-
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        // A production build would register this token against the signed-in user in Firestore.
-        Log.d(TAG, "New FCM token: " + token);
+        // Token registration can be added server-side; never write FCM tokens to device logs.
     }
 
     @Override

@@ -45,6 +45,21 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
             tools:text="Dhaka Medical College" />
+        <TextView
+            android:id="@+id/tvPatientDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/text_secondary"
+            tools:text="Patient details and condition" />
+        <TextView
+            android:id="@+id/tvNeededAt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            tools:text="Needed: 15/11/2026 at 18:30" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

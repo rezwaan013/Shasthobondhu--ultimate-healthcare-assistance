@@ -44,6 +44,16 @@
             android:padding="9dp"
             android:textColor="@color/on_primary_container"
             tools:text="General, Emergency, ICU" />
+        <TextView
+            android:id="@+id/tvHospitalDoctors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_service_label"
+            android:padding="9dp"
+            android:textColor="@color/on_primary_container"
+            android:visibility="gone"
+            tools:text="Doctors: Dr Rahman — Cardiology — Sat–Mon — 5 PM–8 PM" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

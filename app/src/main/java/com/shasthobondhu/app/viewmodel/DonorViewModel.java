@@ -6,9 +6,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.shasthobondhu.app.data.local.entities.DonorEntity;
+import com.shasthobondhu.app.data.model.DonorPresence;
 import com.shasthobondhu.app.data.repository.DonorRepository;
+import com.shasthobondhu.app.data.repository.PresenceRepository;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -22,8 +25,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class DonorViewModel extends ViewModel {
 
     private final DonorRepository repository;
+    private final PresenceRepository presenceRepository;
 
     private final MutableLiveData<String> areaFilter = new MutableLiveData<>("");
+    private final MutableLiveData<String> divisionFilter = new MutableLiveData<>("");
     private final MutableLiveData<String> bloodGroupFilter = new MutableLiveData<>("");
     private final MediatorLiveData<List<DonorEntity>> donors = new MediatorLiveData<>();
     private final MutableLiveData<Boolean> saved = new MutableLiveData<>(false);
@@ -31,10 +36,12 @@ public class DonorViewModel extends ViewModel {
     private LiveData<List<DonorEntity>> currentSource;
 
     @Inject
-    public DonorViewModel(DonorRepository repository) {
+    public DonorViewModel(DonorRepository repository, PresenceRepository presenceRepository) {
         this.repository = repository;
+        this.presenceRepository = presenceRepository;
         reload();
         donors.addSource(areaFilter, value -> reload());
+        donors.addSource(divisionFilter, value -> reload());
         donors.addSource(bloodGroupFilter, value -> reload());
     }
 
@@ -43,8 +50,10 @@ public class DonorViewModel extends ViewModel {
                 ? "" : bloodGroupFilter.getValue().trim();
         String area = areaFilter.getValue() == null
                 ? "" : areaFilter.getValue().trim();
+        String division = divisionFilter.getValue() == null
+                ? "" : divisionFilter.getValue().trim();
 
-        LiveData<List<DonorEntity>> source = repository.getDonors(bloodGroup, area);
+        LiveData<List<DonorEntity>> source = repository.getDonors(bloodGroup, division, area);
         if (currentSource != null) {
             donors.removeSource(currentSource);
         }
@@ -54,6 +63,10 @@ public class DonorViewModel extends ViewModel {
 
     public void setAreaFilter(String area) {
         areaFilter.setValue(area == null ? "" : area);
+    }
+
+    public void setDivisionFilter(String division) {
+        divisionFilter.setValue(division == null ? "" : division);
     }
 
     public void setBloodGroupFilter(String bloodGroup) {
@@ -74,5 +87,9 @@ public class DonorViewModel extends ViewModel {
 
     public void registerDonor(DonorEntity donor) {
         repository.saveDonorAndNotify(donor, () -> saved.setValue(true));
+    }
+
+    public LiveData<Map<String, DonorPresence>> getPresence() {
+        return presenceRepository.observePresence();
     }
 }

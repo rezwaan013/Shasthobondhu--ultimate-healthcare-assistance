@@ -57,6 +57,7 @@ public class HospitalDashboardFragment extends Fragment {
 
         binding.btnCreateHospital.setOnClickListener(v -> createHospital());
         binding.btnAddService.setOnClickListener(v -> addService());
+        binding.btnAddDoctor.setOnClickListener(v -> addDoctor());
         binding.btnHospitalSignOut.setOnClickListener(v -> signOut());
 
         viewModel.loadHospital(SessionManager.getUid(requireContext()));
@@ -72,6 +73,7 @@ public class HospitalDashboardFragment extends Fragment {
             binding.tvHospitalDetails.setText(getString(R.string.facility_created_as,
                     hospital.area, hospital.phone));
             renderServices(hospital);
+            renderDoctors(hospital);
         });
     }
 
@@ -173,6 +175,93 @@ public class HospitalDashboardFragment extends Fragment {
             chip.setOnCloseIconClickListener(v -> removeService(service));
             binding.chipServices.addView(chip);
         }
+    }
+
+    private void addDoctor() {
+        HospitalEntity hospital = viewModel.getHospital().getValue();
+        if (hospital == null) {
+            showError(getString(R.string.error_required));
+            return;
+        }
+        String name = text(binding.etDoctorName);
+        String speciality = text(binding.etDoctorSpeciality);
+        String days = text(binding.etDoctorDays);
+        String time = text(binding.etDoctorTime);
+        if (name.isEmpty() || speciality.isEmpty() || days.isEmpty() || time.isEmpty()) {
+            showError(getString(R.string.doctor_fields_required));
+            return;
+        }
+        hideError();
+
+        String entry = name + "~~" + speciality + "~~" + days + "~~" + time;
+        List<String> doctors = splitDoctors(hospital.doctors);
+        if (!doctors.contains(entry)) {
+            doctors.add(entry);
+        }
+        hospital.doctors = joinDoctors(doctors);
+        binding.btnAddDoctor.setEnabled(false);
+        viewModel.updateHospital(hospital, () -> {
+            if (!isAdded()) {
+                return;
+            }
+            binding.btnAddDoctor.setEnabled(true);
+            binding.etDoctorName.setText("");
+            binding.etDoctorSpeciality.setText("");
+            binding.etDoctorDays.setText("");
+            binding.etDoctorTime.setText("");
+            Toast.makeText(requireContext(), R.string.doctor_added, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void removeDoctor(String entry) {
+        HospitalEntity hospital = viewModel.getHospital().getValue();
+        if (hospital == null) {
+            return;
+        }
+        List<String> doctors = splitDoctors(hospital.doctors);
+        doctors.remove(entry);
+        hospital.doctors = joinDoctors(doctors);
+        viewModel.updateHospital(hospital, () ->
+                Toast.makeText(requireContext(), R.string.doctor_removed,
+                        Toast.LENGTH_SHORT).show());
+    }
+
+    private void renderDoctors(HospitalEntity hospital) {
+        if (binding == null) {
+            return;
+        }
+        binding.chipDoctors.removeAllViews();
+        List<String> doctors = splitDoctors(hospital.doctors);
+        binding.tvNoDoctors.setVisibility(doctors.isEmpty() ? View.VISIBLE : View.GONE);
+        for (String entry : doctors) {
+            Chip chip = new Chip(requireContext());
+            chip.setText(entry.replace("~~", " — "));
+            chip.setCheckable(false);
+            chip.setCloseIconVisible(true);
+            chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(
+                    requireContext(), R.color.primary_container)));
+            chip.setTextColor(ContextCompat.getColor(requireContext(),
+                    R.color.on_primary_container));
+            chip.setOnCloseIconClickListener(v -> removeDoctor(entry));
+            binding.chipDoctors.addView(chip);
+        }
+    }
+
+    private List<String> splitDoctors(String raw) {
+        List<String> doctors = new ArrayList<>();
+        if (raw == null || raw.trim().isEmpty()) {
+            return doctors;
+        }
+        for (String entry : raw.split("\\|\\|")) {
+            if (!entry.trim().isEmpty()) {
+                doctors.add(entry.trim());
+            }
+        }
+        return doctors;
+    }
+
+    private String joinDoctors(List<String> doctors) {
+        return android.text.TextUtils.join("||", doctors);
     }
 
     private List<String> splitServices(String raw) {

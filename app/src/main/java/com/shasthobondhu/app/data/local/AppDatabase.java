@@ -15,7 +15,7 @@ import com.shasthobondhu.app.data.local.entities.*;
                 PharmacyEntity.class,
                 LocalUserEntity.class
         },
-        version = 3,
+        version = 4,
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {

@@ -1,5 +1,7 @@
 package com.shasthobondhu.app.ui.fragments.requests;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,9 @@ import com.shasthobondhu.app.databinding.FragmentCreateRequestBinding;
 import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.util.constants.AppConstants;
 import com.shasthobondhu.app.viewmodel.RequestViewModel;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -56,6 +61,9 @@ public class CreateRequestFragment extends Fragment {
                 android.R.layout.simple_list_item_1, urgencyLabels));
         binding.spinnerUrgency.setText(urgencyLabels[1], false);
 
+        binding.etNeededDate.setOnClickListener(v -> showDatePicker());
+        binding.etNeededTime.setOnClickListener(v -> showTimePicker());
+
         binding.btnPostRequest.setOnClickListener(v -> postRequest());
     }
 
@@ -64,15 +72,19 @@ public class CreateRequestFragment extends Fragment {
             return;
         }
         String patient = text(binding.etPatientName);
+        String patientDetails = text(binding.etPatientDetails);
         String bloodGroup = text(binding.spinnerRequestBloodGroup);
         String unitsText = text(binding.etUnits);
         String hospital = text(binding.etHospitalName);
         String location = text(binding.etRequestLocation);
         String urgency = text(binding.spinnerUrgency);
+        String neededDate = text(binding.etNeededDate);
+        String neededTime = text(binding.etNeededTime);
         String phone = text(binding.etRequestPhone);
 
         hideError();
-        if (patient.isEmpty() || hospital.isEmpty() || location.isEmpty()) {
+        if (patient.isEmpty() || patientDetails.isEmpty() || hospital.isEmpty()
+                || location.isEmpty() || neededDate.isEmpty() || neededTime.isEmpty()) {
             showError(getString(R.string.error_required));
             return;
         }
@@ -106,6 +118,9 @@ public class CreateRequestFragment extends Fragment {
                 ? SessionManager.getUid(requireContext()) : null;
         RequestEntity request = new RequestEntity(patient, bloodGroup, units, hospital,
                 location, storedUrgency, phone, "Open", requesterUid);
+        request.patientDetails = patientDetails;
+        request.neededDate = neededDate;
+        request.neededTime = neededTime;
 
         posting = true;
         binding.btnPostRequest.setEnabled(false);
@@ -116,6 +131,26 @@ public class CreateRequestFragment extends Fragment {
             Toast.makeText(requireContext(), R.string.request_posted, Toast.LENGTH_SHORT).show();
             NavHostFragment.findNavController(this).popBackStack();
         });
+    }
+
+    private void showDatePicker() {
+        Calendar today = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(requireContext(),
+                (picker, year, month, day) -> binding.etNeededDate.setText(
+                        String.format(Locale.getDefault(), "%02d/%02d/%04d",
+                                day, month + 1, year)),
+                today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH));
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000L);
+        dialog.show();
+    }
+
+    private void showTimePicker() {
+        Calendar now = Calendar.getInstance();
+        new TimePickerDialog(requireContext(),
+                (picker, hour, minute) -> binding.etNeededTime.setText(
+                        String.format(Locale.getDefault(), "%02d:%02d", hour, minute)),
+                now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true).show();
     }
 
     private String text(MaterialAutoCompleteTextView field) {

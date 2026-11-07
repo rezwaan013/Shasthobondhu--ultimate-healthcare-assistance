@@ -6,9 +6,12 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.shasthobondhu.app.data.local.entities.RequestEntity;
+import com.shasthobondhu.app.data.model.DonorPresence;
+import com.shasthobondhu.app.data.repository.PresenceRepository;
 import com.shasthobondhu.app.data.repository.RequestRepository;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -26,10 +29,14 @@ public class EmergencyHubViewModel extends ViewModel {
     private final SavedStateHandle state;
     private final LiveData<List<RequestEntity>> openRequests;
     private final LiveData<Integer> openRequestCount;
+    private final PresenceRepository presenceRepository;
 
     @Inject
-    public EmergencyHubViewModel(RequestRepository requestRepository, SavedStateHandle state) {
+    public EmergencyHubViewModel(RequestRepository requestRepository,
+                                 PresenceRepository presenceRepository,
+                                 SavedStateHandle state) {
         this.state = state;
+        this.presenceRepository = presenceRepository;
         openRequests = requestRepository.getAllOpenRequests();
         openRequestCount = Transformations.map(openRequests,
                 requests -> requests == null ? 0 : requests.size());
@@ -67,6 +74,18 @@ public class EmergencyHubViewModel extends ViewModel {
 
     public LiveData<Integer> getOpenRequestCount() {
         return openRequestCount;
+    }
+
+    public boolean isPresenceConfigured() {
+        return presenceRepository.isConfigured();
+    }
+
+    public LiveData<Map<String, DonorPresence>> getPresence() {
+        return presenceRepository.observePresence();
+    }
+
+    public void setAvailableNow(boolean available, PresenceRepository.Callback callback) {
+        presenceRepository.setAvailability(getUserId(), available, callback);
     }
 
     private String value(String key) {

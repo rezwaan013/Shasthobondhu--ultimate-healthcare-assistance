@@ -20,9 +20,16 @@ import java.util.List;
 
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.MedicineViewHolder> {
     private List<MedicineEntity> medicines;
+    private final OnMedicineInfoClickListener infoClickListener;
 
     public MedicineAdapter(List<MedicineEntity> medicines) {
+        this(medicines, null);
+    }
+
+    public MedicineAdapter(List<MedicineEntity> medicines,
+                           OnMedicineInfoClickListener infoClickListener) {
         this.medicines = medicines;
+        this.infoClickListener = infoClickListener;
     }
 
     @NonNull
@@ -69,6 +76,11 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
                     : medicine.pharmacyName + ", " + medicine.pharmacyAddress;
             MapNavigationUtils.navigate(v.getContext(), destination);
         });
+        holder.binding.btnMedicineInfo.setOnClickListener(v -> {
+            if (infoClickListener != null) {
+                infoClickListener.onMedicineInfoClick(medicine);
+            }
+        });
     }
 
     @Override
@@ -83,5 +95,9 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface OnMedicineInfoClickListener {
+        void onMedicineInfoClick(MedicineEntity medicine);
     }
 }

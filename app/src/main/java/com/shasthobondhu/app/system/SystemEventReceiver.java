@@ -56,7 +56,10 @@ public class SystemEventReceiver extends BroadcastReceiver {
                 : battery.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         if (level >= 0 && level <= 15) {
             listener.onSystemEvent(SystemEvent.batteryLow(true));
+            return;
         }
+        // Clear a stale warning when the app returns after the condition ended off-screen.
+        listener.onSystemEvent(SystemEvent.airplane(false));
     }
 
     public static IntentFilter createIntentFilter() {

@@ -19,6 +19,10 @@ public class RequestEntity {
     public String requesterUid;
     public String acceptedByUid;
     public String acceptedByName;
+    public String patientDetails;
+    public String neededDate;
+    public String neededTime;
+    public String remoteId;
 
     @Ignore
     public RequestEntity(String patientName, String bloodGroup, int units,

@@ -26,13 +26,17 @@ public interface DonorDao {
      */
     @Query("SELECT * FROM donors WHERE "
             + "isAvailable = 1 AND "
+            + "availableAfterEpoch <= :now AND "
             + "(:bloodGroup = '' OR bloodGroup = :bloodGroup) AND "
-            + "(:area = '' OR division = :area OR district = :area OR upazila = :area) "
+            + "(:division = '' OR LOWER(division) = LOWER(:division)) AND "
+            + "(:area = '' OR LOWER(district) = LOWER(:area) OR LOWER(upazila) = LOWER(:area)) "
             + "ORDER BY name ASC")
-    LiveData<List<DonorEntity>> searchDonors(String bloodGroup, String area);
+    LiveData<List<DonorEntity>> searchDonors(String bloodGroup, String division, String area,
+                                             long now);
 
-    @Query("SELECT * FROM donors WHERE isAvailable = 1 ORDER BY name ASC")
-    LiveData<List<DonorEntity>> getAllDonors();
+    @Query("SELECT * FROM donors WHERE isAvailable = 1 AND availableAfterEpoch <= :now "
+            + "ORDER BY name ASC")
+    LiveData<List<DonorEntity>> getAllDonors(long now);
 
     @Query("SELECT * FROM donors WHERE ownerUid = :ownerUid LIMIT 1")
     DonorEntity getByOwnerUid(String ownerUid);

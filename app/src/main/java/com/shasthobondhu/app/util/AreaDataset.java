@@ -14,34 +14,14 @@ public class AreaDataset {
 
     public static List<Area> getDivisions() {
         List<Area> divisions = new ArrayList<>();
-        
-        // Dhaka Division
-        Area dhakaDiv = new Area("Dhaka");
-        List<Area> dhakaDistricts = new ArrayList<>();
-        Area dhakaDist = new Area("Dhaka");
-        dhakaDist.children.add(new Area("Mirpur"));
-        dhakaDist.children.add(new Area("Uttara"));
-        dhakaDist.children.add(new Area("Gulshan"));
-        dhakaDistricts.add(dhakaDist);
-        
-        Area gazipurDist = new Area("Gazipur");
-        gazipurDist.children.add(new Area("Sreepur"));
-        gazipurDist.children.add(new Area("Kapasia"));
-        dhakaDistricts.add(gazipurDist);
-        
-        dhakaDiv.children = dhakaDistricts;
-        divisions.add(dhakaDiv);
-        
-        // Chittagong Division
-        Area ctgDiv = new Area("Chattogram");
-        List<Area> ctgDistricts = new ArrayList<>();
-        Area ctgDist = new Area("Chattogram");
-        ctgDist.children.add(new Area("Pahartali"));
-        ctgDist.children.add(new Area("Kotwali"));
-        ctgDistricts.add(ctgDist);
-        ctgDiv.children = ctgDistricts;
-        divisions.add(ctgDiv);
-        
+        divisions.add(new Area("Dhaka"));
+        divisions.add(new Area("Chattogram"));
+        divisions.add(new Area("Rajshahi"));
+        divisions.add(new Area("Khulna"));
+        divisions.add(new Area("Barishal"));
+        divisions.add(new Area("Sylhet"));
+        divisions.add(new Area("Rangpur"));
+        divisions.add(new Area("Mymensingh"));
         return divisions;
     }
 }

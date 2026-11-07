@@ -14,10 +14,12 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.shasthobondhu.app.R;
-import com.shasthobondhu.app.LabComponentsActivity;
+import com.shasthobondhu.app.EmergencyHubActivity;
+import com.shasthobondhu.app.data.local.entities.DonorEntity;
 import com.shasthobondhu.app.databinding.FragmentHomeBinding;
 import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.viewmodel.AuthViewModel;
+import com.shasthobondhu.app.viewmodel.DonorViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -26,6 +28,8 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private AuthViewModel authViewModel;
+    private String donorBloodGroup = "";
+    private String donorDistrict = "";
 
     @Nullable
     @Override
@@ -39,6 +43,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        DonorViewModel donorViewModel = new ViewModelProvider(this).get(DonorViewModel.class);
 
         binding.cardDonors.setOnClickListener(v -> navigate(R.id.nav_donors));
         binding.cardRequests.setOnClickListener(v -> navigate(R.id.nav_requests));
@@ -46,12 +51,7 @@ public class HomeFragment extends Fragment {
         binding.cardMedicines.setOnClickListener(v -> navigate(R.id.nav_medicines));
         binding.btnQuickRequest.setOnClickListener(v -> navigate(R.id.nav_create_request));
         binding.btnQuickDonate.setOnClickListener(v -> navigate(R.id.nav_donor_register));
-        binding.btnLabDemo.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), LabComponentsActivity.class);
-            intent.putExtra(LabComponentsActivity.EXTRA_ENTRY_SOURCE, "MainActivity/HomeFragment");
-            startActivity(intent);
-        });
-
+        binding.btnEmergencyHub.setOnClickListener(v -> openEmergencyHub());
         binding.btnSignOut.setOnClickListener(v -> {
             authViewModel.logout();
             NavOptions options = new NavOptions.Builder()
@@ -60,6 +60,30 @@ public class HomeFragment extends Fragment {
                     .build();
             NavHostFragment.findNavController(this).navigate(R.id.nav_login, null, options);
         });
+
+        String uid = SessionManager.getUid(requireContext());
+        donorViewModel.getMyProfile(uid).observe(getViewLifecycleOwner(), this::cacheDonorContext);
+    }
+
+    private void cacheDonorContext(DonorEntity donor) {
+        if (donor == null) {
+            donorBloodGroup = "";
+            donorDistrict = "";
+            return;
+        }
+        donorBloodGroup = donor.bloodGroup == null ? "" : donor.bloodGroup;
+        donorDistrict = donor.district == null ? "" : donor.district;
+    }
+
+    private void openEmergencyHub() {
+        Intent intent = new Intent(requireContext(), EmergencyHubActivity.class);
+        intent.putExtra(EmergencyHubActivity.EXTRA_USER_ID,
+                SessionManager.getUid(requireContext()));
+        intent.putExtra(EmergencyHubActivity.EXTRA_USER_NAME,
+                SessionManager.getName(requireContext()));
+        intent.putExtra(EmergencyHubActivity.EXTRA_BLOOD_GROUP, donorBloodGroup);
+        intent.putExtra(EmergencyHubActivity.EXTRA_DISTRICT, donorDistrict);
+        startActivity(intent);
     }
 
     @Override

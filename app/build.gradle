@@ -17,10 +17,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Override this if Firebase Console creates the database in another region.
-        def realtimeDatabaseUrl = project.findProperty("FIREBASE_DATABASE_URL")
-                ?: "https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app/"
-        buildConfigField "String", "FIREBASE_DATABASE_URL", "\"${realtimeDatabaseUrl}\""
     }
 
     buildTypes {
@@ -74,7 +70,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.5.2'
     annotationProcessor 'androidx.room:room-compiler:2.5.2'
 
-    // Retrofit
+    // Public health and medicine APIs
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.14.9'

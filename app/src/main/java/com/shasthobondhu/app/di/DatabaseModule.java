@@ -30,11 +30,23 @@ public class DatabaseModule {
         }
     };
 
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE donors ADD COLUMN availableAfterEpoch INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE hospitals ADD COLUMN doctors TEXT");
+            database.execSQL("ALTER TABLE blood_requests ADD COLUMN patientDetails TEXT");
+            database.execSQL("ALTER TABLE blood_requests ADD COLUMN neededDate TEXT");
+            database.execSQL("ALTER TABLE blood_requests ADD COLUMN neededTime TEXT");
+            database.execSQL("ALTER TABLE blood_requests ADD COLUMN remoteId TEXT");
+        }
+    };
+
     @Provides
     @Singleton
     public AppDatabase provideDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "shastho_bondhu_db")
-                .addMigrations(MIGRATION_2_3)
+                .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
                 .fallbackToDestructiveMigration()
                 .build();
     }

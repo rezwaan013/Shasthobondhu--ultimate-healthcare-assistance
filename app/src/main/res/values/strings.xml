@@ -74,7 +74,7 @@
 
     <!-- Feature screens -->
     <string name="donors_title">Blood donors</string>
-    <string name="donors_subtitle">Filter by area and blood group. Leave a field empty to see everyone.</string>
+    <string name="donors_subtitle">Select a division, then enter an exact district or area. Blood group is optional.</string>
     <string name="hint_area">Area, district or upazila</string>
     <string name="hint_blood_group">Blood group, for example A+</string>
     <string name="search_donors">Search donors</string>
@@ -118,26 +118,38 @@
     <string name="donor_register_title">Become a blood donor</string>
     <string name="donor_register_subtitle">People searching your blood group and area will see your name and phone.</string>
     <string name="hint_division">Division</string>
-    <string name="hint_district">District</string>
-    <string name="hint_upazila">Upazila or area</string>
-    <string name="hint_last_donation">Last donation date (optional)</string>
+    <string name="hint_district">District (type manually)</string>
+    <string name="hint_upazila">Area or upazila (type manually)</string>
+    <string name="hint_exact_district_area">Exact district or area</string>
+    <string name="choose_division">Choose a division first</string>
+    <string name="enter_exact_district_area">Enter the exact district or area</string>
+    <string name="hint_last_donation">Last donation date — DD/MM/YYYY (optional)</string>
+    <string name="choose_last_donation_date">Choose last donation date</string>
     <string name="switch_available">I am available to donate</string>
     <string name="action_save_donor">Save donor profile</string>
     <string name="action_update_donor">Update donor profile</string>
     <string name="manage_donor_profile">Availability &amp; donation profile</string>
     <string name="donor_saved">You are now listed as a donor.</string>
     <string name="donor_location_format">%1$s, %2$s</string>
+    <string name="last_donated">Last donated: %1$s</string>
+    <string name="not_shared">Not shared</string>
+    <string name="auto_unavailable_until">Temporarily unavailable. Automatically available from %1$s.</string>
     <string name="donors_empty">No donors matched this area and blood group yet.</string>
     <string name="choose_blood_group">Choose a blood group</string>
 
     <string name="create_request_title">Create emergency request</string>
     <string name="create_request_subtitle">Share the patient details so nearby donors can respond.</string>
     <string name="hint_patient_name">Patient name</string>
+    <string name="hint_patient_details">Patient details and condition</string>
     <string name="hint_units">Units needed</string>
     <string name="hint_hospital_name">Clinic or hospital name</string>
     <string name="hint_location">Area or district</string>
     <string name="hint_contact_phone">Contact phone number</string>
     <string name="hint_urgency">Urgency</string>
+    <string name="hint_needed_date">Blood needed date — DD/MM/YYYY</string>
+    <string name="hint_needed_time">Blood needed time — HH:MM</string>
+    <string name="needed_at">Needed: %1$s at %2$s</string>
+    <string name="no_patient_details">No additional patient details</string>
     <string name="urgency_critical">Critical</string>
     <string name="urgency_urgent">Urgent</string>
     <string name="urgency_normal">Normal</string>
@@ -199,7 +211,130 @@
     <string name="service_added">Test or service added.</string>
     <string name="service_removed">Test or service removed.</string>
     <string name="services_empty">No tests or services added yet.</string>
+    <string name="available_doctors_title">Available doctors</string>
+    <string name="hint_doctor_name">Doctor name</string>
+    <string name="hint_doctor_speciality">Speciality (for example Cardiology)</string>
+    <string name="hint_doctor_days">Available days (for example Sat–Mon)</string>
+    <string name="hint_doctor_time">Available time (for example 5 PM–8 PM)</string>
+    <string name="action_add_doctor">Add doctor schedule</string>
+    <string name="doctors_empty">No doctors added yet.</string>
+    <string name="doctor_fields_required">Enter doctor name, speciality, available days and time.</string>
+    <string name="doctor_added">Doctor schedule added.</string>
+    <string name="doctor_removed">Doctor schedule removed.</string>
+    <string name="doctors_public_label">Doctors:\n%1$s</string>
     <string name="facility_created_as">%1$s · %2$s</string>
+
+    <!-- Emergency Hub and donor details -->
+    <string name="emergency_hub_home_title">Emergency Hub</string>
+    <string name="emergency_hub_home_note">Keep your emergency contact, donor availability, live blood requests and device readiness in one place.</string>
+    <string name="open_emergency_hub">Open Emergency Hub</string>
+    <string name="emergency_hub_title">Emergency Hub</string>
+    <string name="emergency_hub_greeting">Emergency tools for %1$s</string>
+    <string name="emergency_context_missing">Add a donor profile to personalize blood-group and district alerts.</string>
+    <string name="emergency_context_value">Alert profile: %1$s blood · %2$s</string>
+    <string name="live_blood_requests">Live blood requests</string>
+    <plurals name="open_request_count">
+        <item quantity="one">%1$d open request needs a response.</item>
+        <item quantity="other">%1$d open requests need a response.</item>
+    </plurals>
+    <string name="view_requests">View blood requests</string>
+    <string name="emergency_contact_title">Emergency contact</string>
+    <string name="no_emergency_contact">No emergency contact saved yet.</string>
+    <string name="choose_emergency_contact">Choose from contacts</string>
+    <string name="call_emergency_contact">Call emergency contact</string>
+    <string name="share_request_sms">Send blood request by SMS</string>
+    <string name="emergency_readiness_title">Emergency readiness</string>
+    <string name="emergency_monitor_toggle">Monitor matching blood requests</string>
+    <string name="monitor_not_running">Emergency request monitoring is off.</string>
+    <string name="available_now_toggle">I’m available to donate now</string>
+    <string name="presence_setup_pending">Live availability will appear when cloud presence is configured.</string>
+    <string name="bangladesh_health_stats">Bangladesh health snapshot</string>
+    <string name="health_stats_ready">Health statistics are ready to load.</string>
+    <string name="retry">Retry</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="donor_detail_title">Donor details</string>
+    <string name="donor_unknown_name">Blood donor</string>
+    <string name="location_not_shared">Location not shared</string>
+    <string name="phone_not_shared">Phone number not shared</string>
+    <string name="call_donor">Call donor</string>
+    <string name="navigate_to_donor_area">Navigate to donor area</string>
+    <string name="mark_donor_contacted">Mark as contacted</string>
+    <string name="donor_marked_contacted">Donor marked as contacted.</string>
+
+    <!-- Runtime permissions -->
+    <string name="permission_continue">Continue</string>
+    <string name="not_now">Not now</string>
+    <string name="try_again">Try again</string>
+    <string name="permission_denied_title">Permission not granted</string>
+    <string name="permission_denied_message">This feature stays off. You can try again when you need it.</string>
+    <string name="permission_settings_title">Permission blocked</string>
+    <string name="permission_settings_message">Allow this permission from ShasthoBondhu’s app settings to use this feature.</string>
+    <string name="open_app_settings">Open app settings</string>
+    <string name="notification_permission_rationale_title">Enable emergency alerts</string>
+    <string name="notification_permission_rationale_message">ShasthoBondhu needs notification permission to keep the Emergency Request Monitor visible and alert you to matching blood requests.</string>
+    <string name="notification_permission_ready">Emergency alert notifications are enabled.</string>
+    <string name="notification_permission_denied_status">Notifications are denied, so monitoring remains off.</string>
+    <string name="notification_permission_settings_needed">Allow notifications in app settings before starting monitoring.</string>
+    <string name="contacts_permission_rationale_title">Choose an emergency contact</string>
+    <string name="contacts_permission_rationale_message">ShasthoBondhu reads phone contacts only when you choose one emergency contact. Your contact list is not uploaded.</string>
+    <string name="contacts_permission_ready">Contact access granted. Choose a contact to continue.</string>
+    <string name="contacts_permission_denied_status">Contact access was not granted.</string>
+    <string name="contacts_permission_settings_needed">Allow Contacts in app settings to choose an emergency contact.</string>
+
+    <!-- System status -->
+    <string name="system_airplane_on">Airplane mode is on — blood request alerts cannot arrive.</string>
+    <string name="system_airplane_off">Airplane mode is off. Network alerts can resume.</string>
+    <string name="system_battery_low">Battery is low — emergency monitoring may stop. Connect a charger.</string>
+    <string name="system_battery_okay">Battery level is safe again.</string>
+    <string name="system_power_save_on">Battery saver is on — Android may delay emergency updates.</string>
+    <string name="system_power_save_off">Battery saver is off. Background updates can resume.</string>
+
+    <!-- Emergency contact provider -->
+    <string name="unknown_contact">Unknown contact</string>
+    <string name="contact_picker_privacy_note">Choose one phone number to keep on this device as your emergency contact.</string>
+    <string name="no_phone_contacts">No phone contacts were found on this device.</string>
+    <string name="contacts_load_failed">Contacts could not be read. Check the Contacts permission and try again.</string>
+    <string name="emergency_contact_value">%1$s\n%2$s</string>
+    <string name="emergency_sms_body">Emergency blood support request from %1$s. Blood group: %2$s. Area: %3$s. Please contact me as soon as possible through ShasthoBondhu.</string>
+    <string name="no_dialer_app">No phone app is available.</string>
+    <string name="no_sms_app">No SMS app is available.</string>
+
+    <!-- Emergency request foreground monitor -->
+    <string name="monitor_running">Emergency Request Monitor is active. Check the ongoing notification.</string>
+    <string name="monitor_started">Emergency request monitoring started.</string>
+    <string name="monitor_start_failed">Monitoring could not start. Keep the app open and try again.</string>
+    <string name="monitor_channel_name">Emergency request monitor</string>
+    <string name="monitor_channel_description">Ongoing count of matching open blood requests</string>
+    <string name="monitor_notification_title">Emergency Request Monitor</string>
+    <string name="monitor_notification_connecting">Connecting to live blood requests…</string>
+    <string name="any_blood_group">any group</string>
+    <string name="any_district">all districts</string>
+    <plurals name="monitor_notification_count">
+        <item quantity="one">%1$d open %2$s request near %3$s · %4$d urgent</item>
+        <item quantity="other">%1$d open %2$s requests near %3$s · %4$d urgent</item>
+    </plurals>
+
+    <!-- Public health APIs -->
+    <string name="more_medicine_info">More info</string>
+    <string name="open_fda_disclaimer">Public label data from openFDA. Confirm treatment and dosage with a doctor or pharmacist.</string>
+    <string name="medicine_indications">Indications and uses</string>
+    <string name="medicine_warnings">Warnings</string>
+    <string name="medicine_info_not_provided">This label does not provide this section.</string>
+    <string name="medicine_info_empty">No public FDA label matched this medicine name. Ask a pharmacist for the generic name.</string>
+    <string name="api_network_error">No network connection. Check connectivity and retry.</string>
+    <string name="api_server_error">The public health service is unavailable. Try again later.</string>
+    <string name="api_data_error">The public service returned data that could not be read.</string>
+    <string name="health_stats_value">Reported COVID-19 totals\nCases: %1$s\nDeaths: %2$s\nTests: %3$s\nPopulation: %4$s\nUpdated: %5$s\n\nSource: disease.sh public API</string>
+    <string name="health_stats_empty">No Bangladesh health statistics are currently available.</string>
+
+    <!-- Realtime donor presence -->
+    <string name="available_now_badge">Available now</string>
+    <string name="presence_not_configured">Live availability is unavailable until Realtime Database is configured.</string>
+    <string name="presence_firebase_sign_in_required">Sign in with a Firebase account to publish live availability.</string>
+    <string name="presence_updating">Updating live availability…</string>
+    <string name="presence_available_now">You appear as available now to people searching for donors.</string>
+    <string name="presence_not_available">Your live “Available now” badge is off.</string>
+    <string name="presence_update_failed">Live availability could not be updated. Check your connection and try again.</string>
 
     <!-- Validation and errors -->
     <string name="error_required">This field is required</string>
@@ -213,68 +348,8 @@
     <string name="error_firebase_not_configured">Firebase Email/Password sign-in is not enabled. Create an account in the app to use offline mode.</string>
     <string name="error_owner_only">Sign in with a medicine shop owner or clinic owner account.</string>
 
-    <!-- Lab demonstration and Android components -->
-    <string name="lab_home_title">Android components lab</string>
-    <string name="lab_home_note">Open the live demonstrations for Intents, broadcasts, contacts, services, JSON API and Firebase.</string>
-    <string name="open_lab_demo">Open lab demonstration</string>
-    <string name="lab_title">Components lab</string>
-    <string name="lab_heading">Android systems, working live</string>
-    <string name="lab_subtitle">Trigger each component and show the evaluator its visible result. Rotate the device to demonstrate the two-column landscape layout.</string>
-    <string name="lab_architecture_title">Activities and Intents</string>
-    <string name="lab_architecture_status">This second Activity was opened from %1$s by an explicit Intent. The button below uses an implicit Intent.</string>
-    <string name="open_google_maps_demo">Navigate with Google Maps</string>
     <string name="navigate">Navigate</string>
     <string name="no_maps_app">No maps or browser application is available.</string>
-
-    <string name="device_signals_title">Device signals and foreground service</string>
-    <string name="broadcast_waiting">Listening for battery, airplane-mode and power-saving broadcasts.</string>
-    <string name="broadcast_airplane_on">Broadcast received: Airplane mode is ON.</string>
-    <string name="broadcast_airplane_off">Broadcast received: Airplane mode is OFF.</string>
-    <string name="broadcast_power_save_on">Broadcast received: Battery saver is ON.</string>
-    <string name="broadcast_power_save_off">Broadcast received: Battery saver is OFF.</string>
-    <string name="broadcast_battery">Battery broadcast received: %1$d%% remaining.</string>
-    <string name="broadcast_battery_low">Broadcast received: the system reports LOW BATTERY.</string>
-    <string name="broadcast_battery_okay">Broadcast received: battery level is okay again.</string>
-    <string name="airplane_settings">Airplane mode</string>
-    <string name="battery_saver_settings">Battery saver</string>
-    <string name="permission_status_granted">Notification permission: granted.</string>
-    <string name="permission_status_needed">Notification permission: required on Android 13+.</string>
-    <string name="request_notification_permission">Request notification permission</string>
-    <string name="notification_permission_granted">Notification permission granted.</string>
-    <string name="notification_permission_denied">Notification permission denied. You can enable it in system settings.</string>
-    <string name="notification_permission_already_granted">Notification permission is already available.</string>
-    <string name="start_monitor">Start foreground monitor</string>
-    <string name="stop_monitor">Stop monitor</string>
-    <string name="monitor_status_running">Foreground service: running. Check the notification tray.</string>
-    <string name="monitor_status_stopped">Foreground service: stopped.</string>
-    <string name="monitor_channel_name">Health monitor</string>
-    <string name="monitor_channel_description">Active foreground health-monitor updates</string>
-    <string name="monitor_notification_title">ShasthoBondhu health monitor active</string>
-    <plurals name="monitor_notification_detail">
-        <item quantity="one">Battery %1$s%% · running for %2$d second</item>
-        <item quantity="other">Battery %1$s%% · running for %2$d seconds</item>
-    </plurals>
-
-    <string name="contact_provider_title">Emergency contact provider</string>
-    <string name="no_contact_selected">No emergency contact selected.</string>
-    <string name="pick_emergency_contact">Choose from device contacts</string>
-    <string name="selected_contact">Selected: %1$s · %2$s</string>
-    <string name="unknown_contact">Unknown contact</string>
-    <string name="contact_access_failed">The selected contact could not be read.</string>
-
-    <string name="live_api_title">Live JSON health API</string>
-    <string name="api_ready">Ready to call Open-Meteo over HTTPS and parse its JSON response with Gson.</string>
-    <string name="api_loading">GET request in progress…</string>
-    <string name="api_result">Dhaka now: %1$s°C · humidity %2$s%% · wind %3$s km/h\nAPI time: %4$s</string>
-    <string name="api_error">API request failed: %1$s</string>
-    <string name="load_health_api">Load Dhaka health conditions</string>
-
-    <string name="firebase_demo_title">Firebase cloud verification</string>
-    <string name="firebase_ready">Sign in with Email/Password first. This check then writes the same authenticated event to Firestore and Realtime Database.</string>
-    <string name="firebase_running">Connecting to Firebase services…</string>
-    <string name="firebase_success">All three Firebase services succeeded. UID: %1$s</string>
-    <string name="firebase_error">Firebase check needs attention: %1$s</string>
-    <string name="run_firebase_demo">Run Firebase cloud check</string>
 
     <!-- Notifications -->
     <string name="default_notification_channel_id">shastho_default</string>

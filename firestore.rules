@@ -13,13 +13,25 @@ service cloud.firestore {
 
     match /donors/{donorId} {
       allow read: if true;
-      allow create, update: if signedIn();
+      allow create: if signedIn()
+                    && donorId == request.auth.uid
+                    && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if signedIn()
+                    && donorId == request.auth.uid
+                    && resource.data.ownerUid == request.auth.uid
+                    && request.resource.data.ownerUid == request.auth.uid;
     }
 
     match /blood_requests/{requestId} {
       allow read: if true;
-      allow create: if true;
-      allow update: if signedIn();
+      allow create: if signedIn()
+                    && request.resource.data.requesterUid == request.auth.uid;
+      allow update: if signedIn() && (
+        resource.data.requesterUid == request.auth.uid ||
+        (resource.data.status == "Open"
+         && request.resource.data.status == "Accepted"
+         && request.resource.data.acceptedByUid == request.auth.uid)
+      );
     }
 
     match /hospitals/{hospitalId} {

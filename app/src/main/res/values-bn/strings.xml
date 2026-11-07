@@ -74,7 +74,7 @@
 
     <!-- Feature screens -->
     <string name="donors_title">রক্তদাতা</string>
-    <string name="donors_subtitle">এলাকা ও রক্তের গ্রুপ দিয়ে খুঁজুন। সবাইকে দেখতে ঘর খালি রাখুন।</string>
+    <string name="donors_subtitle">বিভাগ বেছে নিয়ে সঠিক জেলা বা এলাকা লিখুন। রক্তের গ্রুপ ঐচ্ছিক।</string>
     <string name="hint_area">এলাকা, জেলা বা উপজেলা</string>
     <string name="hint_blood_group">রক্তের গ্রুপ, যেমন A+</string>
     <string name="search_donors">রক্তদাতা খুঁজুন</string>
@@ -118,26 +118,38 @@
     <string name="donor_register_title">রক্তদাতা হিসেবে যোগ দিন</string>
     <string name="donor_register_subtitle">আপনার রক্তের গ্রুপ ও এলাকা খুঁজলে মানুষ আপনার নাম ও ফোন দেখতে পাবে।</string>
     <string name="hint_division">বিভাগ</string>
-    <string name="hint_district">জেলা</string>
-    <string name="hint_upazila">উপজেলা বা এলাকা</string>
-    <string name="hint_last_donation">শেষ রক্তদানের তারিখ (ঐচ্ছিক)</string>
+    <string name="hint_district">জেলা (নিজে লিখুন)</string>
+    <string name="hint_upazila">এলাকা বা উপজেলা (নিজে লিখুন)</string>
+    <string name="hint_exact_district_area">সঠিক জেলা বা এলাকা</string>
+    <string name="choose_division">আগে বিভাগ বেছে নিন</string>
+    <string name="enter_exact_district_area">সঠিক জেলা বা এলাকা লিখুন</string>
+    <string name="hint_last_donation">শেষ রক্তদানের তারিখ — দিন/মাস/বছর (ঐচ্ছিক)</string>
+    <string name="choose_last_donation_date">শেষ রক্তদানের তারিখ বেছে নিন</string>
     <string name="switch_available">আমি রক্তদানের জন্য প্রস্তুত</string>
     <string name="action_save_donor">রক্তদাতা প্রোফাইল সংরক্ষণ করুন</string>
     <string name="action_update_donor">রক্তদাতা প্রোফাইল হালনাগাদ করুন</string>
     <string name="manage_donor_profile">উপলব্ধতা ও রক্তদানের প্রোফাইল</string>
     <string name="donor_saved">আপনি এখন রক্তদাতা হিসেবে তালিকাভুক্ত।</string>
     <string name="donor_location_format">%1$s, %2$s</string>
+    <string name="last_donated">শেষ রক্তদান: %1$s</string>
+    <string name="not_shared">শেয়ার করা হয়নি</string>
+    <string name="auto_unavailable_until">সাময়িকভাবে অনুপলব্ধ। %1$s থেকে স্বয়ংক্রিয়ভাবে উপলব্ধ হবে।</string>
     <string name="donors_empty">এই এলাকা ও রক্তের গ্রুপে কোনো রক্তদাতা পাওয়া যায়নি।</string>
     <string name="choose_blood_group">রক্তের গ্রুপ বেছে নিন</string>
 
     <string name="create_request_title">জরুরি আবেদন তৈরি করুন</string>
     <string name="create_request_subtitle">রোগীর তথ্য দিন যাতে কাছের রক্তদাতারা সাড়া দিতে পারেন।</string>
     <string name="hint_patient_name">রোগীর নাম</string>
+    <string name="hint_patient_details">রোগীর বিস্তারিত তথ্য ও অবস্থা</string>
     <string name="hint_units">প্রয়োজনীয় ইউনিট</string>
     <string name="hint_hospital_name">ক্লিনিক বা হাসপাতালের নাম</string>
     <string name="hint_location">এলাকা বা জেলা</string>
     <string name="hint_contact_phone">যোগাযোগের ফোন নম্বর</string>
     <string name="hint_urgency">জরুরি অবস্থা</string>
+    <string name="hint_needed_date">রক্ত প্রয়োজনের তারিখ — দিন/মাস/বছর</string>
+    <string name="hint_needed_time">রক্ত প্রয়োজনের সময় — ঘণ্টা:মিনিট</string>
+    <string name="needed_at">প্রয়োজন: %1$s, সময় %2$s</string>
+    <string name="no_patient_details">রোগীর অতিরিক্ত তথ্য নেই</string>
     <string name="urgency_critical">অতি জরুরি</string>
     <string name="urgency_urgent">জরুরি</string>
     <string name="urgency_normal">সাধারণ</string>
@@ -199,7 +211,130 @@
     <string name="service_added">টেস্ট বা সেবা যোগ হয়েছে।</string>
     <string name="service_removed">টেস্ট বা সেবা সরানো হয়েছে।</string>
     <string name="services_empty">এখনো কোনো টেস্ট বা সেবা যোগ করা হয়নি।</string>
+    <string name="available_doctors_title">উপলব্ধ ডাক্তার</string>
+    <string name="hint_doctor_name">ডাক্তারের নাম</string>
+    <string name="hint_doctor_speciality">বিশেষত্ব (যেমন কার্ডিওলজি)</string>
+    <string name="hint_doctor_days">উপলব্ধ দিন (যেমন শনি–সোম)</string>
+    <string name="hint_doctor_time">উপলব্ধ সময় (যেমন বিকাল ৫টা–রাত ৮টা)</string>
+    <string name="action_add_doctor">ডাক্তারের সময়সূচি যোগ করুন</string>
+    <string name="doctors_empty">এখনো কোনো ডাক্তার যোগ করা হয়নি।</string>
+    <string name="doctor_fields_required">ডাক্তারের নাম, বিশেষত্ব, উপলব্ধ দিন ও সময় লিখুন।</string>
+    <string name="doctor_added">ডাক্তারের সময়সূচি যোগ হয়েছে।</string>
+    <string name="doctor_removed">ডাক্তারের সময়সূচি সরানো হয়েছে।</string>
+    <string name="doctors_public_label">ডাক্তার:\n%1$s</string>
     <string name="facility_created_as">%1$s · %2$s</string>
+
+    <!-- Emergency Hub and donor details -->
+    <string name="emergency_hub_home_title">জরুরি সহায়তা কেন্দ্র</string>
+    <string name="emergency_hub_home_note">জরুরি যোগাযোগ, রক্তদাতার উপস্থিতি, সরাসরি রক্তের আবেদন ও ফোনের অবস্থা এক জায়গায় রাখুন।</string>
+    <string name="open_emergency_hub">জরুরি সহায়তা কেন্দ্র খুলুন</string>
+    <string name="emergency_hub_title">জরুরি সহায়তা কেন্দ্র</string>
+    <string name="emergency_hub_greeting">%1$s-এর জরুরি সরঞ্জাম</string>
+    <string name="emergency_context_missing">রক্তের গ্রুপ ও জেলার সতর্কতা পেতে রক্তদাতা প্রোফাইল যোগ করুন।</string>
+    <string name="emergency_context_value">সতর্কতা প্রোফাইল: %1$s রক্ত · %2$s</string>
+    <string name="live_blood_requests">সরাসরি রক্তের আবেদন</string>
+    <plurals name="open_request_count">
+        <item quantity="one">%1$dটি খোলা আবেদনে সাড়া দরকার।</item>
+        <item quantity="other">%1$dটি খোলা আবেদনে সাড়া দরকার।</item>
+    </plurals>
+    <string name="view_requests">রক্তের আবেদন দেখুন</string>
+    <string name="emergency_contact_title">জরুরি যোগাযোগ</string>
+    <string name="no_emergency_contact">এখনো কোনো জরুরি যোগাযোগ সংরক্ষিত নেই।</string>
+    <string name="choose_emergency_contact">যোগাযোগ তালিকা থেকে বাছুন</string>
+    <string name="call_emergency_contact">জরুরি যোগাযোগে কল করুন</string>
+    <string name="share_request_sms">এসএমএসে রক্তের আবেদন পাঠান</string>
+    <string name="emergency_readiness_title">জরুরি প্রস্তুতি</string>
+    <string name="emergency_monitor_toggle">মিলে যাওয়া রক্তের আবেদন পর্যবেক্ষণ করুন</string>
+    <string name="monitor_not_running">জরুরি আবেদন পর্যবেক্ষণ বন্ধ আছে।</string>
+    <string name="available_now_toggle">আমি এখন রক্ত দিতে প্রস্তুত</string>
+    <string name="presence_setup_pending">ক্লাউড উপস্থিতি কনফিগার হলে সরাসরি প্রাপ্যতা দেখা যাবে।</string>
+    <string name="bangladesh_health_stats">বাংলাদেশ স্বাস্থ্য চিত্র</string>
+    <string name="health_stats_ready">স্বাস্থ্য পরিসংখ্যান লোড করার জন্য প্রস্তুত।</string>
+    <string name="retry">আবার চেষ্টা করুন</string>
+    <string name="dismiss">বন্ধ করুন</string>
+    <string name="donor_detail_title">রক্তদাতার বিস্তারিত</string>
+    <string name="donor_unknown_name">রক্তদাতা</string>
+    <string name="location_not_shared">অবস্থান শেয়ার করা হয়নি</string>
+    <string name="phone_not_shared">ফোন নম্বর শেয়ার করা হয়নি</string>
+    <string name="call_donor">রক্তদাতাকে কল করুন</string>
+    <string name="navigate_to_donor_area">রক্তদাতার এলাকায় নেভিগেট করুন</string>
+    <string name="mark_donor_contacted">যোগাযোগ হয়েছে হিসেবে চিহ্নিত করুন</string>
+    <string name="donor_marked_contacted">রক্তদাতাকে যোগাযোগ হয়েছে হিসেবে চিহ্নিত করা হয়েছে।</string>
+
+    <!-- Runtime permissions -->
+    <string name="permission_continue">চালিয়ে যান</string>
+    <string name="not_now">এখন নয়</string>
+    <string name="try_again">আবার চেষ্টা করুন</string>
+    <string name="permission_denied_title">অনুমতি দেওয়া হয়নি</string>
+    <string name="permission_denied_message">এই সুবিধাটি বন্ধ থাকবে। প্রয়োজন হলে আবার চেষ্টা করতে পারবেন।</string>
+    <string name="permission_settings_title">অনুমতি বন্ধ করা আছে</string>
+    <string name="permission_settings_message">এই সুবিধা ব্যবহার করতে স্বাস্থ্যবন্ধুর অ্যাপ সেটিংস থেকে অনুমতি দিন।</string>
+    <string name="open_app_settings">অ্যাপ সেটিংস খুলুন</string>
+    <string name="notification_permission_rationale_title">জরুরি সতর্কতা চালু করুন</string>
+    <string name="notification_permission_rationale_message">জরুরি আবেদন পর্যবেক্ষণ দৃশ্যমান রাখতে এবং মিলে যাওয়া রক্তের আবেদনের সতর্কতা দিতে নোটিফিকেশন অনুমতি প্রয়োজন।</string>
+    <string name="notification_permission_ready">জরুরি সতর্কতার নোটিফিকেশন চালু আছে।</string>
+    <string name="notification_permission_denied_status">নোটিফিকেশন অনুমতি নেই, তাই পর্যবেক্ষণ বন্ধ আছে।</string>
+    <string name="notification_permission_settings_needed">পর্যবেক্ষণ চালুর আগে অ্যাপ সেটিংসে নোটিফিকেশন অনুমতি দিন।</string>
+    <string name="contacts_permission_rationale_title">জরুরি যোগাযোগ বেছে নিন</string>
+    <string name="contacts_permission_rationale_message">একটি জরুরি যোগাযোগ বেছে নেওয়ার সময় স্বাস্থ্যবন্ধু ফোনের যোগাযোগ তালিকা পড়ে। তালিকা আপলোড করা হয় না।</string>
+    <string name="contacts_permission_ready">যোগাযোগ তালিকার অনুমতি দেওয়া হয়েছে। এখন একজনকে বেছে নিন।</string>
+    <string name="contacts_permission_denied_status">যোগাযোগ তালিকার অনুমতি দেওয়া হয়নি।</string>
+    <string name="contacts_permission_settings_needed">জরুরি যোগাযোগ বেছে নিতে অ্যাপ সেটিংসে Contacts অনুমতি দিন।</string>
+
+    <!-- System status -->
+    <string name="system_airplane_on">এয়ারপ্লেন মোড চালু — রক্তের আবেদনের সতর্কতা আসবে না।</string>
+    <string name="system_airplane_off">এয়ারপ্লেন মোড বন্ধ। নেটওয়ার্ক সতর্কতা আবার আসতে পারবে।</string>
+    <string name="system_battery_low">ব্যাটারি কম — জরুরি পর্যবেক্ষণ বন্ধ হতে পারে। চার্জার সংযুক্ত করুন।</string>
+    <string name="system_battery_okay">ব্যাটারির মাত্রা আবার নিরাপদ।</string>
+    <string name="system_power_save_on">ব্যাটারি সেভার চালু — জরুরি আপডেট দেরিতে আসতে পারে।</string>
+    <string name="system_power_save_off">ব্যাটারি সেভার বন্ধ। ব্যাকগ্রাউন্ড আপডেট আবার চলবে।</string>
+
+    <!-- Emergency contact provider -->
+    <string name="unknown_contact">অজানা যোগাযোগ</string>
+    <string name="contact_picker_privacy_note">এই ডিভাইসে জরুরি যোগাযোগ হিসেবে রাখতে একটি ফোন নম্বর বেছে নিন।</string>
+    <string name="no_phone_contacts">এই ডিভাইসে কোনো ফোন যোগাযোগ পাওয়া যায়নি।</string>
+    <string name="contacts_load_failed">যোগাযোগ তালিকা পড়া যায়নি। Contacts অনুমতি দেখে আবার চেষ্টা করুন।</string>
+    <string name="emergency_contact_value">%1$s\n%2$s</string>
+    <string name="emergency_sms_body">%1$s-এর জরুরি রক্ত সহায়তার আবেদন। রক্তের গ্রুপ: %2$s। এলাকা: %3$s। স্বাস্থ্যবন্ধুর মাধ্যমে দ্রুত যোগাযোগ করুন।</string>
+    <string name="no_dialer_app">কোনো ফোন অ্যাপ পাওয়া যায়নি।</string>
+    <string name="no_sms_app">কোনো এসএমএস অ্যাপ পাওয়া যায়নি।</string>
+
+    <!-- Emergency request foreground monitor -->
+    <string name="monitor_running">জরুরি আবেদন পর্যবেক্ষণ চলছে। চলমান নোটিফিকেশন দেখুন।</string>
+    <string name="monitor_started">জরুরি আবেদন পর্যবেক্ষণ শুরু হয়েছে।</string>
+    <string name="monitor_start_failed">পর্যবেক্ষণ শুরু করা যায়নি। অ্যাপ খোলা রেখে আবার চেষ্টা করুন।</string>
+    <string name="monitor_channel_name">জরুরি আবেদন পর্যবেক্ষণ</string>
+    <string name="monitor_channel_description">মিলে যাওয়া খোলা রক্তের আবেদনের চলমান সংখ্যা</string>
+    <string name="monitor_notification_title">জরুরি আবেদন পর্যবেক্ষণ</string>
+    <string name="monitor_notification_connecting">সরাসরি রক্তের আবেদনে সংযোগ হচ্ছে…</string>
+    <string name="any_blood_group">যেকোনো গ্রুপ</string>
+    <string name="any_district">সব জেলা</string>
+    <plurals name="monitor_notification_count">
+        <item quantity="one">%3$s এলাকায় %1$dটি খোলা %2$s আবেদন · %4$dটি জরুরি</item>
+        <item quantity="other">%3$s এলাকায় %1$dটি খোলা %2$s আবেদন · %4$dটি জরুরি</item>
+    </plurals>
+
+    <!-- Public health APIs -->
+    <string name="more_medicine_info">আরও তথ্য</string>
+    <string name="open_fda_disclaimer">openFDA-এর প্রকাশ্য লেবেল তথ্য। চিকিৎসা ও মাত্রা ডাক্তার বা ফার্মাসিস্টের সঙ্গে নিশ্চিত করুন।</string>
+    <string name="medicine_indications">ব্যবহার ও নির্দেশনা</string>
+    <string name="medicine_warnings">সতর্কতা</string>
+    <string name="medicine_info_not_provided">এই লেবেলে এই অংশের তথ্য নেই।</string>
+    <string name="medicine_info_empty">এই ঔষধের নামে কোনো প্রকাশ্য FDA লেবেল মেলেনি। ফার্মাসিস্টের কাছে জেনেরিক নাম জিজ্ঞেস করুন।</string>
+    <string name="api_network_error">নেটওয়ার্ক সংযোগ নেই। সংযোগ দেখে আবার চেষ্টা করুন।</string>
+    <string name="api_server_error">প্রকাশ্য স্বাস্থ্য সেবা এখন পাওয়া যাচ্ছে না। পরে আবার চেষ্টা করুন।</string>
+    <string name="api_data_error">প্রকাশ্য সেবা এমন তথ্য দিয়েছে যা পড়া যায়নি।</string>
+    <string name="health_stats_value">প্রকাশিত কোভিড-১৯ মোট\nআক্রান্ত: %1$s\nমৃত্যু: %2$s\nটেস্ট: %3$s\nজনসংখ্যা: %4$s\nহালনাগাদ: %5$s\n\nউৎস: disease.sh প্রকাশ্য API</string>
+    <string name="health_stats_empty">বাংলাদেশের স্বাস্থ্য পরিসংখ্যান এখন পাওয়া যাচ্ছে না।</string>
+
+    <!-- Realtime donor presence -->
+    <string name="available_now_badge">এখন উপলব্ধ</string>
+    <string name="presence_not_configured">Realtime Database কনফিগার না করা পর্যন্ত সরাসরি প্রাপ্যতা পাওয়া যাবে না।</string>
+    <string name="presence_firebase_sign_in_required">সরাসরি প্রাপ্যতা প্রকাশ করতে Firebase অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
+    <string name="presence_updating">সরাসরি প্রাপ্যতা হালনাগাদ হচ্ছে…</string>
+    <string name="presence_available_now">রক্তদাতা খোঁজা মানুষ এখন আপনাকে উপলব্ধ হিসেবে দেখবে।</string>
+    <string name="presence_not_available">আপনার “এখন উপলব্ধ” চিহ্ন বন্ধ আছে।</string>
+    <string name="presence_update_failed">সরাসরি প্রাপ্যতা হালনাগাদ করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।</string>
 
     <!-- Validation and errors -->
     <string name="error_required">এই ঘরটি পূরণ করুন</string>
@@ -213,68 +348,8 @@
     <string name="error_firebase_not_configured">ফায়ারবেস ইমেইল লগইন চালু নেই। অফলাইন মোড ব্যবহার করতে অ্যাপে অ্যাকাউন্ট তৈরি করুন।</string>
     <string name="error_owner_only">ঔষধের দোকান মালিক বা ক্লিনিক মালিক অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
 
-    <!-- Lab demonstration and Android components -->
-    <string name="lab_home_title">অ্যান্ড্রয়েড কম্পোনেন্টস ল্যাব</string>
-    <string name="lab_home_note">Intent, ব্রডকাস্ট, কন্টাক্ট, সার্ভিস, JSON API ও Firebase-এর লাইভ ডেমো খুলুন।</string>
-    <string name="open_lab_demo">ল্যাব ডেমো খুলুন</string>
-    <string name="lab_title">কম্পোনেন্টস ল্যাব</string>
-    <string name="lab_heading">অ্যান্ড্রয়েড সিস্টেমের লাইভ ডেমো</string>
-    <string name="lab_subtitle">প্রতিটি কম্পোনেন্ট চালিয়ে দৃশ্যমান ফল দেখান। দুই-কলামের ল্যান্ডস্কেপ লেআউট দেখাতে ডিভাইস ঘোরান।</string>
-    <string name="lab_architecture_title">Activity ও Intent</string>
-    <string name="lab_architecture_status">এই দ্বিতীয় Activity-টি %1$s থেকে explicit Intent দিয়ে খোলা হয়েছে। নিচের বোতামটি implicit Intent ব্যবহার করে।</string>
-    <string name="open_google_maps_demo">Google Maps দিয়ে নেভিগেট করুন</string>
     <string name="navigate">নেভিগেট</string>
     <string name="no_maps_app">কোনো ম্যাপ বা ব্রাউজার অ্যাপ পাওয়া যায়নি।</string>
-
-    <string name="device_signals_title">ডিভাইস সিগন্যাল ও ফোরগ্রাউন্ড সার্ভিস</string>
-    <string name="broadcast_waiting">ব্যাটারি, এয়ারপ্লেন মোড ও পাওয়ার সেভিং ব্রডকাস্ট শোনা হচ্ছে।</string>
-    <string name="broadcast_airplane_on">ব্রডকাস্ট পাওয়া গেছে: এয়ারপ্লেন মোড চালু।</string>
-    <string name="broadcast_airplane_off">ব্রডকাস্ট পাওয়া গেছে: এয়ারপ্লেন মোড বন্ধ।</string>
-    <string name="broadcast_power_save_on">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারি সেভার চালু।</string>
-    <string name="broadcast_power_save_off">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারি সেভার বন্ধ।</string>
-    <string name="broadcast_battery">ব্যাটারি ব্রডকাস্ট: %1$d%% বাকি।</string>
-    <string name="broadcast_battery_low">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারি কম।</string>
-    <string name="broadcast_battery_okay">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারির মাত্রা আবার স্বাভাবিক।</string>
-    <string name="airplane_settings">এয়ারপ্লেন মোড</string>
-    <string name="battery_saver_settings">ব্যাটারি সেভার</string>
-    <string name="permission_status_granted">নোটিফিকেশন অনুমতি: দেওয়া হয়েছে।</string>
-    <string name="permission_status_needed">নোটিফিকেশন অনুমতি: Android 13+ এ প্রয়োজন।</string>
-    <string name="request_notification_permission">নোটিফিকেশন অনুমতি নিন</string>
-    <string name="notification_permission_granted">নোটিফিকেশন অনুমতি দেওয়া হয়েছে।</string>
-    <string name="notification_permission_denied">নোটিফিকেশন অনুমতি দেওয়া হয়নি। সিস্টেম সেটিংস থেকে চালু করতে পারেন।</string>
-    <string name="notification_permission_already_granted">নোটিফিকেশন অনুমতি ইতিমধ্যে আছে।</string>
-    <string name="start_monitor">ফোরগ্রাউন্ড মনিটর চালু করুন</string>
-    <string name="stop_monitor">মনিটর বন্ধ করুন</string>
-    <string name="monitor_status_running">ফোরগ্রাউন্ড সার্ভিস চলছে। নোটিফিকেশন ট্রে দেখুন।</string>
-    <string name="monitor_status_stopped">ফোরগ্রাউন্ড সার্ভিস বন্ধ।</string>
-    <string name="monitor_channel_name">হেলথ মনিটর</string>
-    <string name="monitor_channel_description">সক্রিয় ফোরগ্রাউন্ড হেলথ-মনিটর আপডেট</string>
-    <string name="monitor_notification_title">স্বাস্থ্যবন্ধু হেলথ মনিটর সক্রিয়</string>
-    <plurals name="monitor_notification_detail">
-        <item quantity="one">ব্যাটারি %1$s%% · %2$d সেকেন্ড ধরে চলছে</item>
-        <item quantity="other">ব্যাটারি %1$s%% · %2$d সেকেন্ড ধরে চলছে</item>
-    </plurals>
-
-    <string name="contact_provider_title">জরুরি কন্টাক্ট প্রোভাইডার</string>
-    <string name="no_contact_selected">কোনো জরুরি কন্টাক্ট বেছে নেওয়া হয়নি।</string>
-    <string name="pick_emergency_contact">ডিভাইস কন্টাক্ট থেকে বেছে নিন</string>
-    <string name="selected_contact">নির্বাচিত: %1$s · %2$s</string>
-    <string name="unknown_contact">অজানা কন্টাক্ট</string>
-    <string name="contact_access_failed">নির্বাচিত কন্টাক্ট পড়া যায়নি।</string>
-
-    <string name="live_api_title">লাইভ JSON হেলথ API</string>
-    <string name="api_ready">HTTPS দিয়ে Open-Meteo কল এবং Gson দিয়ে JSON ফল পার্স করার জন্য প্রস্তুত।</string>
-    <string name="api_loading">GET রিকোয়েস্ট চলছে…</string>
-    <string name="api_result">ঢাকা এখন: %1$s°C · আর্দ্রতা %2$s%% · বাতাস %3$s কিমি/ঘণ্টা\nAPI সময়: %4$s</string>
-    <string name="api_error">API রিকোয়েস্ট ব্যর্থ: %1$s</string>
-    <string name="load_health_api">ঢাকার স্বাস্থ্য-আবহাওয়া লোড করুন</string>
-
-    <string name="firebase_demo_title">Firebase ক্লাউড যাচাই</string>
-    <string name="firebase_ready">আগে Email/Password দিয়ে লগইন করুন। এরপর একই যাচাইকৃত ইভেন্ট Firestore ও Realtime Database-এ লেখা হবে।</string>
-    <string name="firebase_running">Firebase সার্ভিসে সংযোগ হচ্ছে…</string>
-    <string name="firebase_success">তিনটি Firebase সার্ভিসই সফল। UID: %1$s</string>
-    <string name="firebase_error">Firebase যাচাইয়ে সমস্যা: %1$s</string>
-    <string name="run_firebase_demo">Firebase ক্লাউড যাচাই চালান</string>
 
     <!-- Notifications -->
     <string name="default_notification_channel_id">shastho_default</string>
