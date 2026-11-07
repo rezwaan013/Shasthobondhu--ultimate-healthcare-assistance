@@ -229,6 +229,66 @@
     <string name="error_firebase_not_configured">ফায়ারবেস ইমেইল লগইন চালু নেই। অফলাইন মোড ব্যবহার করতে অ্যাপে অ্যাকাউন্ট তৈরি করুন।</string>
     <string name="error_owner_only">ফার্মেসি মালিক বা হাসপাতাল মালিক অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
 
+    <!-- Lab demonstration and Android components -->
+    <string name="lab_home_title">অ্যান্ড্রয়েড কম্পোনেন্টস ল্যাব</string>
+    <string name="lab_home_note">Intent, ব্রডকাস্ট, কন্টাক্ট, সার্ভিস, JSON API ও Firebase-এর লাইভ ডেমো খুলুন।</string>
+    <string name="open_lab_demo">ল্যাব ডেমো খুলুন</string>
+    <string name="lab_title">কম্পোনেন্টস ল্যাব</string>
+    <string name="lab_heading">অ্যান্ড্রয়েড সিস্টেমের লাইভ ডেমো</string>
+    <string name="lab_subtitle">প্রতিটি কম্পোনেন্ট চালিয়ে দৃশ্যমান ফল দেখান। দুই-কলামের ল্যান্ডস্কেপ লেআউট দেখাতে ডিভাইস ঘোরান।</string>
+    <string name="lab_architecture_title">Activity ও Intent</string>
+    <string name="lab_architecture_status">এই দ্বিতীয় Activity-টি %1$s থেকে explicit Intent দিয়ে খোলা হয়েছে। নিচের বোতামটি implicit Intent ব্যবহার করে।</string>
+    <string name="open_google_maps_demo">Google Maps দিয়ে নেভিগেট করুন</string>
+    <string name="navigate">নেভিগেট</string>
+    <string name="no_maps_app">কোনো ম্যাপ বা ব্রাউজার অ্যাপ পাওয়া যায়নি।</string>
+
+    <string name="device_signals_title">ডিভাইস সিগন্যাল ও ফোরগ্রাউন্ড সার্ভিস</string>
+    <string name="broadcast_waiting">ব্যাটারি, এয়ারপ্লেন মোড ও পাওয়ার সেভিং ব্রডকাস্ট শোনা হচ্ছে।</string>
+    <string name="broadcast_airplane_on">ব্রডকাস্ট পাওয়া গেছে: এয়ারপ্লেন মোড চালু।</string>
+    <string name="broadcast_airplane_off">ব্রডকাস্ট পাওয়া গেছে: এয়ারপ্লেন মোড বন্ধ।</string>
+    <string name="broadcast_power_save_on">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারি সেভার চালু।</string>
+    <string name="broadcast_power_save_off">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারি সেভার বন্ধ।</string>
+    <string name="broadcast_battery">ব্যাটারি ব্রডকাস্ট: %1$d%% বাকি।</string>
+    <string name="broadcast_battery_low">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারি কম।</string>
+    <string name="broadcast_battery_okay">ব্রডকাস্ট পাওয়া গেছে: ব্যাটারির মাত্রা আবার স্বাভাবিক।</string>
+    <string name="airplane_settings">এয়ারপ্লেন মোড</string>
+    <string name="battery_saver_settings">ব্যাটারি সেভার</string>
+    <string name="permission_status_granted">নোটিফিকেশন অনুমতি: দেওয়া হয়েছে।</string>
+    <string name="permission_status_needed">নোটিফিকেশন অনুমতি: Android 13+ এ প্রয়োজন।</string>
+    <string name="request_notification_permission">নোটিফিকেশন অনুমতি নিন</string>
+    <string name="notification_permission_granted">নোটিফিকেশন অনুমতি দেওয়া হয়েছে।</string>
+    <string name="notification_permission_denied">নোটিফিকেশন অনুমতি দেওয়া হয়নি। সিস্টেম সেটিংস থেকে চালু করতে পারেন।</string>
+    <string name="notification_permission_already_granted">নোটিফিকেশন অনুমতি ইতিমধ্যে আছে।</string>
+    <string name="start_monitor">ফোরগ্রাউন্ড মনিটর চালু করুন</string>
+    <string name="stop_monitor">মনিটর বন্ধ করুন</string>
+    <string name="monitor_status_running">ফোরগ্রাউন্ড সার্ভিস চলছে। নোটিফিকেশন ট্রে দেখুন।</string>
+    <string name="monitor_status_stopped">ফোরগ্রাউন্ড সার্ভিস বন্ধ।</string>
+    <string name="monitor_channel_name">হেলথ মনিটর</string>
+    <string name="monitor_channel_description">সক্রিয় ফোরগ্রাউন্ড হেলথ-মনিটর আপডেট</string>
+    <string name="monitor_notification_title">স্বাস্থ্যবন্ধু হেলথ মনিটর সক্রিয়</string>
+    <string name="monitor_notification_detail">ব্যাটারি %1$s%% · %2$d সেকেন্ড ধরে চলছে</string>
+
+    <string name="contact_provider_title">জরুরি কন্টাক্ট প্রোভাইডার</string>
+    <string name="no_contact_selected">কোনো জরুরি কন্টাক্ট বেছে নেওয়া হয়নি।</string>
+    <string name="pick_emergency_contact">ডিভাইস কন্টাক্ট থেকে বেছে নিন</string>
+    <string name="selected_contact">নির্বাচিত: %1$s · %2$s</string>
+    <string name="unknown_contact">অজানা কন্টাক্ট</string>
+    <string name="contact_access_failed">নির্বাচিত কন্টাক্ট পড়া যায়নি।</string>
+
+    <string name="live_api_title">লাইভ JSON হেলথ API</string>
+    <string name="api_ready">HTTPS দিয়ে Open-Meteo কল এবং Gson দিয়ে JSON ফল পার্স করার জন্য প্রস্তুত।</string>
+    <string name="api_loading">GET রিকোয়েস্ট চলছে…</string>
+    <string name="api_result">ঢাকা এখন: %1$s°C · আর্দ্রতা %2$s%% · বাতাস %3$s কিমি/ঘণ্টা\nAPI সময়: %4$s</string>
+    <string name="api_error">API রিকোয়েস্ট ব্যর্থ: %1$s</string>
+    <string name="load_health_api">ঢাকার স্বাস্থ্য-আবহাওয়া লোড করুন</string>
+
+    <string name="firebase_demo_title">Firebase ক্লাউড যাচাই</string>
+    <string name="firebase_ready">Anonymous Authentication চালিয়ে একই ইভেন্ট Firestore ও Realtime Database-এ লেখা হবে।</string>
+    <string name="firebase_running">Firebase সার্ভিসে সংযোগ হচ্ছে…</string>
+    <string name="firebase_success">তিনটি Firebase সার্ভিসই সফল। UID: %1$s</string>
+    <string name="firebase_error">Firebase যাচাইয়ে সমস্যা: %1$s</string>
+    <string name="run_firebase_demo">Firebase ক্লাউড যাচাই চালান</string>
+
     <!-- Notifications -->
     <string name="default_notification_channel_id">shastho_default</string>
     <string name="notification_channel_name">স্বাস্থ্যবন্ধু সতর্কতা</string>

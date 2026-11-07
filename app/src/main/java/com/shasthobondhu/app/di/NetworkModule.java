@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.shasthobondhu.app.BuildConfig;
 import com.shasthobondhu.app.data.remote.FirebaseService;
 import com.shasthobondhu.app.data.remote.PasswordResetApi;
+import com.shasthobondhu.app.data.remote.PublicHealthApi;
 
 import java.util.concurrent.TimeUnit;
 
@@ -72,5 +73,16 @@ public class NetworkModule {
     @Singleton
     public PasswordResetApi providePasswordResetApi(Retrofit retrofit) {
         return retrofit.create(PasswordResetApi.class);
+    }
+
+    @Provides
+    @Singleton
+    public PublicHealthApi providePublicHealthApi(OkHttpClient client, Gson gson) {
+        return new Retrofit.Builder()
+                .baseUrl("https://api.open-meteo.com/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+                .create(PublicHealthApi.class);
     }
 }

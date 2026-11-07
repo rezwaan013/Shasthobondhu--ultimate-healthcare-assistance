@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shasthobondhu.app.data.local.entities.HospitalEntity;
 import com.shasthobondhu.app.databinding.ItemHospitalBinding;
+import com.shasthobondhu.app.util.MapNavigationUtils;
 
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
                 // No dialer available.
             }
         });
+        holder.binding.btnNavigateHospital.setOnClickListener(v ->
+                MapNavigationUtils.navigate(v.getContext(),
+                        hospital.name + ", " + hospital.address));
     }
 
     @Override

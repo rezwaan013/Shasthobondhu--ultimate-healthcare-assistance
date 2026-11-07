@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "lab_demo_status": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['uid', 'source', 'message', 'timestamp']) && newData.child('uid').val() === auth.uid && newData.child('source').val() === 'android_lab_demo'"
+      }
+    }
+  }
+}

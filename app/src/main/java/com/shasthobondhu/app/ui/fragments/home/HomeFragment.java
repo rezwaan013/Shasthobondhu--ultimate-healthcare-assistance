@@ -1,5 +1,6 @@
 package com.shasthobondhu.app.ui.fragments.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.shasthobondhu.app.R;
+import com.shasthobondhu.app.LabComponentsActivity;
 import com.shasthobondhu.app.databinding.FragmentHomeBinding;
 import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.util.constants.AppConstants;
@@ -48,6 +50,11 @@ public class HomeFragment extends Fragment {
         binding.cardMedicines.setOnClickListener(v -> navigate(R.id.nav_medicines));
         binding.btnQuickRequest.setOnClickListener(v -> navigate(R.id.nav_create_request));
         binding.btnQuickDonate.setOnClickListener(v -> navigate(R.id.nav_donor_register));
+        binding.btnLabDemo.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), LabComponentsActivity.class);
+            intent.putExtra(LabComponentsActivity.EXTRA_ENTRY_SOURCE, "MainActivity/HomeFragment");
+            startActivity(intent);
+        });
 
         binding.btnLogin.setOnClickListener(v -> openLogin(null));
         binding.btnRegister.setOnClickListener(v -> openRegister(null));

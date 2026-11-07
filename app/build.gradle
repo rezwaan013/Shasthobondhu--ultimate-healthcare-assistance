@@ -22,6 +22,11 @@ android {
         // Override per machine with:  -PSHASSTHO_RESET_URL=https://your-host/  (or in gradle.properties)
         def resetBaseUrl = project.findProperty("SHASSTHO_RESET_URL") ?: ""
         buildConfigField "String", "PASSWORD_RESET_BASE_URL", "\"${resetBaseUrl}\""
+
+        // Override this if Firebase Console creates the database in another region.
+        def realtimeDatabaseUrl = project.findProperty("FIREBASE_DATABASE_URL")
+                ?: "https://shasthobondhu-d5bdf-default-rtdb.firebaseio.com/"
+        buildConfigField "String", "FIREBASE_DATABASE_URL", "\"${realtimeDatabaseUrl}\""
     }
 
     buildTypes {
@@ -84,6 +89,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.0')
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-messaging'
 
     // Testing

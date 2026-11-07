@@ -16,7 +16,7 @@ Bangla + English support and area-based search.
 | DI | Hilt (`annotationProcessor`, no kapt) |
 | Local cache | Room |
 | Networking | Retrofit + OkHttp + Gson |
-| Backend | Firebase Auth (Phone + Email/Password), Firestore, Cloud Messaging |
+| Backend | Firebase Auth, Firestore, Realtime Database, Cloud Messaging |
 | Build | AGP 7.3.1 · Gradle 7.4 · JDK 11 · Groovy DSL |
 
 `minSdk 24` · `targetSdk 33` · `compileSdk 33`
@@ -28,7 +28,8 @@ Bangla + English support and area-based search.
 ```
 app/src/main/java/com/shasthobondhu/app/
 ├── ShasthoBondhuApp.java          # @HiltAndroidApp
-├── MainActivity.java              # single activity + BottomNavigationView
+├── MainActivity.java              # primary activity + BottomNavigationView
+├── LabComponentsActivity.java     # second activity + Android/Firebase live demos
 ├── data/
 │   ├── local/                     # Room: AppDatabase, entities, dao
 │   ├── remote/                    # FirebaseService, PasswordResetApi, FCM service, DTOs
@@ -62,8 +63,12 @@ app/src/main/res/
 4. Enable **Authentication → Sign-in method**:
    * **Phone** — used by the OTP login screen.
    * **Email/Password** — used by registration and the forgot-password flow.
+   * **Anonymous** — used by the one-button Firebase lab verification.
 5. Create a **Cloud Firestore** database.
-6. Add your debug **SHA-1 / SHA-256** fingerprints (required for Phone Auth):
+6. Create a **Realtime Database** in the same Firebase project.
+   If Firebase gives it a regional URL, place that URL in `gradle.properties`:
+   `FIREBASE_DATABASE_URL=https://your-database-url/`.
+7. Add your debug **SHA-1 / SHA-256** fingerprints (required for Phone Auth):
    ```
    ./gradlew signingReport
    ```
@@ -72,7 +77,7 @@ app/src/main/res/
 Deploy the Firestore rules included in this repo:
 
 ```bash
-firebase deploy --only firestore:rules
+firebase deploy --only firestore:rules,database
 ```
 
 ---
@@ -158,18 +163,27 @@ Nothing secret is stored in the app: Gmail credentials live only in the Cloud Fu
 
 * **Blood donors** — register with name, phone, blood group, division/district/upazila,
   last donation date and availability. Search **by blood group and by area**
-  (any level of the hierarchy), then call or SMS the donor.
+  (any level of the hierarchy), then call the donor.
 * **Emergency requests** — create a request (patient, group, units, hospital, location,
-  urgency, contact), see an area-filtered feed and track status
-  (Open → Accepted → Fulfilled). Matching donors are notified through FCM.
-* **Hospitals & clinics** — search by name, area or service; call or open maps.
+  urgency, contact), see the open-request feed and call the requester.
+* **Hospitals & clinics** — search by name, area, test or service; call or launch
+  turn-by-turn Google Maps navigation.
 * **Medicines** — search a medicine and see participating pharmacies with
-  **In Stock / Low / Out of Stock** and the last-updated time; pharmacy accounts update stock.
-* **Auth** — phone OTP plus email/password, roles **User/Donor** and **Pharmacy**.
+  **In Stock / Low / Out of Stock**; pharmacy owners update stock and users can navigate
+  to the pharmacy in Google Maps.
+* **Auth and roles** — phone OTP plus email/password, with **General user**,
+  **Pharmacy owner**, and **Hospital owner** dashboards. A salted local fallback keeps
+  the roles testable when Firebase Email/Password is not enabled.
 * **Offline first** — Room caches everything; screens expose loading / empty / error states.
 * **Localisation** — complete English (`values/`) and Bangla (`values-bn/`) string sets.
 * **Accessible visual modes** — a persistent forest-green light/dark theme, boxed service
   selections and large touch targets tuned on a Samsung Android 14 device.
+* **Lab components** — explicit and implicit Intents, system broadcasts, contact picker,
+  runtime notification permission, updating foreground-service notification, public JSON API,
+  and Auth + Firestore + Realtime Database cloud verification.
+
+See **[LAB_DEMONSTRATION.md](LAB_DEMONSTRATION.md)** for the exact live-demo sequence,
+Firebase prerequisites, and code references.
 
 ---
 

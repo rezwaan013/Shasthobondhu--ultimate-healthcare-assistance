@@ -13,6 +13,7 @@ import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.data.local.entities.MedicineEntity;
 import com.shasthobondhu.app.databinding.ItemMedicineBinding;
 import com.shasthobondhu.app.util.DisplayUtils;
+import com.shasthobondhu.app.util.MapNavigationUtils;
 import com.shasthobondhu.app.util.constants.AppConstants;
 
 import java.util.List;
@@ -60,6 +61,13 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
             } catch (Exception ignored) {
                 // No dialer available.
             }
+        });
+        holder.binding.btnNavigatePharmacy.setOnClickListener(v -> {
+            String destination = medicine.pharmacyAddress == null
+                    || medicine.pharmacyAddress.trim().isEmpty()
+                    ? medicine.pharmacyName + ", " + medicine.pharmacyArea
+                    : medicine.pharmacyName + ", " + medicine.pharmacyAddress;
+            MapNavigationUtils.navigate(v.getContext(), destination);
         });
     }
 
