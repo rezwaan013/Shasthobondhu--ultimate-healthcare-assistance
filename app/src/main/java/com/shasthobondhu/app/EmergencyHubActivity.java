@@ -20,7 +20,7 @@ import com.shasthobondhu.app.data.model.HealthStats;
 import com.shasthobondhu.app.data.model.Resource;
 import com.shasthobondhu.app.data.repository.SystemStatusRepository;
 import com.shasthobondhu.app.data.repository.MonitorPreferences;
-import com.shasthobondhu.app.data.repository.PresenceRepository;
+import com.shasthobondhu.app.data.repository.RealtimeDatabaseRepository;
 import com.shasthobondhu.app.databinding.ActivityEmergencyHubBinding;
 import com.shasthobondhu.app.databinding.DialogContactPickerBinding;
 import com.shasthobondhu.app.system.SystemEvent;
@@ -56,6 +56,8 @@ public class EmergencyHubActivity extends AppCompatActivity {
     private PermissionHelper permissionHelper;
     private boolean changingMonitorSwitch;
     private boolean changingAvailabilitySwitch;
+    private boolean donorAvailable;
+    private boolean userOnline;
     private SystemEventReceiver systemEventReceiver;
     private boolean receiverRegistered;
     private SystemEvent.Type dismissedSystemEvent;
@@ -383,7 +385,7 @@ public class EmergencyHubActivity extends AppCompatActivity {
         boolean usable = viewModel.isPresenceConfigured()
                 && !SessionManager.isLocalMode(this)
                 && !viewModel.getUserId().isEmpty();
-        binding.switchAvailability.setEnabled(usable);
+        binding.switchAvailability.setEnabled(false);
         if (!viewModel.isPresenceConfigured()) {
             binding.tvPresenceStatus.setText(R.string.presence_not_configured);
             return;
@@ -393,6 +395,19 @@ public class EmergencyHubActivity extends AppCompatActivity {
             return;
         }
         viewModel.getPresence().observe(this, this::renderOwnPresence);
+        viewModel.getDonorProfile().observe(this, donor -> {
+            binding.switchAvailability.setEnabled(donor != null);
+            if (donor == null) {
+                donorAvailable = false;
+                binding.tvPresenceStatus.setText(R.string.presence_donor_profile_required);
+                return;
+            }
+            donorAvailable = donor != null && donor.isAvailable;
+            changingAvailabilitySwitch = true;
+            binding.switchAvailability.setChecked(donorAvailable);
+            changingAvailabilitySwitch = false;
+            renderAvailabilityStatus();
+        });
         binding.switchAvailability.setOnCheckedChangeListener((button, checked) -> {
             if (changingAvailabilitySwitch) {
                 return;
@@ -402,8 +417,8 @@ public class EmergencyHubActivity extends AppCompatActivity {
             viewModel.setAvailableNow(checked, (success, failure) -> runOnUiThread(() -> {
                 binding.switchAvailability.setEnabled(true);
                 if (success) {
-                    binding.tvPresenceStatus.setText(checked
-                            ? R.string.presence_available_now : R.string.presence_not_available);
+                    donorAvailable = checked;
+                    renderAvailabilityStatus();
                 } else {
                     changingAvailabilitySwitch = true;
                     binding.switchAvailability.setChecked(!checked);
@@ -416,19 +431,25 @@ public class EmergencyHubActivity extends AppCompatActivity {
 
     private void renderOwnPresence(Map<String, DonorPresence> values) {
         DonorPresence presence = values == null ? null : values.get(viewModel.getUserId());
-        boolean available = presence != null && presence.available;
-        changingAvailabilitySwitch = true;
-        binding.switchAvailability.setChecked(available);
-        changingAvailabilitySwitch = false;
-        binding.tvPresenceStatus.setText(available
-                ? R.string.presence_available_now : R.string.presence_not_available);
+        userOnline = presence != null && presence.online;
+        renderAvailabilityStatus();
     }
 
-    private int presenceError(PresenceRepository.Failure failure) {
-        if (failure == PresenceRepository.Failure.NOT_CONFIGURED) {
+    private void renderAvailabilityStatus() {
+        if (donorAvailable && userOnline) {
+            binding.tvPresenceStatus.setText(R.string.presence_available_now);
+        } else if (donorAvailable) {
+            binding.tvPresenceStatus.setText(R.string.presence_available_offline);
+        } else {
+            binding.tvPresenceStatus.setText(R.string.presence_not_available);
+        }
+    }
+
+    private int presenceError(RealtimeDatabaseRepository.Failure failure) {
+        if (failure == RealtimeDatabaseRepository.Failure.NOT_CONFIGURED) {
             return R.string.presence_not_configured;
         }
-        if (failure == PresenceRepository.Failure.NOT_AUTHENTICATED) {
+        if (failure == RealtimeDatabaseRepository.Failure.UNAUTHENTICATED) {
             return R.string.presence_firebase_sign_in_required;
         }
         return R.string.presence_update_failed;

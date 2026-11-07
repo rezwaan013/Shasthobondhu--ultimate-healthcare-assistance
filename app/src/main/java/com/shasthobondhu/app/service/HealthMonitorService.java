@@ -13,12 +13,17 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.shasthobondhu.app.MainActivity;
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.data.remote.FirebaseService;
 import com.shasthobondhu.app.data.repository.MonitorPreferences;
+import com.shasthobondhu.app.data.repository.RealtimeDatabaseRepository;
 import com.shasthobondhu.app.util.constants.AppConstants;
 
 import java.util.Locale;
@@ -27,7 +32,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-/** Foreground monitor for open Firestore blood requests matching the donor's alert profile. */
+/** Foreground monitor for open cloud blood requests matching the donor's alert profile. */
 @AndroidEntryPoint
 public class HealthMonitorService extends Service {
 
@@ -44,7 +49,9 @@ public class HealthMonitorService extends Service {
     @Inject
     FirebaseService firebaseService;
 
-    private ListenerRegistration requestListener;
+    private ListenerRegistration firestoreRequestListener;
+    private DatabaseReference realtimeRequestReference;
+    private ValueEventListener realtimeRequestListener;
     private String bloodGroup = "";
     private String district = "";
 
@@ -73,10 +80,13 @@ public class HealthMonitorService extends Service {
     }
 
     private void attachRequestListener() {
-        if (requestListener != null) {
-            requestListener.remove();
+        removeRequestListeners();
+        if (firebaseService.getRealtimeDb() != null
+                && firebaseService.getAuth().getCurrentUser() != null) {
+            attachRealtimeRequestListener();
+            return;
         }
-        requestListener = firebaseService.getDb()
+        firestoreRequestListener = firebaseService.getDb()
                 .collection(AppConstants.COLLECTION_REQUESTS)
                 .addSnapshotListener((snapshot, error) -> {
                     if (error != null || snapshot == null) {
@@ -104,6 +114,55 @@ public class HealthMonitorService extends Service {
                     }
                     updateNotification(matching, urgent);
                 });
+    }
+
+    private void attachRealtimeRequestListener() {
+        realtimeRequestReference = firebaseService.getRealtimeDb()
+                .getReference(RealtimeDatabaseRepository.PATH_REQUESTS);
+        realtimeRequestListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                int matching = 0;
+                int urgent = 0;
+                for (DataSnapshot request : snapshot.getChildren()) {
+                    if (!"Open".equalsIgnoreCase(childString(request, "status"))) continue;
+                    if (!matches(bloodGroup, childString(request, "bloodGroup"))
+                            || !containsIgnoreCase(childString(request, "location"), district)) {
+                        continue;
+                    }
+                    matching++;
+                    String urgency = childString(request, "urgency");
+                    if (AppConstants.URGENCY_CRITICAL.equalsIgnoreCase(urgency)
+                            || AppConstants.URGENCY_URGENT.equalsIgnoreCase(urgency)) {
+                        urgent++;
+                    }
+                }
+                updateNotification(matching, urgent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                updateNotification(-1, 0);
+            }
+        };
+        realtimeRequestReference.addValueEventListener(realtimeRequestListener);
+    }
+
+    private String childString(DataSnapshot snapshot, String child) {
+        Object value = snapshot.child(child).getValue();
+        return value == null ? "" : String.valueOf(value).trim();
+    }
+
+    private void removeRequestListeners() {
+        if (firestoreRequestListener != null) {
+            firestoreRequestListener.remove();
+            firestoreRequestListener = null;
+        }
+        if (realtimeRequestReference != null && realtimeRequestListener != null) {
+            realtimeRequestReference.removeEventListener(realtimeRequestListener);
+        }
+        realtimeRequestReference = null;
+        realtimeRequestListener = null;
     }
 
     private boolean matches(String expected, String actual) {
@@ -169,10 +228,7 @@ public class HealthMonitorService extends Service {
 
     @Override
     public void onDestroy() {
-        if (requestListener != null) {
-            requestListener.remove();
-            requestListener = null;
-        }
+        removeRequestListeners();
         MonitorPreferences.setRunning(this, false, bloodGroup, district);
         super.onDestroy();
     }

@@ -67,15 +67,16 @@ app/src/main/res/
 4. Enable **Authentication → Sign-in method → Email/Password**. No SHA fingerprint is
    required because this app does not use Phone or Google Authentication.
 5. Create a **Cloud Firestore** database.
-6. Create a **Realtime Database** for live donor presence.
-7. Re-download `google-services.json` after creating Realtime Database. The file must contain
-   `project_info.firebase_url`; the checked-in file currently does not, so presence intentionally
-   fails soft until it is replaced.
+6. Create the **Realtime Database** in `asia-southeast1`. The configured endpoint is
+   `https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app`.
+7. Keep `app/google-services.json` downloaded from that Firebase project. The build also accepts
+   a `FIREBASE_DATABASE_URL` Gradle property for separate environments.
 
 Deploy the restricted Firestore and Realtime Database rules included in this repo:
 
 ```bash
-firebase deploy --only firestore:rules,database
+firebase deploy --only firestore:rules
+firebase.cmd deploy --only database
 ```
 
 ---
@@ -114,12 +115,11 @@ fingerprint, or app secret. Firebase handles token generation, expiration and pa
 ## Features
 
 * **Blood donors** — register with name, phone, blood group, division/district/upazila,
-  calendar-selected last donation date and availability. Donor profiles synchronize through
-  Firestore so updates appear on other phones. Search by selected division plus an exact,
-  case-insensitive district/area match, optionally filtered by blood group.
-* **Emergency requests** — create a request (patient, group, units, hospital, location,
-  patient details, required date/time, urgency and contact), synchronize through Firestore,
-  accept another user's request, see who accepted, and call the requester.
+  calendar-selected last donation date and availability. Profiles synchronize through Firestore
+  and RTDB. Search supports division, exact district/area and optional blood group.
+* **Emergency requests** — create push-ID requests in RTDB, mirror them to Firestore, accept an
+  open request, and let its owner mark accepted requests Fulfilled or Cancelled. Security rules
+  enforce ownership and valid transitions.
 * **Hospitals & clinics** — search by name, area, test or service; call or launch
   turn-by-turn Google Maps navigation. Clinic owners also publish doctor speciality,
   available days and times.
@@ -130,8 +130,10 @@ fingerprint, or app secret. Firebase handles token generation, expiration and pa
 * **Emergency Hub** — a separate, rotation-safe Activity for emergency contacts, live blood
   requests, donor presence, Bangladesh public-health statistics, system readiness and the
   Emergency Request Monitor.
-* **Live donor availability** — authenticated donors can publish ephemeral “Available now” state
-  to Realtime Database. Firestore remains the durable donor/profile source of truth.
+* **Live donor availability** — willingness is stored in `/blood_donors`; genuine connection
+  state comes from `.info/connected` and `/user_status`. “Available now” requires both.
+* **Private notifications** — `/notifications/{uid}` is visible only to that user. Clients can
+  mark records read but only a trusted backend can create them.
 * **Device-aware emergency delivery** — live airplane-mode, low-battery and power-saver warnings;
   runtime notification/contact permissions; contact-provider import; call and SMS intents.
 * **Auth-first role flow** — the app opens only to Login/Register. Registration chooses
@@ -169,22 +171,35 @@ launch, on a background thread, so every screen has content immediately.
 | Runtime permissions | `PermissionHelper`, `EmergencyHubActivity` |
 | System broadcasts | `SystemEventReceiver`, `SystemStatusRepository`, status banners in both activities |
 | Content Provider | `EmergencyContactRepository` queries `ContactsContract` off-main with a closed cursor |
-| Foreground service | `HealthMonitorService`, Hub monitor toggle, ongoing live Firestore notification |
+| Foreground service | `HealthMonitorService`, Hub monitor toggle, ongoing live RTDB/Firestore notification |
 | HTTP and typed JSON parsing | `PublicHealthApi`, `NetworkModule`, `HealthInfoRepository`, API DTOs and mappers |
-| Firebase Auth, Firestore, RTDB and FCM | `FirebaseService`, existing repositories/Auth, `PresenceRepository`, `ShasthoMessagingService` |
+| Firebase Auth, Firestore, RTDB and FCM | `FirebaseService`, `RealtimeDatabaseRepository`, `PresenceRepository`, `NotificationRepository`, `ShasthoMessagingService` |
 
 ## Manual setup and API notes
 
 ### Realtime Database
 
-1. In Firebase Console, open **Build → Realtime Database → Create Database**.
-2. Choose the region appropriate for the existing project.
-3. Deploy `database.rules.json` with `firebase deploy --only database`.
-4. Download a fresh Android `google-services.json` and replace `app/google-services.json`.
-5. Confirm the new file has `project_info.firebase_url`; never add or invent a URL/key in source.
+The final rules are intentionally restrictive. Review `database.rules.json` and
+`docs/RTDB_INTEGRATION_PLAN.md`, then deploy manually:
 
-Without these steps, Auth, Firestore and FCM continue to work. Presence controls are disabled and
-donor “Available now” badges stay hidden instead of crashing.
+```powershell
+firebase.cmd deploy --only database
+```
+
+Run the local Auth + Database emulator security smoke suite before deployment:
+
+```powershell
+firebase.cmd emulators:exec --only auth,database --project shasthobondhu-d5bdf `
+  "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\rtdb-rules-smoke.ps1"
+```
+
+Paths created automatically by app use are `/users`, `/blood_donors`, `/blood_requests`,
+`/blood_request_status`, and `/user_status`. `/notifications`, `/hospitals`, and `/medicines`
+remain empty until a trusted backend or Firebase Admin SDK writes real records.
+
+Hospital, medicine, and notification creation requires either the Admin SDK (which bypasses
+client rules) or an authenticated administrator with a server-issued custom claim:
+`{ "admin": true }`. Never derive this permission from `/users/{uid}/role`.
 
 ### Public APIs
 

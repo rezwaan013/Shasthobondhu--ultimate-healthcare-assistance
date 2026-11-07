@@ -3,6 +3,7 @@ package com.shasthobondhu.app.data.repository;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,27 +23,48 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
+@SuppressWarnings("unchecked")
 public class DonorRepository {
     private static final String TAG = "DonorRepository";
 
     private final DonorDao donorDao;
     private final FirebaseAuth auth;
     private final FirebaseFirestore firestore;
+    private final RealtimeDatabaseRepository realtimeRepository;
 
     @Inject
-    public DonorRepository(DonorDao donorDao, FirebaseService firebaseService) {
+    public DonorRepository(DonorDao donorDao, FirebaseService firebaseService,
+                           RealtimeDatabaseRepository realtimeRepository) {
         this.donorDao = donorDao;
         this.auth = firebaseService.getAuth();
         this.firestore = firebaseService.getDb();
+        this.realtimeRepository = realtimeRepository;
         startRemoteSync();
         syncExistingLocalProfile();
     }
 
     public LiveData<List<DonorEntity>> getDonors(String bloodGroup, String division, String area) {
-        return donorDao.searchDonors(bloodGroup == null ? "" : bloodGroup,
+        LiveData<List<DonorEntity>> local = donorDao.searchDonors(bloodGroup == null ? "" : bloodGroup,
                 division == null ? "" : division,
                 area == null ? "" : area,
                 System.currentTimeMillis());
+        if (!realtimeRepository.isConfigured() || !realtimeRepository.isAuthenticated()) {
+            return local;
+        }
+        LiveData<List<DonorEntity>> remote = realtimeRepository.observeDonors(
+                bloodGroup, division, area);
+        MediatorLiveData<List<DonorEntity>> result = new MediatorLiveData<>();
+        final List<DonorEntity>[] localValue = new List[]{null};
+        final List<DonorEntity>[] remoteValue = new List[]{null};
+        result.addSource(local, value -> {
+            localValue[0] = value;
+            publishPreferred(result, remoteValue[0], localValue[0]);
+        });
+        result.addSource(remote, value -> {
+            remoteValue[0] = value;
+            publishPreferred(result, remoteValue[0], localValue[0]);
+        });
+        return result;
     }
 
     public LiveData<List<DonorEntity>> getAllDonors() {
@@ -78,7 +100,29 @@ public class DonorRepository {
                 donorDao.insert(donor);
             }
             syncDonorToFirestore(donor);
+            realtimeRepository.saveDonorProfile(donor, null);
             AppExecutors.main(onSaved);
+        });
+    }
+
+    public void updateAvailability(String ownerUid, boolean available,
+                                   RealtimeDatabaseRepository.CompletionCallback callback) {
+        if (ownerUid == null || ownerUid.trim().isEmpty()) {
+            if (callback != null) {
+                callback.onComplete(false,
+                        RealtimeDatabaseRepository.Failure.UNAUTHENTICATED);
+            }
+            return;
+        }
+        AppExecutors.io(() -> {
+            donorDao.updateAvailability(ownerUid, available);
+            if (auth.getCurrentUser() != null
+                    && ownerUid.equals(auth.getCurrentUser().getUid())) {
+                firestore.collection(AppConstants.COLLECTION_DONORS).document(ownerUid)
+                        .update("available", available,
+                                "updatedAt", FieldValue.serverTimestamp());
+            }
+            realtimeRepository.updateDonorAvailability(ownerUid, available, callback);
         });
     }
 
@@ -169,5 +213,17 @@ public class DonorRepository {
                 available == null || available, ownerUid);
         donor.availableAfterEpoch = availableAfter == null ? 0L : availableAfter;
         return donor;
+    }
+
+    private static void publishPreferred(MediatorLiveData<List<DonorEntity>> result,
+                                         List<DonorEntity> remote,
+                                         List<DonorEntity> local) {
+        if (remote != null && !remote.isEmpty()) {
+            result.setValue(remote);
+        } else if (local != null) {
+            result.setValue(local);
+        } else if (remote != null) {
+            result.setValue(remote);
+        }
     }
 }

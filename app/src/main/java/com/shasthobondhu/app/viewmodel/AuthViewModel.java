@@ -15,6 +15,8 @@ import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.data.local.dao.LocalUserDao;
 import com.shasthobondhu.app.data.local.entities.LocalUserEntity;
 import com.shasthobondhu.app.data.remote.FirebaseService;
+import com.shasthobondhu.app.data.repository.PresenceRepository;
+import com.shasthobondhu.app.data.repository.RealtimeDatabaseRepository;
 import com.shasthobondhu.app.util.AppExecutors;
 import com.shasthobondhu.app.util.PasswordHasher;
 import com.shasthobondhu.app.util.SessionManager;
@@ -35,6 +37,8 @@ public class AuthViewModel extends ViewModel {
     private final FirebaseAuth auth;
     private final FirebaseFirestore db;
     private final LocalUserDao localUserDao;
+    private final RealtimeDatabaseRepository realtimeRepository;
+    private final PresenceRepository presenceRepository;
     @SuppressLint("StaticFieldLeak") // Hilt supplies the process-wide application context.
     private final Context context;
 
@@ -48,10 +52,14 @@ public class AuthViewModel extends ViewModel {
 
     @Inject
     public AuthViewModel(FirebaseService firebaseService, LocalUserDao localUserDao,
+                         RealtimeDatabaseRepository realtimeRepository,
+                         PresenceRepository presenceRepository,
                          @ApplicationContext Context context) {
         this.auth = firebaseService.getAuth();
         this.db = firebaseService.getDb();
         this.localUserDao = localUserDao;
+        this.realtimeRepository = realtimeRepository;
+        this.presenceRepository = presenceRepository;
         this.context = context.getApplicationContext();
         this.localMode.setValue(SessionManager.isLocalMode(this.context));
     }
@@ -177,6 +185,8 @@ public class AuthViewModel extends ViewModel {
                     db.collection(AppConstants.COLLECTION_USERS)
                             .document(user.getUid())
                             .set(document);
+                    realtimeRepository.saveUserProfile(user.getUid(), name, email, phone,
+                            safeRole, null);
                 });
     }
 
@@ -197,6 +207,7 @@ public class AuthViewModel extends ViewModel {
     }
 
     public void logout() {
+        presenceRepository.stopPresence(null);
         auth.signOut();
         SessionManager.signOut(context);
         localMode.setValue(false);
@@ -288,6 +299,10 @@ public class AuthViewModel extends ViewModel {
         SessionManager.signIn(context, uid, name, email, phone, role, isLocal);
         SessionManager.cacheRole(context, email, role);
         localMode.setValue(isLocal);
+        if (!isLocal) {
+            realtimeRepository.saveUserProfile(uid, name, email, phone, role, null);
+            presenceRepository.startPresenceForCurrentUser();
+        }
         loading.setValue(false);
         isLoginSuccess.setValue(true);
     }

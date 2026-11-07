@@ -139,6 +139,14 @@
                     android:layout_marginTop="12dp"
                     android:backgroundTint="@color/emergency"
                     android:text="@string/open_emergency_hub" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNotifications"
+                    style="@style/Widget.Shastho.Button.Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/open_notifications" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

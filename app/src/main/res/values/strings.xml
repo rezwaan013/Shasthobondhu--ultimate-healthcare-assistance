@@ -167,6 +167,10 @@
     <string name="request_accepted">Blood request accepted. Please contact the requester.</string>
     <string name="request_already_accepted">This request was already accepted.</string>
     <string name="cannot_accept_own_request">You cannot accept your own blood request.</string>
+    <string name="mark_request_fulfilled">Fulfilled</string>
+    <string name="cancel_request">Cancel</string>
+    <string name="request_status_updated">Request status updated.</string>
+    <string name="request_status_update_failed">This request status could not be updated.</string>
 
     <string name="hospitals_empty">No hospitals matched. Try another test, service or area.</string>
     <string name="hospital_tests_label">Tests and services</string>
@@ -334,10 +338,19 @@
     <string name="available_now_badge">Available now</string>
     <string name="presence_not_configured">Live availability is unavailable until Realtime Database is configured.</string>
     <string name="presence_firebase_sign_in_required">Sign in with a Firebase account to publish live availability.</string>
+    <string name="presence_donor_profile_required">Create a donor profile before publishing live availability.</string>
     <string name="presence_updating">Updating live availability…</string>
     <string name="presence_available_now">You appear as available now to people searching for donors.</string>
+    <string name="presence_available_offline">You are willing to donate, but the live badge is hidden while you are offline.</string>
     <string name="presence_not_available">Your live “Available now” badge is off.</string>
     <string name="presence_update_failed">Live availability could not be updated. Check your connection and try again.</string>
+
+    <!-- Private Realtime Database notifications -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_subtitle">Private blood-request and account updates created by ShasthoBondhu.</string>
+    <string name="notifications_empty">No notifications yet.</string>
+    <string name="notification_unread">New</string>
+    <string name="open_notifications">View notifications</string>
 
     <!-- Validation and errors -->
     <string name="error_required">This field is required</string>

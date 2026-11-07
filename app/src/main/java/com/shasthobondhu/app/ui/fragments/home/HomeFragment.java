@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
         binding.btnQuickRequest.setOnClickListener(v -> navigate(R.id.nav_create_request));
         binding.btnQuickDonate.setOnClickListener(v -> navigate(R.id.nav_donor_register));
         binding.btnEmergencyHub.setOnClickListener(v -> openEmergencyHub());
+        binding.btnNotifications.setOnClickListener(v -> navigate(R.id.nav_notifications));
         binding.btnSignOut.setOnClickListener(v -> {
             authViewModel.logout();
             NavOptions options = new NavOptions.Builder()

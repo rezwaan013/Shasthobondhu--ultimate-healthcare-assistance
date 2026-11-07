@@ -27,6 +27,10 @@ public class PresenceRepository {
     private final FirebaseAuth auth;
     private final FirebaseDatabase database;
     private final PresenceLiveData presence;
+    private DatabaseReference connectedReference;
+    private DatabaseReference activeStatusReference;
+    private ValueEventListener connectedListener;
+    private String activeUid;
 
     @Inject
     public PresenceRepository(FirebaseService firebaseService) {
@@ -43,32 +47,70 @@ public class PresenceRepository {
         return presence;
     }
 
-    public void setAvailability(String uid, boolean available, Callback callback) {
-        if (database == null) {
-            callback.onComplete(false, Failure.NOT_CONFIGURED);
+    /** Uses Firebase's connection sentinel; opening an Activity alone never implies online. */
+    public synchronized void startPresenceForCurrentUser() {
+        if (database == null || auth.getCurrentUser() == null
+                || !auth.getCurrentUser().isEmailVerified()) {
             return;
         }
-        if (auth.getCurrentUser() == null || uid == null
-                || !uid.equals(auth.getCurrentUser().getUid())) {
-            callback.onComplete(false, Failure.NOT_AUTHENTICATED);
+        String uid = auth.getCurrentUser().getUid();
+        if (uid.equals(activeUid) && connectedListener != null) {
             return;
         }
-        DatabaseReference reference = database.getReference("presence").child(uid);
-        Map<String, Object> disconnected = presenceValue(false);
-        reference.onDisconnect().setValue(disconnected).addOnCompleteListener(disconnectTask -> {
-            if (!disconnectTask.isSuccessful()) {
-                callback.onComplete(false, Failure.WRITE_FAILED);
-                return;
+        removeConnectionListener();
+        activeUid = uid;
+        connectedReference = database.getReference(".info/connected");
+        activeStatusReference = database.getReference(
+                RealtimeDatabaseRepository.PATH_USER_STATUS).child(uid);
+        connectedListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!Boolean.TRUE.equals(snapshot.getValue(Boolean.class))
+                        || activeStatusReference == null) {
+                    return;
+                }
+                activeStatusReference.onDisconnect().setValue(statusValue(false));
+                activeStatusReference.setValue(statusValue(true));
             }
-            reference.setValue(presenceValue(available)).addOnCompleteListener(writeTask ->
-                    callback.onComplete(writeTask.isSuccessful(), writeTask.isSuccessful()
-                            ? null : Failure.WRITE_FAILED));
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // A denied status write must not affect authentication or other app features.
+            }
+        };
+        connectedReference.addValueEventListener(connectedListener);
+    }
+
+    public synchronized void stopPresence(Callback callback) {
+        if (database == null) {
+            complete(callback, true, null);
+            return;
+        }
+        DatabaseReference status = activeStatusReference;
+        removeConnectionListener();
+        if (status == null) {
+            complete(callback, true, null);
+            return;
+        }
+        status.setValue(statusValue(false)).addOnCompleteListener(task -> {
+            complete(callback, task.isSuccessful(), task.isSuccessful()
+                    ? null : Failure.WRITE_FAILED);
         });
     }
 
-    private Map<String, Object> presenceValue(boolean available) {
+    private synchronized void removeConnectionListener() {
+        if (connectedReference != null && connectedListener != null) {
+            connectedReference.removeEventListener(connectedListener);
+        }
+        connectedReference = null;
+        connectedListener = null;
+        activeStatusReference = null;
+        activeUid = null;
+    }
+
+    private Map<String, Object> statusValue(boolean online) {
         Map<String, Object> value = new HashMap<>();
-        value.put("available", available);
+        value.put("online", online);
         value.put("lastSeen", ServerValue.TIMESTAMP);
         return value;
     }
@@ -79,6 +121,10 @@ public class PresenceRepository {
         void onComplete(boolean success, Failure failure);
     }
 
+    private static void complete(Callback callback, boolean success, Failure failure) {
+        if (callback != null) callback.onComplete(success, failure);
+    }
+
     private static final class PresenceLiveData
             extends LiveData<Map<String, DonorPresence>> {
 
@@ -86,7 +132,8 @@ public class PresenceRepository {
         private final ValueEventListener listener;
 
         PresenceLiveData(FirebaseDatabase database) {
-            reference = database == null ? null : database.getReference("presence");
+            reference = database == null ? null : database.getReference(
+                    RealtimeDatabaseRepository.PATH_USER_STATUS);
             listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

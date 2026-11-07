@@ -46,4 +46,7 @@ public interface DonorDao {
 
     @Query("SELECT COUNT(*) FROM donors")
     int count();
+
+    @Query("UPDATE donors SET isAvailable = :available WHERE ownerUid = :ownerUid")
+    int updateAvailability(String ownerUid, boolean available);
 }

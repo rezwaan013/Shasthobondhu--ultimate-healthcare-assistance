@@ -14,11 +14,11 @@ public final class PresenceMapper {
         if (values == null) {
             return null;
         }
-        Object availableValue = values.get("available");
+        Object onlineValue = values.get("online");
         Object lastSeenValue = values.get("lastSeen");
-        boolean available = availableValue instanceof Boolean && (Boolean) availableValue;
+        boolean online = onlineValue instanceof Boolean && (Boolean) onlineValue;
         long lastSeen = lastSeenValue instanceof Number
                 ? ((Number) lastSeenValue).longValue() : 0L;
-        return new DonorPresence(available, lastSeen);
+        return new DonorPresence(online, lastSeen);
     }
 }

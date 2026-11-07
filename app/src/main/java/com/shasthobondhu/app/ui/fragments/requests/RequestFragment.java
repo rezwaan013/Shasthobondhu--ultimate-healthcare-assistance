@@ -60,14 +60,15 @@ public class RequestFragment extends Fragment {
     }
 
     private RequestAdapter createAdapter(java.util.List<RequestEntity> requests) {
-        return new RequestAdapter(requests, request -> {
+        String currentUid = SessionManager.getUid(requireContext());
+        return new RequestAdapter(requests, currentUid, request -> {
             String uid = SessionManager.getUid(requireContext());
             if (uid.equals(request.requesterUid)) {
                 Toast.makeText(requireContext(), R.string.cannot_accept_own_request,
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            viewModel.acceptRequest(request.id, uid,
+            viewModel.acceptRequest(request, uid,
                     SessionManager.getName(requireContext()), accepted -> {
                         if (isAdded()) {
                             Toast.makeText(requireContext(), accepted
@@ -76,7 +77,14 @@ public class RequestFragment extends Fragment {
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-        });
+        }, (request, status) -> viewModel.updateStatus(request, status, updated -> {
+            if (isAdded()) {
+                Toast.makeText(requireContext(), updated
+                                ? R.string.request_status_updated
+                                : R.string.request_status_update_failed,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     @Override

@@ -17,6 +17,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // Realtime Database URLs are project endpoints, not credentials. Override per environment.
+        def realtimeDatabaseUrl = project.findProperty("FIREBASE_DATABASE_URL")
+                ?: "https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app"
+        buildConfigField "String", "FIREBASE_DATABASE_URL", "\"${realtimeDatabaseUrl}\""
+
     }
 
     buildTypes {

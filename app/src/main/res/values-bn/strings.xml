@@ -167,6 +167,10 @@
     <string name="request_accepted">রক্তের আবেদন গ্রহণ করা হয়েছে। আবেদনকারীর সাথে যোগাযোগ করুন।</string>
     <string name="request_already_accepted">এই আবেদনটি ইতিমধ্যে গ্রহণ করা হয়েছে।</string>
     <string name="cannot_accept_own_request">নিজের রক্তের আবেদন গ্রহণ করা যাবে না।</string>
+    <string name="mark_request_fulfilled">সম্পন্ন</string>
+    <string name="cancel_request">বাতিল</string>
+    <string name="request_status_updated">আবেদনের অবস্থা হালনাগাদ হয়েছে।</string>
+    <string name="request_status_update_failed">এই আবেদনের অবস্থা হালনাগাদ করা যায়নি।</string>
 
     <string name="hospitals_empty">কোনো হাসপাতাল পাওয়া যায়নি। অন্য টেস্ট, সেবা বা এলাকা চেষ্টা করুন।</string>
     <string name="hospital_tests_label">টেস্ট ও সেবা</string>
@@ -334,10 +338,19 @@
     <string name="available_now_badge">এখন উপলব্ধ</string>
     <string name="presence_not_configured">Realtime Database কনফিগার না করা পর্যন্ত সরাসরি প্রাপ্যতা পাওয়া যাবে না।</string>
     <string name="presence_firebase_sign_in_required">সরাসরি প্রাপ্যতা প্রকাশ করতে Firebase অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
+    <string name="presence_donor_profile_required">সরাসরি প্রাপ্যতা প্রকাশের আগে রক্তদাতা প্রোফাইল তৈরি করুন।</string>
     <string name="presence_updating">সরাসরি প্রাপ্যতা হালনাগাদ হচ্ছে…</string>
     <string name="presence_available_now">রক্তদাতা খোঁজা মানুষ এখন আপনাকে উপলব্ধ হিসেবে দেখবে।</string>
+    <string name="presence_available_offline">আপনি রক্ত দিতে প্রস্তুত, তবে অফলাইনে থাকলে সরাসরি ব্যাজ লুকানো থাকবে।</string>
     <string name="presence_not_available">আপনার “এখন উপলব্ধ” চিহ্ন বন্ধ আছে।</string>
     <string name="presence_update_failed">সরাসরি প্রাপ্যতা হালনাগাদ করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।</string>
+
+    <!-- Private Realtime Database notifications -->
+    <string name="notifications_title">নোটিফিকেশন</string>
+    <string name="notifications_subtitle">স্বাস্থ্যবন্ধুর ব্যক্তিগত রক্তের আবেদন ও অ্যাকাউন্ট আপডেট।</string>
+    <string name="notifications_empty">এখনো কোনো নোটিফিকেশন নেই।</string>
+    <string name="notification_unread">নতুন</string>
+    <string name="open_notifications">নোটিফিকেশন দেখুন</string>
 
     <!-- Validation and errors -->
     <string name="error_required">এই ঘরটি পূরণ করুন</string>

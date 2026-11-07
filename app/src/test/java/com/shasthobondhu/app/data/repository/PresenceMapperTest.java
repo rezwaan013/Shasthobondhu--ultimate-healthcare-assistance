@@ -17,20 +17,20 @@ public class PresenceMapperTest {
     @Test
     public void mapsRealtimeValues() {
         Map<String, Object> values = new HashMap<>();
-        values.put("available", true);
+        values.put("online", true);
         values.put("lastSeen", 1234L);
         DonorPresence presence = PresenceMapper.fromMap(values);
-        assertTrue(presence.available);
+        assertTrue(presence.online);
         assertEquals(1234L, presence.lastSeen);
     }
 
     @Test
     public void malformedValuesFailSoft() {
         Map<String, Object> values = new HashMap<>();
-        values.put("available", "yes");
+        values.put("online", "yes");
         values.put("lastSeen", "now");
         DonorPresence presence = PresenceMapper.fromMap(values);
-        assertFalse(presence.available);
+        assertFalse(presence.online);
         assertEquals(0L, presence.lastSeen);
         assertNull(PresenceMapper.fromMap(null));
     }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shasthobondhu.app.data.local.entities.DonorEntity;
 import com.shasthobondhu.app.data.model.DonorPresence;
+import com.shasthobondhu.app.data.repository.DonorAvailabilityPolicy;
 import com.shasthobondhu.app.databinding.ItemDonorBinding;
 
 import java.util.ArrayList;
@@ -68,7 +69,8 @@ public class DonorAdapter extends RecyclerView.Adapter<DonorAdapter.DonorViewHol
                         : donor.lastDonationDate));
         DonorPresence donorPresence = donor.ownerUid == null
                 ? null : presence.get(donor.ownerUid);
-        binding.tvAvailableNow.setVisibility(donorPresence != null && donorPresence.available
+        binding.tvAvailableNow.setVisibility(DonorAvailabilityPolicy.isAvailableNow(
+                donor.isAvailable, donorPresence != null && donorPresence.online)
                 ? android.view.View.VISIBLE : android.view.View.GONE);
 
         binding.getRoot().setOnClickListener(v -> {

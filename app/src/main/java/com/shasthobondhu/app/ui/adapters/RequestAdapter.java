@@ -19,14 +19,23 @@ import java.util.List;
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
     private List<RequestEntity> requests;
     private final OnAcceptListener acceptListener;
+    private final OnStatusListener statusListener;
+    private final String currentUid;
 
     public RequestAdapter(List<RequestEntity> requests) {
-        this(requests, null);
+        this(requests, "", null, null);
     }
 
     public RequestAdapter(List<RequestEntity> requests, OnAcceptListener acceptListener) {
+        this(requests, "", acceptListener, null);
+    }
+
+    public RequestAdapter(List<RequestEntity> requests, String currentUid,
+                          OnAcceptListener acceptListener, OnStatusListener statusListener) {
         this.requests = requests;
+        this.currentUid = currentUid == null ? "" : currentUid;
         this.acceptListener = acceptListener;
+        this.statusListener = statusListener;
     }
 
     @NonNull
@@ -56,6 +65,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
                 holder.itemView.getContext(), request.urgency));
         holder.binding.tvStatus.setText(request.status);
         boolean accepted = "Accepted".equals(request.status);
+        boolean owner = currentUid.equals(request.requesterUid);
         holder.binding.tvAcceptedBy.setVisibility(accepted ? View.VISIBLE : View.GONE);
         if (accepted) {
             holder.binding.tvAcceptedBy.setText(holder.itemView.getContext().getString(
@@ -64,12 +74,20 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
                             : request.acceptedByName));
         }
         holder.binding.btnAcceptRequest.setVisibility(
-                !accepted && acceptListener != null ? View.VISIBLE : View.GONE);
+                !accepted && !owner && acceptListener != null ? View.VISIBLE : View.GONE);
         holder.binding.btnAcceptRequest.setOnClickListener(v -> {
             if (acceptListener != null) {
                 acceptListener.onAccept(request);
             }
         });
+        holder.binding.btnFulfillRequest.setVisibility(accepted && owner && statusListener != null
+                ? View.VISIBLE : View.GONE);
+        holder.binding.btnCancelRequest.setVisibility(("Open".equals(request.status) || accepted)
+                && owner && statusListener != null ? View.VISIBLE : View.GONE);
+        holder.binding.btnFulfillRequest.setOnClickListener(v ->
+                statusListener.onStatus(request, "Fulfilled"));
+        holder.binding.btnCancelRequest.setOnClickListener(v ->
+                statusListener.onStatus(request, "Cancelled"));
         holder.binding.btnCallRequester.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_DIAL,
                     Uri.parse("tel:" + request.contactPhone));
@@ -97,5 +115,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
 
     public interface OnAcceptListener {
         void onAccept(RequestEntity request);
+    }
+
+    public interface OnStatusListener {
+        void onStatus(RequestEntity request, String status);
     }
 }

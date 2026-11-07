@@ -119,6 +119,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/accept_blood_request" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFulfillRequest"
+                style="@style/Widget.Shastho.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/mark_request_fulfilled"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelRequest"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/cancel_request"
+                android:textColor="@color/emergency"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

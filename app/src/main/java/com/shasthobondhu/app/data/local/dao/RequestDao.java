@@ -42,4 +42,7 @@ public interface RequestDao {
 
     @Query("SELECT COUNT(*) FROM blood_requests")
     int count();
+
+    @Query("UPDATE blood_requests SET status = :status WHERE id = :requestId")
+    int updateStatus(int requestId, String status);
 }

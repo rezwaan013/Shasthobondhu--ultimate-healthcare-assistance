@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 import com.shasthobondhu.app.data.local.entities.RequestEntity;
 import com.shasthobondhu.app.data.model.DonorPresence;
 import com.shasthobondhu.app.data.repository.PresenceRepository;
+import com.shasthobondhu.app.data.repository.DonorRepository;
+import com.shasthobondhu.app.data.repository.RealtimeDatabaseRepository;
 import com.shasthobondhu.app.data.repository.RequestRepository;
 
 import java.util.List;
@@ -30,13 +32,16 @@ public class EmergencyHubViewModel extends ViewModel {
     private final LiveData<List<RequestEntity>> openRequests;
     private final LiveData<Integer> openRequestCount;
     private final PresenceRepository presenceRepository;
+    private final DonorRepository donorRepository;
 
     @Inject
     public EmergencyHubViewModel(RequestRepository requestRepository,
                                  PresenceRepository presenceRepository,
+                                 DonorRepository donorRepository,
                                  SavedStateHandle state) {
         this.state = state;
         this.presenceRepository = presenceRepository;
+        this.donorRepository = donorRepository;
         openRequests = requestRepository.getAllOpenRequests();
         openRequestCount = Transformations.map(openRequests,
                 requests -> requests == null ? 0 : requests.size());
@@ -84,8 +89,13 @@ public class EmergencyHubViewModel extends ViewModel {
         return presenceRepository.observePresence();
     }
 
-    public void setAvailableNow(boolean available, PresenceRepository.Callback callback) {
-        presenceRepository.setAvailability(getUserId(), available, callback);
+    public LiveData<com.shasthobondhu.app.data.local.entities.DonorEntity> getDonorProfile() {
+        return donorRepository.getMyProfile(getUserId());
+    }
+
+    public void setAvailableNow(boolean available,
+                                RealtimeDatabaseRepository.CompletionCallback callback) {
+        donorRepository.updateAvailability(getUserId(), available, callback);
     }
 
     private String value(String key) {

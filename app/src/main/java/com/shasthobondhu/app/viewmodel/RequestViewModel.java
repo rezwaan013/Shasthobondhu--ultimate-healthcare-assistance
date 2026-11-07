@@ -38,4 +38,14 @@ public class RequestViewModel extends ViewModel {
                               RequestRepository.AcceptCallback callback) {
         repository.acceptRequest(requestId, uid, name, callback);
     }
+
+    public void acceptRequest(RequestEntity request, String uid, String name,
+                              RequestRepository.AcceptCallback callback) {
+        repository.acceptRequest(request, uid, name, callback);
+    }
+
+    public void updateStatus(RequestEntity request, String status,
+                             RequestRepository.StatusCallback callback) {
+        repository.updateOwnedStatus(request, status, callback);
+    }
 }

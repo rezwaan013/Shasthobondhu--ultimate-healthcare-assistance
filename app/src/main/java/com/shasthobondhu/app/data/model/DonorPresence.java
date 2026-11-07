@@ -1,12 +1,12 @@
 package com.shasthobondhu.app.data.model;
 
-/** Ephemeral Realtime Database state; donor profile data remains in Firestore/Room. */
+/** Ephemeral Firebase connection state; willingness remains on the donor profile. */
 public final class DonorPresence {
-    public final boolean available;
+    public final boolean online;
     public final long lastSeen;
 
-    public DonorPresence(boolean available, long lastSeen) {
-        this.available = available;
+    public DonorPresence(boolean online, long lastSeen) {
+        this.online = online;
         this.lastSeen = Math.max(0L, lastSeen);
     }
 }
