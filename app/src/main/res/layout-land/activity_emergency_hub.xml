@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnHubBack"
+        style="@style/Widget.Shastho.Button.Box"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/action_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHubToolbarTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/emergency_hub_title"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnHubBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnHubBack"
+        app:layout_constraintTop_toTopOf="@id/btnHubBack" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/hubScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnHubBack">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/hubMidGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <LinearLayout
+                android:id="@+id/hubLeftColumn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/hubMidGuideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvHubGreeting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_primary"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/tvHubContext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_secondary" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/systemStatusBanner"
+                    style="@style/Widget.Shastho.Card.Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:strokeColor="@color/warning">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+                        <TextView
+                            android:id="@+id/tvSystemStatus"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/warning" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDismissStatus"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dismiss" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Shastho.Card.Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/emergency_contact_title"
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp" />
+                        <TextView
+                            android:id="@+id/tvEmergencyContact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textColor="@color/text_secondary" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnChooseContact"
+                            style="@style/Widget.Shastho.Button.Box"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/choose_emergency_contact" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCallContact"
+                            style="@style/Widget.Shastho.Button.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/call_emergency_contact" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnShareSms"
+                            style="@style/Widget.Shastho.Button.Box"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/share_request_sms" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Shastho.Card.Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/emergency_readiness_title"
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchMonitor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/emergency_monitor_toggle" />
+                        <TextView
+                            android:id="@+id/tvMonitorStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_secondary" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchAvailability"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/available_now_toggle" />
+                        <TextView
+                            android:id="@+id/tvPresenceStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/hubRightColumn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/hubMidGuideline"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Shastho.Card.Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:strokeColor="@color/emergency">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/live_blood_requests"
+                            android:textColor="@color/emergency"
+                            android:textSize="18sp" />
+                        <TextView
+                            android:id="@+id/tvHubSosCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/text_primary" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnViewRequests"
+                            style="@style/Widget.Shastho.Button.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="@color/emergency"
+                            android:text="@string/view_requests" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Shastho.Card.Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/bangladesh_health_stats"
+                            android:textColor="@color/text_primary"
+                            android:textSize="18sp" />
+                        <ProgressBar
+                            android:id="@+id/progressHealthStats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp" />
+                        <TextView
+                            android:id="@+id/tvHealthStats"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/text_secondary" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRetryHealthStats"
+                            style="@style/Widget.Shastho.Button.Box"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/retry" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
