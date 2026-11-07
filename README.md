@@ -73,6 +73,10 @@ Deploy the Firestore rules included in this repo:
 firebase deploy --only firestore:rules,database
 ```
 
+Alternatively, paste `database.rules.json` into **Realtime Database → Rules** in Firebase
+Console and click **Publish**. The in-app cloud check identifies unpublished rules as a
+permission error.
+
 ---
 
 ## Forgot password (6-digit code by Gmail)
@@ -85,7 +89,7 @@ The screen is at **Login → Forgot password?** and runs in three steps:
 
 Because Firebase's client SDK cannot change another user's password, the code is
 issued and verified by a small trusted backend. A ready-to-deploy implementation
-lives in `functions/index.js` (Node 16, Firebase Admin + Nodemailer over Gmail SMTP).
+lives in `functions/index.js` (Node 20, Firebase Admin + Nodemailer over Gmail SMTP).
 
 ### 1. Configure Gmail
 

@@ -92,6 +92,11 @@ public class LabComponentsActivity extends AppCompatActivity
         systemEventReceiver = new SystemEventReceiver(this);
         bindActions();
         showInitialState(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Portrait and landscape have different column heights. Restoring the old
+            // portrait scroll offset can hide the entire right column in landscape.
+            binding.labScroll.post(() -> binding.labScroll.scrollTo(0, 0));
+        }
     }
 
     private void bindActions() {

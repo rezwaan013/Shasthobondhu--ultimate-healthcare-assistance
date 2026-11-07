@@ -5,6 +5,8 @@ import android.content.Context;
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.util.constants.AppConstants;
 
+import java.util.Locale;
+
 /** Keeps the signed-in account and its role available to every screen. */
 public final class SessionManager {
 
@@ -30,7 +32,8 @@ public final class SessionManager {
                 .putString(KEY_PHONE, phone)
                 .putString(KEY_ROLE, safeRole)
                 .putBoolean(KEY_LOCAL_MODE, localMode)
-                .putString(ROLE_CACHE_PREFIX + (email == null ? "" : email.toLowerCase()), safeRole)
+                .putString(ROLE_CACHE_PREFIX
+                        + (email == null ? "" : email.toLowerCase(Locale.ROOT)), safeRole)
                 .apply();
     }
 
@@ -79,7 +82,7 @@ public final class SessionManager {
             return;
         }
         prefs(context).edit()
-                .putString(ROLE_CACHE_PREFIX + email.toLowerCase(), normalizeRole(role))
+                .putString(ROLE_CACHE_PREFIX + email.toLowerCase(Locale.ROOT), normalizeRole(role))
                 .apply();
     }
 
@@ -88,7 +91,8 @@ public final class SessionManager {
             return AppConstants.ROLE_USER;
         }
         return normalizeRole(prefs(context)
-                .getString(ROLE_CACHE_PREFIX + email.toLowerCase(), AppConstants.ROLE_USER));
+                .getString(ROLE_CACHE_PREFIX + email.toLowerCase(Locale.ROOT),
+                        AppConstants.ROLE_USER));
     }
 
     public static boolean isPharmacyOwner(Context context) {

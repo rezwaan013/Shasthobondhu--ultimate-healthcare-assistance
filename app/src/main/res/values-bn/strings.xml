@@ -64,11 +64,13 @@
     <string name="resend_code">আবার কোড পাঠান</string>
     <string name="resend_in">%1$d সেকেন্ড পরে আবার পাঠান</string>
     <string name="reset_success_title">পাসওয়ার্ড পরিবর্তিত হয়েছে</string>
+    <string name="reset_link_sent_title">রিসেট লিংক পাঠানো হয়েছে</string>
     <string name="reset_success_message">আপনার পাসওয়ার্ড পরিবর্তন করা হয়েছে। এখন নতুন পাসওয়ার্ড দিয়ে লগইন করুন।</string>
     <string name="action_back_to_login">লগইনে ফিরে যান</string>
     <string name="code_sent_message">%1$s ঠিকানায় পাঠানো ৬ ডিজিটের কোড দিন</string>
     <string name="link_sent_message">অ্যাকাউন্ট থাকলে %1$s ঠিকানায় একটি নিরাপদ লিংক পাঠানো হয়েছে।</string>
     <string name="demo_code_label">ডেমো মোড — ইমেইল ব্যাকএন্ড কনফিগার করা নেই, তাই কোডটি এখানে দেখানো হচ্ছে:</string>
+    <string name="demo_code_value">%1$s\n%2$s</string>
     <string name="err_invalid_email">সঠিক ইমেইল ঠিকানা দিন</string>
     <string name="err_invalid_password">পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে এবং একটি অক্ষর ও একটি সংখ্যা থাকতে হবে</string>
     <string name="err_password_mismatch">পাসওয়ার্ড মিলছে না</string>
@@ -118,6 +120,7 @@
     <string name="owner_role_changed">এই অ্যাকাউন্টটি %1$s হিসেবে নিবন্ধিত। সেই ড্যাশবোর্ড খোলা হচ্ছে।</string>
     <string name="demo_accounts_title">ডেমো মালিক অ্যাকাউন্ট</string>
     <string name="demo_accounts_note">ইমেইল: owner.pharmacy@shasthobondhu.app · পাসওয়ার্ড: Pharmacy123\nইমেইল: owner.hospital@shasthobondhu.app · পাসওয়ার্ড: Hospital123</string>
+    <string name="demo_accounts_value">%1$s\n%2$s</string>
     <string name="local_mode_notice">ফায়ারবেস ইমেইল লগইন চালু নেই, তাই এই অ্যাকাউন্টটি এই ফোনে সংরক্ষিত। সিঙ্ক করতে ফায়ারবেসে Email/Password চালু করুন।</string>
     <string name="account_guest_title">আপনার স্বাস্থ্যবন্ধু অ্যাকাউন্ট</string>
     <string name="account_guest_note">রক্তদাতা প্রোফাইল সংরক্ষণ, আবেদন পোস্ট বা ফার্মেসি/হাসপাতাল পরিচালনা করতে লগইন করুন।</string>
@@ -138,6 +141,7 @@
     <string name="switch_available">আমি রক্তদানের জন্য প্রস্তুত</string>
     <string name="action_save_donor">রক্তদাতা প্রোফাইল সংরক্ষণ করুন</string>
     <string name="donor_saved">আপনি এখন রক্তদাতা হিসেবে তালিকাভুক্ত।</string>
+    <string name="donor_location_format">%1$s, %2$s</string>
     <string name="donors_empty">এই এলাকা ও রক্তের গ্রুপে কোনো রক্তদাতা পাওয়া যায়নি।</string>
     <string name="choose_blood_group">রক্তের গ্রুপ বেছে নিন</string>
 
@@ -154,6 +158,7 @@
     <string name="urgency_normal">সাধারণ</string>
     <string name="action_post_request">আবেদন পোস্ট করুন</string>
     <string name="request_posted">আপনার জরুরি আবেদন প্রকাশিত হয়েছে।</string>
+    <string name="request_hospital_location">%1$s · %2$s</string>
     <string name="requests_empty">এই এলাকায় এখন কোনো খোলা আবেদন নেই।</string>
     <string name="call_requester">আবেদনকারীকে কল করুন</string>
 
@@ -254,7 +259,10 @@
     <string name="monitor_channel_name">হেলথ মনিটর</string>
     <string name="monitor_channel_description">সক্রিয় ফোরগ্রাউন্ড হেলথ-মনিটর আপডেট</string>
     <string name="monitor_notification_title">স্বাস্থ্যবন্ধু হেলথ মনিটর সক্রিয়</string>
-    <string name="monitor_notification_detail">ব্যাটারি %1$s%% · %2$d সেকেন্ড ধরে চলছে</string>
+    <plurals name="monitor_notification_detail">
+        <item quantity="one">ব্যাটারি %1$s%% · %2$d সেকেন্ড ধরে চলছে</item>
+        <item quantity="other">ব্যাটারি %1$s%% · %2$d সেকেন্ড ধরে চলছে</item>
+    </plurals>
 
     <string name="contact_provider_title">জরুরি কন্টাক্ট প্রোভাইডার</string>
     <string name="no_contact_selected">কোনো জরুরি কন্টাক্ট বেছে নেওয়া হয়নি।</string>

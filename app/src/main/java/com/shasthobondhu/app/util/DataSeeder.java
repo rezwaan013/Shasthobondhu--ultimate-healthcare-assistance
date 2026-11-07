@@ -11,6 +11,7 @@ import com.shasthobondhu.app.util.constants.AppConstants;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.Locale;
 
 /**
  * Inserts demo data the first time the app runs so every screen has
@@ -116,6 +117,7 @@ public class DataSeeder {
         String salt = PasswordHasher.newSalt();
         String hash = PasswordHasher.hash(password, salt);
         db.localUserDao().insert(new LocalUserEntity(
-                "local_" + role.toLowerCase() + "_demo", name, email, phone, role, hash, salt));
+                "local_" + role.toLowerCase(Locale.ROOT) + "_demo",
+                name, email, phone, role, hash, salt));
     }
 }

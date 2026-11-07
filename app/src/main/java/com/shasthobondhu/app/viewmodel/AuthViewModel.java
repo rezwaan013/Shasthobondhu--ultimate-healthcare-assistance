@@ -1,5 +1,6 @@
 package com.shasthobondhu.app.viewmodel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
@@ -34,6 +35,7 @@ public class AuthViewModel extends ViewModel {
     private final FirebaseAuth auth;
     private final FirebaseFirestore db;
     private final LocalUserDao localUserDao;
+    @SuppressLint("StaticFieldLeak") // Hilt supplies the process-wide application context.
     private final Context context;
 
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);

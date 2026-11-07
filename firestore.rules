@@ -32,15 +32,6 @@ service cloud.firestore {
       allow write: if signedIn();
     }
 
-    // Small authenticated records created from the in-app lab verification screen.
-    match /lab_demo_events/{eventId} {
-      allow create: if signedIn()
-                    && request.resource.data.uid == request.auth.uid
-                    && request.resource.data.source == "android_lab_demo";
-      allow read: if signedIn();
-      allow update, delete: if false;
-    }
-
     // Only the Cloud Functions service account may touch reset codes.
     match /password_resets/{docId} {
       allow read, write: if false;

@@ -25,7 +25,7 @@ android {
 
         // Override this if Firebase Console creates the database in another region.
         def realtimeDatabaseUrl = project.findProperty("FIREBASE_DATABASE_URL")
-                ?: "https://shasthobondhu-d5bdf-default-rtdb.firebaseio.com/"
+                ?: "https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app/"
         buildConfigField "String", "FIREBASE_DATABASE_URL", "\"${realtimeDatabaseUrl}\""
     }
 

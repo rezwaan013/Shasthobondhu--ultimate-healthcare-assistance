@@ -86,6 +86,9 @@ public class ForgotPasswordFragment extends Fragment {
             if (step == ForgotPasswordViewModel.Step.DONE) {
                 cancelResendTimer();
                 Boolean linkSent = viewModel.getLinkSent().getValue();
+                binding.tvDoneTitle.setText(linkSent != null && linkSent
+                        ? R.string.reset_link_sent_title
+                        : R.string.reset_success_title);
                 binding.tvDoneMessage.setText(linkSent != null && linkSent
                         ? getString(R.string.link_sent_message, lastEmail)
                         : getString(R.string.reset_success_message));
@@ -114,7 +117,8 @@ public class ForgotPasswordFragment extends Fragment {
                 return;
             }
             binding.tvDemoCode.setVisibility(View.VISIBLE);
-            binding.tvDemoCode.setText(getString(R.string.demo_code_label) + "\n" + code);
+            binding.tvDemoCode.setText(getString(R.string.demo_code_value,
+                    getString(R.string.demo_code_label), code));
         });
 
         viewModel.getErrorCode().observe(getViewLifecycleOwner(), this::showError);

@@ -34,7 +34,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         RequestEntity request = requests.get(position);
         holder.binding.tvPatientName.setText(request.patientName);
         holder.binding.tvBloodGroup.setText(request.bloodGroup);
-        holder.binding.tvHospital.setText(request.hospitalName + " · " + request.location);
+        holder.binding.tvHospital.setText(holder.itemView.getContext().getString(
+                com.shasthobondhu.app.R.string.request_hospital_location,
+                request.hospitalName, request.location));
         holder.binding.tvUrgency.setText(DisplayUtils.urgencyLabel(
                 holder.itemView.getContext(), request.urgency));
         holder.binding.tvStatus.setText(request.status);

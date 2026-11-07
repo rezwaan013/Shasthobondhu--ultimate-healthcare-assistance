@@ -16,6 +16,10 @@ This guide maps every instructor requirement to a visible app action and its sou
    firebase deploy --only firestore:rules,database
    ```
 
+   Without Firebase CLI, open **Realtime Database → Rules**, replace the editor with the
+   complete contents of `database.rules.json`, and press **Publish**. A cloud-check result that
+   says `Permission denied` means these Realtime Database rules are not yet published.
+
 4. Build and install the debug APK.
 5. On Android 13+, grant notification permission when the lab screen requests it.
 
@@ -122,7 +126,7 @@ objects through Retrofit/OkHttp.
 Press **Run Firebase cloud check**. The app:
 
 1. reuses the currently signed-in Firebase Email/Password user;
-2. writes an authenticated event to Firestore collection `lab_demo_events`;
+2. writes an authenticated `lastLabCheck` event to its own Firestore `users/{uid}` document;
 3. writes the same event to Realtime Database path `lab_demo_status/{uid}`;
 4. displays success only when both writes complete.
 

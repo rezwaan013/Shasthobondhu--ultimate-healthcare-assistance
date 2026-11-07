@@ -87,8 +87,13 @@ public class HealthMonitorService extends Service {
                 openIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        String detail = getString(R.string.monitor_notification_detail,
-                battery < 0 ? "--" : String.valueOf(battery), elapsedSeconds);
+        int elapsedQuantity = elapsedSeconds > Integer.MAX_VALUE
+                ? Integer.MAX_VALUE : (int) elapsedSeconds;
+        String detail = getResources().getQuantityString(
+                R.plurals.monitor_notification_detail,
+                elapsedQuantity,
+                battery < 0 ? "--" : String.valueOf(battery),
+                elapsedSeconds);
 
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_app_logo)

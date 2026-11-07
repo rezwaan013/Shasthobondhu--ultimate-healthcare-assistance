@@ -6,10 +6,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.shasthobondhu.app.data.remote.FirebaseService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -44,17 +47,15 @@ public class FirebaseDemoRepository {
 
     private void writeToBothDatabases(FirebaseUser user, ResultCallback callback) {
         long now = System.currentTimeMillis();
-        String eventId = user.getUid() + "_" + now;
-
         Map<String, Object> event = new HashMap<>();
         event.put("uid", user.getUid());
         event.put("source", "android_lab_demo");
         event.put("message", "ShasthoBondhu cloud components are connected");
         event.put("timestamp", now);
 
-        Task<Void> firestoreWrite = firestore.collection("lab_demo_events")
-                .document(eventId)
-                .set(event);
+        Task<Void> firestoreWrite = firestore.collection("users")
+                .document(user.getUid())
+                .set(Collections.singletonMap("lastLabCheck", event), SetOptions.merge());
         Task<Void> realtimeWrite = realtimeDatabase.getReference("lab_demo_status")
                 .child(user.getUid())
                 .setValue(event);
@@ -70,9 +71,18 @@ public class FirebaseDemoRepository {
             message.append(firestoreOk ? "Firestore succeeded. "
                     : "Firestore failed: " + errorMessage(firestoreWrite.getException()) + " ");
             message.append(realtimeOk ? "Realtime Database succeeded."
-                    : "Realtime Database failed: " + errorMessage(realtimeWrite.getException()));
+                    : "Realtime Database failed: "
+                    + realtimeErrorMessage(realtimeWrite.getException()));
             callback.onError(message.toString());
         });
+    }
+
+    private String realtimeErrorMessage(Exception exception) {
+        String message = errorMessage(exception);
+        if (message.toLowerCase(Locale.US).contains("permission denied")) {
+            return "Permission denied. Publish database.rules.json in Firebase Console.";
+        }
+        return message;
     }
 
     private String errorMessage(Exception exception) {

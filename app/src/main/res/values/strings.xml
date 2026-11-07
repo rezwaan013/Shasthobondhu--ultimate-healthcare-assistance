@@ -64,11 +64,13 @@
     <string name="resend_code">Resend code</string>
     <string name="resend_in">Resend in %1$d s</string>
     <string name="reset_success_title">Password updated</string>
+    <string name="reset_link_sent_title">Reset link sent</string>
     <string name="reset_success_message">Your password has been changed. You can now sign in with your new password.</string>
     <string name="action_back_to_login">Back to login</string>
     <string name="code_sent_message">Enter the 6-digit code we sent to %1$s</string>
     <string name="link_sent_message">If an account exists for %1$s, a secure reset link is on its way.</string>
     <string name="demo_code_label">Demo mode — the email backend is not configured, so your code is shown here:</string>
+    <string name="demo_code_value">%1$s\n%2$s</string>
     <string name="err_invalid_email">Enter a valid email address</string>
     <string name="err_invalid_password">Password must be at least 8 characters and include a letter and a number</string>
     <string name="err_password_mismatch">Passwords do not match</string>
@@ -118,6 +120,7 @@
     <string name="owner_role_changed">This account is registered as %1$s. Opening that dashboard instead.</string>
     <string name="demo_accounts_title">Demo owner accounts</string>
     <string name="demo_accounts_note">Email: owner.pharmacy@shasthobondhu.app · Password: Pharmacy123\nEmail: owner.hospital@shasthobondhu.app · Password: Hospital123</string>
+    <string name="demo_accounts_value">%1$s\n%2$s</string>
     <string name="local_mode_notice">Firebase email sign-in is not enabled, so this account is stored on this phone. Enable Email/Password in Firebase to sync.</string>
     <string name="account_guest_title">Your ShasthoBondhu account</string>
     <string name="account_guest_note">Sign in to save your donor profile, post requests and manage a pharmacy or hospital.</string>
@@ -138,6 +141,7 @@
     <string name="switch_available">I am available to donate</string>
     <string name="action_save_donor">Save donor profile</string>
     <string name="donor_saved">You are now listed as a donor.</string>
+    <string name="donor_location_format">%1$s, %2$s</string>
     <string name="donors_empty">No donors matched this area and blood group yet.</string>
     <string name="choose_blood_group">Choose a blood group</string>
 
@@ -154,6 +158,7 @@
     <string name="urgency_normal">Normal</string>
     <string name="action_post_request">Post request</string>
     <string name="request_posted">Your emergency request is live.</string>
+    <string name="request_hospital_location">%1$s · %2$s</string>
     <string name="requests_empty">No open requests in this area yet.</string>
     <string name="call_requester">Call requester</string>
 
@@ -254,7 +259,10 @@
     <string name="monitor_channel_name">Health monitor</string>
     <string name="monitor_channel_description">Active foreground health-monitor updates</string>
     <string name="monitor_notification_title">ShasthoBondhu health monitor active</string>
-    <string name="monitor_notification_detail">Battery %1$s%% · running for %2$d seconds</string>
+    <plurals name="monitor_notification_detail">
+        <item quantity="one">Battery %1$s%% · running for %2$d second</item>
+        <item quantity="other">Battery %1$s%% · running for %2$d seconds</item>
+    </plurals>
 
     <string name="contact_provider_title">Emergency contact provider</string>
     <string name="no_contact_selected">No emergency contact selected.</string>

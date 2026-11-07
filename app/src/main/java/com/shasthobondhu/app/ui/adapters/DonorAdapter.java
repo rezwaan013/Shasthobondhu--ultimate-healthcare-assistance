@@ -42,7 +42,9 @@ public class DonorAdapter extends RecyclerView.Adapter<DonorAdapter.DonorViewHol
 
         binding.tvDonorName.setText(donor.name);
         binding.tvBloodGroup.setText(donor.bloodGroup);
-        binding.tvDonorLocation.setText(donor.district + ", " + donor.upazila);
+        binding.tvDonorLocation.setText(binding.getRoot().getContext().getString(
+                com.shasthobondhu.app.R.string.donor_location_format,
+                donor.district, donor.upazila));
 
         binding.btnCall.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_DIAL,

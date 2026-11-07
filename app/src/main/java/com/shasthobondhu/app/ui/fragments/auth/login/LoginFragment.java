@@ -64,8 +64,9 @@ public class LoginFragment extends Fragment {
         binding.tvOwnerNotice.setVisibility(View.VISIBLE);
         binding.tvOwnerNotice.setText(getString(R.string.owner_role_notice, label));
         binding.tvDemoAccounts.setVisibility(View.VISIBLE);
-        binding.tvDemoAccounts.setText(getString(R.string.demo_accounts_title)
-                + "\n" + getString(R.string.demo_accounts_note));
+        binding.tvDemoAccounts.setText(getString(R.string.demo_accounts_value,
+                getString(R.string.demo_accounts_title),
+                getString(R.string.demo_accounts_note)));
     }
 
     private void observeViewModel() {

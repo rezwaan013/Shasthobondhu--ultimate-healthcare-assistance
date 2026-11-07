@@ -2,7 +2,7 @@
   "name": "shasthobondhu-password-reset",
   "description": "Sends 6-digit password reset codes by Gmail and updates Firebase Auth passwords.",
   "engines": {
-    "node": "16"
+    "node": "20"
   },
   "main": "index.js",
   "dependencies": {
