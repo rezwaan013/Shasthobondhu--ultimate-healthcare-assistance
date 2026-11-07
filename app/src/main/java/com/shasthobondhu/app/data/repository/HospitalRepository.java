@@ -8,6 +8,8 @@ import com.shasthobondhu.app.data.local.entities.HospitalEntity;
 import com.shasthobondhu.app.util.AppExecutors;
 
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -72,23 +74,39 @@ public class HospitalRepository {
 
     private void publish(MediatorLiveData<List<HospitalEntity>> result,
                          List<HospitalEntity> remote, List<HospitalEntity> local, String query) {
-        if (remote != null && !remote.isEmpty()) {
-            String filter = query.toLowerCase(java.util.Locale.ROOT);
-            List<HospitalEntity> matches = new java.util.ArrayList<>();
-            for (HospitalEntity item : remote) {
-                String searchable = safe(item.name) + " " + safe(item.address) + " "
-                        + safe(item.area) + " " + safe(item.services);
-                if (filter.isEmpty()
-                        || searchable.toLowerCase(java.util.Locale.ROOT).contains(filter)) {
-                    matches.add(item);
-                }
-            }
-            result.setValue(matches);
-        } else if (local != null) {
-            result.setValue(local);
-        } else if (remote != null) {
-            result.setValue(remote);
+        if (remote == null && local == null) {
+            return;
         }
+        Map<String, HospitalEntity> combined = new LinkedHashMap<>();
+        if (remote != null) {
+            for (HospitalEntity item : remote) {
+                combined.put(hospitalKey(item), item);
+            }
+        }
+        // Local owner changes override an equivalent cloud entry on this device.
+        if (local != null) {
+            for (HospitalEntity item : local) {
+                combined.put(hospitalKey(item), item);
+            }
+        }
+        String filter = query.toLowerCase(java.util.Locale.ROOT);
+        List<HospitalEntity> matches = new java.util.ArrayList<>();
+        for (HospitalEntity item : combined.values()) {
+            String searchable = safe(item.name) + " " + safe(item.address) + " "
+                    + safe(item.area) + " " + safe(item.services);
+            if (filter.isEmpty()
+                    || searchable.toLowerCase(java.util.Locale.ROOT).contains(filter)) {
+                matches.add(item);
+            }
+        }
+        matches.sort(java.util.Comparator.comparing(item -> safe(item.name),
+                String.CASE_INSENSITIVE_ORDER));
+        result.setValue(matches);
+    }
+
+    private String hospitalKey(HospitalEntity item) {
+        return (safe(item.name) + "|" + safe(item.address) + "|" + safe(item.phone))
+                .toLowerCase(java.util.Locale.ROOT);
     }
 
     private String safe(String value) {

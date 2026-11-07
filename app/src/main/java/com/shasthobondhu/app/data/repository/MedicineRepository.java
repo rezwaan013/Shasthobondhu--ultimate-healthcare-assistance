@@ -8,6 +8,8 @@ import com.shasthobondhu.app.data.local.entities.MedicineEntity;
 import com.shasthobondhu.app.util.AppExecutors;
 
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -71,26 +73,37 @@ public class MedicineRepository {
     private void publish(MediatorLiveData<List<MedicineEntity>> result,
                          List<MedicineEntity> remote, List<MedicineEntity> local,
                          String query, String area) {
-        if (remote != null && !remote.isEmpty()) {
-            String nameFilter = query.toLowerCase(java.util.Locale.ROOT);
-            String areaFilter = area.toLowerCase(java.util.Locale.ROOT);
-            List<MedicineEntity> matches = new java.util.ArrayList<>();
-            for (MedicineEntity item : remote) {
-                boolean nameMatches = nameFilter.isEmpty()
-                        || safe(item.name).toLowerCase(java.util.Locale.ROOT).contains(nameFilter)
-                        || safe(item.pharmacyName).toLowerCase(java.util.Locale.ROOT)
-                        .contains(nameFilter);
-                boolean areaMatches = areaFilter.isEmpty()
-                        || safe(item.pharmacyArea).toLowerCase(java.util.Locale.ROOT)
-                        .contains(areaFilter);
-                if (nameMatches && areaMatches) matches.add(item);
-            }
-            result.setValue(matches);
-        } else if (local != null) {
-            result.setValue(local);
-        } else if (remote != null) {
-            result.setValue(remote);
+        if (remote == null && local == null) {
+            return;
         }
+        Map<String, MedicineEntity> combined = new LinkedHashMap<>();
+        if (remote != null) {
+            for (MedicineEntity item : remote) combined.put(medicineKey(item), item);
+        }
+        if (local != null) {
+            for (MedicineEntity item : local) combined.put(medicineKey(item), item);
+        }
+        String nameFilter = query.toLowerCase(java.util.Locale.ROOT);
+        String areaFilter = area.toLowerCase(java.util.Locale.ROOT);
+        List<MedicineEntity> matches = new java.util.ArrayList<>();
+        for (MedicineEntity item : combined.values()) {
+            boolean nameMatches = nameFilter.isEmpty()
+                    || safe(item.name).toLowerCase(java.util.Locale.ROOT).contains(nameFilter)
+                    || safe(item.pharmacyName).toLowerCase(java.util.Locale.ROOT)
+                    .contains(nameFilter);
+            boolean areaMatches = areaFilter.isEmpty()
+                    || safe(item.pharmacyArea).toLowerCase(java.util.Locale.ROOT)
+                    .contains(areaFilter);
+            if (nameMatches && areaMatches) matches.add(item);
+        }
+        matches.sort(java.util.Comparator.comparing(item -> safe(item.name),
+                String.CASE_INSENSITIVE_ORDER));
+        result.setValue(matches);
+    }
+
+    private String medicineKey(MedicineEntity item) {
+        return (safe(item.name) + "|" + safe(item.pharmacyName) + "|"
+                + safe(item.pharmacyArea)).toLowerCase(java.util.Locale.ROOT);
     }
 
     private String safe(String value) {

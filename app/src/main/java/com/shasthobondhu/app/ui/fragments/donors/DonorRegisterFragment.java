@@ -98,6 +98,14 @@ public class DonorRegisterFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_list_item_1, bloodGroups);
         binding.spinnerBloodGroup.setAdapter(adapter);
+        binding.spinnerBloodGroup.setThreshold(0);
+        binding.spinnerBloodGroup.setOnClickListener(v ->
+                binding.spinnerBloodGroup.showDropDown());
+        binding.spinnerBloodGroup.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.spinnerBloodGroup.showDropDown();
+            }
+        });
     }
 
     private void setupAreas() {
