@@ -1,19 +1,19 @@
 package com.shasthobondhu.app.data.remote;
 
-import com.shasthobondhu.app.data.remote.model.WeatherResponse;
+import com.shasthobondhu.app.data.remote.model.BangladeshHealthStatsResponse;
+import com.shasthobondhu.app.data.remote.model.OpenFdaLabelResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-/** Public JSON API used in the lab demonstration. */
 public interface PublicHealthApi {
 
-    @GET("v1/forecast")
-    Call<WeatherResponse> getCurrentConditions(
-            @Query("latitude") double latitude,
-            @Query("longitude") double longitude,
-            @Query("current") String currentFields,
-            @Query("timezone") String timezone
-    );
+    @GET("drug/label.json")
+    Call<OpenFdaLabelResponse> getDrugLabel(
+            @Query("search") String search,
+            @Query("limit") int limit);
+
+    @GET("https://disease.sh/v3/covid-19/countries/bangladesh")
+    Call<BangladeshHealthStatsResponse> getBangladeshHealthStats();
 }
