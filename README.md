@@ -1,211 +1,241 @@
-# ShasthoBondhu — Ultimate Healthcare Assistance
+# ShasthoBondhu
 
-A native Android app (Java) that improves access to essential healthcare services in Bangladesh:
-blood donors, emergency blood requests, hospitals/clinics and medicine availability — with
-Bangla + English support and area-based search.
+**ShasthoBondhu** is a native Android health-support application for Bangladesh. It connects
+people with blood donors, emergency blood requests, hospitals, medicine availability, private
+notifications, and practical emergency tools in Bangla and English.
 
----
+## Download
 
-## Tech stack
+[**Download the latest debug APK**](releases/ShasthoBondhu-v1.0-debug.apk)
 
-| Area | Choice |
-|---|---|
-| Language | Java 11 (no Kotlin) |
-| UI | XML + Material Components 3, ViewBinding |
-| Architecture | MVVM (ViewModel + LiveData) + Repository |
-| DI | Hilt (`annotationProcessor`, no kapt) |
-| Local cache | Room |
-| Networking | Retrofit + OkHttp + Gson |
-| Cloud data | Firebase Authentication, Firestore, Realtime Database presence, FCM |
-| Build | AGP 7.3.1 · Gradle 7.4 · JDK 11 · Groovy DSL |
-
-`minSdk 24` · `targetSdk 33` · `compileSdk 33`
-
----
-
-## Project structure
-
-```
-app/src/main/java/com/shasthobondhu/app/
-├── ShasthoBondhuApp.java          # @HiltAndroidApp
-├── MainActivity.java              # primary activity + BottomNavigationView
-├── EmergencyHubActivity.java      # emergency tools and foreground monitor controls
-├── DonorDetailActivity.java       # explicit-intent donor details and result flow
-├── data/
-│   ├── local/                     # Room: AppDatabase, entities, dao
-│   ├── remote/                    # Firebase, FCM, openFDA and public-health APIs
-│   └── repository/                # Room, cloud, contacts, presence and network data
-├── di/                            # Room and network Hilt modules
-├── service/                       # Emergency Request Monitor foreground service
-├── system/                        # dynamic Android system-event receiver
-├── ui/
-│   ├── adapters/                  # ViewBinding RecyclerView adapters
-│   └── fragments/
-│       ├── auth/                  # Registration, ForgotPassword
-│       ├── auth/login/            # Email/password login
-│       ├── home/ donors/ requests/ hospitals/ medicines/
-├── util/                          # AreaDataset, ValidationUtils, DataSeeder, constants
-└── viewmodel/                     # Auth, ForgotPassword, Donor, Request, Hospital, Medicine
-
-app/src/main/res/
-├── layout/            # fragments, rows and portrait activity layouts
-├── layout-land/       # two-column Emergency Hub and donor-detail layouts
-├── navigation/nav_graph.xml
-├── menu/bottom_nav_menu.xml
-├── values/            # English strings, colors, themes (Material 3)
-└── values-bn/         # Bangla strings
+```text
+SHA-256: F3D1D1CE237F398B9103922AABF6B43E0CD5BE5E0F5EBFBD200BF1E7C5C35D99
 ```
 
----
+> The downloadable file is a debug build intended for coursework, demonstration, and testing.
+> Android may ask you to allow installation from the browser or file manager used to open it.
 
-## Firebase setup
+## Highlights
 
-1. Create a project at <https://console.firebase.google.com>.
-2. Add an Android app with package name **`com.shasthobondhu.app`**.
-3. Download `google-services.json` and put it in **`app/google-services.json`**
-   (it must be inside `app/`, not the project root).
-4. Enable **Authentication → Sign-in method → Email/Password**. No SHA fingerprint is
-   required because this app does not use Phone or Google Authentication.
-5. Create a **Cloud Firestore** database.
-6. Create the **Realtime Database** in `asia-southeast1`. The configured endpoint is
-   `https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app`.
-7. Keep `app/google-services.json` downloaded from that Firebase project. The build also accepts
-   a `FIREBASE_DATABASE_URL` Gradle property for separate environments.
+- **Verified accounts** — Firebase Email/Password registration, verification email, resend flow,
+  verified-login enforcement, and secure password reset.
+- **Blood donors** — donor profile, blood group and exact-area search, donation eligibility,
+  calling, map navigation, and live availability.
+- **Genuine presence** — Firebase `.info/connected` and `onDisconnect()` maintain online status;
+  the **Available now** badge requires both donor willingness and an active Firebase connection.
+- **Emergency requests** — RTDB push IDs, request ownership, transactional acceptance, and secure
+  Open → Accepted → Fulfilled/Cancelled transitions.
+- **Hospitals and medicines** — searchable local/offline data with authenticated RTDB reads;
+  sensitive cloud writes require a trusted administrator claim.
+- **Medicine information** — keyless openFDA label lookup with typed JSON parsing and safe
+  loading, empty, network, malformed-data, and server-error states.
+- **Emergency Hub** — emergency contact import, call/SMS actions, public Bangladesh health data,
+  system-condition warnings, live request monitoring, and donor availability controls.
+- **Private notifications** — per-user RTDB notifications that clients may read and mark as read,
+  but cannot create or rewrite.
+- **Device integration** — runtime permissions, Contacts Content Provider, implicit intents,
+  system broadcasts, foreground service, FCM, dark mode, and responsive landscape layouts.
 
-Deploy the restricted Firestore and Realtime Database rules included in this repo:
-
-```bash
-firebase deploy --only firestore:rules
-firebase.cmd deploy --only database
-```
-
----
-
-## Forgot password
-
-The screen at **Login → Forgot password?** uses Firebase Authentication's hosted,
-expiring reset link:
-
-1. Enter the account email.
-2. Firebase sends a secure password-reset email.
-3. Open the link, choose a new password, and return to the app to sign in.
-
-This requires no custom server, Gmail credential, Cloud Function, billing plan, SHA
-fingerprint, or app secret. Firebase handles token generation, expiration and password update.
-
----
-
-## Build & run
-
-1. Open the project in **Android Studio Dolphin 2021.3.1** (or newer).
-2. Make sure `app/google-services.json` exists.
-3. Let Gradle sync (AGP 7.3.1 / Gradle 7.4 / JDK 11).
-   If the wrapper is missing on your machine:
-   ```bash
-   gradle wrapper --gradle-version 7.4
-   ```
-4. Run on a device/emulator with **API 24+** and Google Play Services.
-
-> Samsung devices may block sideloaded debug builds with
-> `INSTALL_FAILED_VERIFICATION_FAILURE`; temporarily disable *Play Protect →
-> Scan apps with Play Protect* or install via Android Studio's Run button.
-
----
-
-## Features
-
-* **Blood donors** — register with name, phone, blood group, division/district/upazila,
-  calendar-selected last donation date and availability. Profiles synchronize through Firestore
-  and RTDB. Search supports division, exact district/area and optional blood group.
-* **Emergency requests** — create push-ID requests in RTDB, mirror them to Firestore, accept an
-  open request, and let its owner mark accepted requests Fulfilled or Cancelled. Security rules
-  enforce ownership and valid transitions.
-* **Hospitals & clinics** — search by name, area, test or service; call or launch
-  turn-by-turn Google Maps navigation. Clinic owners also publish doctor speciality,
-  available days and times.
-* **Medicines** — search a medicine and see participating medicine shops with
-  **In Stock / Low / Out of Stock**; shop owners update stock and users can navigate
-  to the pharmacy in Google Maps. “More info” loads nullable-safe indications and warnings from
-  openFDA and clearly distinguishes loading, empty, malformed, network and server states.
-* **Emergency Hub** — a separate, rotation-safe Activity for emergency contacts, live blood
-  requests, donor presence, Bangladesh public-health statistics, system readiness and the
-  Emergency Request Monitor.
-* **Live donor availability** — willingness is stored in `/blood_donors`; genuine connection
-  state comes from `.info/connected` and `/user_status`. “Available now” requires both.
-* **Private notifications** — `/notifications/{uid}` is visible only to that user. Clients can
-  mark records read but only a trusted backend can create them.
-* **Device-aware emergency delivery** — live airplane-mode, low-battery and power-saver warnings;
-  runtime notification/contact permissions; contact-provider import; call and SMS intents.
-* **Auth-first role flow** — the app opens only to Login/Register. Registration chooses
-  **General user / blood donor**, **Medicine shop owner**, or **Clinic owner**. General users
-  complete and later edit availability/last-donation details; owners route directly to their
-  management dashboard. A salted local fallback keeps
-  the roles testable when Firebase Email/Password is not enabled.
-* **Offline first** — Room caches everything; screens expose loading / empty / error states.
-* **Localisation** — complete English (`values/`) and Bangla (`values-bn/`) string sets.
-* **Accessible visual modes** — a persistent forest-green light/dark theme, boxed service
-  selections and large touch targets tuned on a Samsung Android 14 device.
-
----
-
-## Data notes
-
-`util/AreaDataset` contains all eight Bangladesh divisions: Dhaka, Chattogram, Rajshahi,
-Khulna, Barishal, Sylhet, Rangpur and Mymensingh. District and area are intentionally entered
-manually, and donor search performs exact district/area matching within the selected division.
-
-`util/DataSeeder` inserts demo donors, requests, hospitals and medicines **once** on first
-launch, on a background thread, so every screen has content immediately.
-
----
-
-## Requirements coverage
+## Verified requirements
 
 | Requirement | Implementation |
 |---|---|
-| Multi-Activity navigation and explicit intents | `EmergencyHubActivity`, `DonorDetailActivity`, `HomeFragment`, `DonorFragment`, `DonorAdapter` |
-| Implicit intents | `MapNavigationUtils`, donor/contact dial actions, emergency SMS `ACTION_SENDTO` |
-| View Binding and event handling | All Activities/Fragments/adapters and generated `*Binding` classes |
-| Responsive ConstraintLayout and rotation | `layout/activity_emergency_hub.xml`, `layout-land/activity_emergency_hub.xml`, and donor-detail equivalents |
-| RecyclerView, adapters and ViewHolders | Donors, requests, hospitals, medicines, and contact picker |
-| Runtime permissions | `PermissionHelper`, `EmergencyHubActivity` |
-| System broadcasts | `SystemEventReceiver`, `SystemStatusRepository`, status banners in both activities |
-| Content Provider | `EmergencyContactRepository` queries `ContactsContract` off-main with a closed cursor |
-| Foreground service | `HealthMonitorService`, Hub monitor toggle, ongoing live RTDB/Firestore notification |
-| HTTP and typed JSON parsing | `PublicHealthApi`, `NetworkModule`, `HealthInfoRepository`, API DTOs and mappers |
-| Firebase Auth, Firestore, RTDB and FCM | `FirebaseService`, `RealtimeDatabaseRepository`, `PresenceRepository`, `NotificationRepository`, `ShasthoMessagingService` |
+| Multi-Activity navigation and explicit intents | `EmergencyHubActivity`, `DonorDetailActivity` |
+| Implicit intents | Dialer, SMS, Google Maps, browser fallback |
+| View Binding and UI event handling | Activities, Fragments, adapters, and row bindings |
+| RecyclerView, adapters, and ViewHolders | Donors, requests, hospitals, medicines, contacts, notifications |
+| Responsive layouts and rotation | Portrait plus two-column `layout-land` activity resources |
+| Runtime permissions | Reusable notification/contact `PermissionHelper` |
+| BroadcastReceiver | Airplane mode, battery low/okay, and power saver events |
+| Content Provider | Off-main `ContactsContract` query with safely closed cursor |
+| Foreground service | Ongoing emergency-request monitor notification |
+| HTTP and JSON parsing | Retrofit, OkHttp, Gson, openFDA, disease.sh |
+| Firebase services | Authentication, Firestore, RTDB, FCM |
+| Realtime presence | `.info/connected`, `onDisconnect()`, server timestamp |
+| Security rules | Owner checks, private notifications, validated transitions, admin claims |
 
-## Manual setup and API notes
+## Architecture
 
-### Realtime Database
+The project follows the existing Java MVVM/repository architecture:
 
-The final rules are intentionally restrictive. Review `database.rules.json` and
-`docs/RTDB_INTEGRATION_PLAN.md`, then deploy manually:
-
-```powershell
-firebase.cmd deploy --only database
+```text
+View (Activity/Fragment + View Binding)
+        ↓
+Hilt ViewModel + LiveData
+        ↓
+Repository layer
+   ├── Room local/offline cache
+   ├── Firebase Authentication
+   ├── Cloud Firestore
+   ├── Firebase Realtime Database
+   └── Retrofit public APIs
 ```
 
-Run the local Auth + Database emulator security smoke suite before deployment:
+Firestore and Room remain available for durable/offline behavior. RTDB supplies live profiles,
+donor discovery, request updates, presence, notifications, and administrator-managed reference
+data without removing existing features.
+
+## Technology
+
+| Area | Choice |
+|---|---|
+| Language | Java 11 |
+| UI | XML, Material 3, View Binding, ConstraintLayout |
+| Architecture | MVVM, Repository, LiveData |
+| Dependency injection | Hilt |
+| Local database | Room |
+| Cloud | Firebase Auth, Firestore, RTDB, FCM |
+| Networking | Retrofit, OkHttp, Gson |
+| Build | AGP 7.3.1, Gradle 7.4, Groovy DSL |
+
+`minSdk 24` · `targetSdk 33` · `compileSdk 33`
+
+## Project structure
+
+```text
+app/src/main/java/com/shasthobondhu/app/
+├── MainActivity.java
+├── EmergencyHubActivity.java
+├── DonorDetailActivity.java
+├── data/
+│   ├── local/              # Room entities and DAOs
+│   ├── model/              # UI/domain models
+│   ├── remote/             # Firebase, FCM, Retrofit APIs and DTOs
+│   └── repository/         # Local, cloud, presence, contacts, and API repositories
+├── di/                     # Hilt modules and entry points
+├── service/                # Emergency foreground monitor
+├── system/                 # Android system-event receiver and state
+├── ui/
+│   ├── adapters/
+│   └── fragments/
+├── util/
+└── viewmodel/
+
+docs/RTDB_STRUCTURE.md      # Expected cloud paths and trusted-admin setup
+scripts/rtdb-rules-smoke.ps1
+database.rules.json
+firestore.rules
+firebase.json
+```
+
+## Build and test
+
+### Requirements
+
+- JDK 11
+- Android SDK 33
+- Android Studio or command-line Gradle
+- `app/google-services.json` for package `com.shasthobondhu.app`
+
+### Build the APK
+
+```powershell
+.\gradlew.bat clean assembleDebug
+```
+
+Generated APK:
+
+```text
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+### Run all local checks
+
+```powershell
+.\gradlew.bat clean testDebugUnitTest assembleDebug lintDebug
+```
+
+The latest verification completed with a successful build, passing unit tests, and **0 lint
+errors**. The app was also installed and launched on a Pixel 5 Android 11 emulator without an
+`AndroidRuntime` crash.
+
+## Firebase configuration
+
+Firebase project:
+
+```text
+shasthobondhu-d5bdf
+```
+
+Realtime Database endpoint:
+
+```text
+https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app
+```
+
+Enable Email/Password Authentication and create Firestore plus Realtime Database. The app's
+`google-services.json` belongs in `app/`.
+
+### Deploy rules
+
+Review the rules before deployment, then run:
+
+```powershell
+firebase.cmd deploy --only database --project shasthobondhu-d5bdf
+firebase.cmd deploy --only firestore:rules --project shasthobondhu-d5bdf
+```
+
+No production rule deployment is performed automatically by this repository.
+
+### Test RTDB rules locally
 
 ```powershell
 firebase.cmd emulators:exec --only auth,database --project shasthobondhu-d5bdf `
   "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\rtdb-rules-smoke.ps1"
 ```
 
-Paths created automatically by app use are `/users`, `/blood_donors`, `/blood_requests`,
-`/blood_request_status`, and `/user_status`. `/notifications`, `/hospitals`, and `/medicines`
-remain empty until a trusted backend or Firebase Admin SDK writes real records.
+The smoke suite verifies authentication, ownership, donor discovery, presence, request
+transitions, notification privacy, and administrator-only hospital/medicine writes.
 
-Hospital, medicine, and notification creation requires either the Admin SDK (which bypasses
-client rules) or an authenticated administrator with a server-issued custom claim:
-`{ "admin": true }`. Never derive this permission from `/users/{uid}/role`.
+## Realtime Database security
 
-### Public APIs
+| Path | Read | Write |
+|---|---|---|
+| `/users/{uid}` | Owner | Owner |
+| `/blood_donors` | Authenticated users | Donor owner |
+| `/blood_requests` | Authenticated users | Requester or controlled donor acceptance |
+| `/blood_request_status` | Authenticated users | Authorized requester/accepting donor |
+| `/notifications/{uid}` | Owner | Owner can only mark read; trusted backend creates |
+| `/user_status` | Authenticated users | Status owner |
+| `/hospitals` | Authenticated users | `admin: true` only |
+| `/medicines` | Authenticated users | `admin: true` only |
 
-* Medicine labels use the key-less openFDA drug-label endpoint. A 404 is an expected empty result;
-  common local names containing “Napa” or “paracetamol” are queried as `acetaminophen`.
-* The Hub's Bangladesh card uses the key-less disease.sh country endpoint. Values are public
-  reported COVID-19 totals and are informational, not medical advice.
-* Both endpoints were reachable during implementation. They can change independently of the app,
-  so every request has timeout, retry, empty, malformed-data and failure handling.
+Root read/write access is denied. Android account roles do not grant administration. Production
+hospital, medicine, and notification creation must use Firebase Admin SDK, Cloud Functions, or a
+server-issued Auth custom claim:
+
+```json
+{ "admin": true }
+```
+
+See [RTDB_STRUCTURE.md](docs/RTDB_STRUCTURE.md) for the complete expected data structure and
+automatic first-write behavior.
+
+## Permissions
+
+- `INTERNET`, `ACCESS_NETWORK_STATE`
+- `POST_NOTIFICATIONS` on Android 13+
+- `READ_CONTACTS`, requested only when selecting an emergency contact
+- `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_DATA_SYNC`
+
+No location permission is requested.
+
+## Data and privacy notes
+
+- User profiles are private to their owners.
+- Donor phone numbers are available only to authenticated users because calling donors is a core
+  feature.
+- Notification creation is denied to ordinary clients.
+- Presence contains only `online` and `lastSeen`; donor willingness remains separate.
+- Room demo records are local development data and are never uploaded as production RTDB data.
+- Public medicine and health endpoints are informational and not medical advice.
+
+## Localisation
+
+UI strings are provided in:
+
+- `res/values/strings.xml` — English
+- `res/values-bn/strings.xml` — Bangla
+
+The green day/night theme, large touch targets, and scrollable forms support phones in portrait
+and landscape orientations.
