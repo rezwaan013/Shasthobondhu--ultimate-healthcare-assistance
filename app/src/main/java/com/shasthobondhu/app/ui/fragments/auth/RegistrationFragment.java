@@ -15,7 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.databinding.FragmentRegistrationBinding;
-import com.shasthobondhu.app.ui.fragments.home.HomeFragment;
+import com.shasthobondhu.app.ui.fragments.donors.DonorRegisterFragment;
 import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.util.ValidationUtils;
 import com.shasthobondhu.app.util.constants.AppConstants;
@@ -87,10 +87,7 @@ public class RegistrationFragment extends Fragment {
                 android.R.layout.simple_list_item_1, roleLabels);
         binding.spinnerRole.setAdapter(adapter);
 
-        String requestedRole = getArguments() == null
-                ? AppConstants.ROLE_USER
-                : SessionManager.normalizeRole(
-                        getArguments().getString(HomeFragment.ARG_OWNER_ROLE));
+        String requestedRole = AppConstants.ROLE_USER;
         int selectedIndex = 0;
         for (int i = 0; i < roleValues.length; i++) {
             if (roleValues[i].equals(requestedRole)) {
@@ -138,20 +135,23 @@ public class RegistrationFragment extends Fragment {
 
     private void navigateAfterRegistration() {
         String role = SessionManager.getRole(requireContext());
-        int destination;
         if (AppConstants.ROLE_PHARMACY.equals(role)) {
-            destination = R.id.nav_pharmacy_dashboard;
+            navigateAfterAuth(R.id.nav_pharmacy_dashboard, null);
         } else if (AppConstants.ROLE_HOSPITAL.equals(role)) {
-            destination = R.id.nav_hospital_dashboard;
+            navigateAfterAuth(R.id.nav_hospital_dashboard, null);
         } else {
-            destination = R.id.nav_home;
+            Bundle args = new Bundle();
+            args.putBoolean(DonorRegisterFragment.ARG_ONBOARDING, true);
+            navigateAfterAuth(R.id.nav_donor_register, args);
         }
+    }
 
+    private void navigateAfterAuth(int destination, Bundle args) {
         NavOptions options = new NavOptions.Builder()
                 .setPopUpTo(R.id.nav_register, true)
                 .setLaunchSingleTop(true)
                 .build();
-        NavHostFragment.findNavController(this).navigate(destination, null, options);
+        NavHostFragment.findNavController(this).navigate(destination, args, options);
     }
 
     private void showError(String message) {

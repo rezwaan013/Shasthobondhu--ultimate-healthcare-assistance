@@ -19,7 +19,7 @@ public interface RequestDao {
     @Update
     void update(RequestEntity request);
 
-    @Query("SELECT * FROM blood_requests WHERE status = 'Open' AND "
+    @Query("SELECT * FROM blood_requests WHERE status != 'Fulfilled' AND "
             + "(location LIKE '%' || :area || '%' OR hospitalName LIKE '%' || :area || '%') "
             + "ORDER BY id DESC")
     LiveData<List<RequestEntity>> getOpenRequestsByArea(String area);
@@ -27,8 +27,12 @@ public interface RequestDao {
     @Query("SELECT * FROM blood_requests ORDER BY id DESC")
     LiveData<List<RequestEntity>> getAllRequests();
 
-    @Query("SELECT * FROM blood_requests WHERE status = 'Open' ORDER BY id DESC")
+    @Query("SELECT * FROM blood_requests WHERE status != 'Fulfilled' ORDER BY id DESC")
     LiveData<List<RequestEntity>> getOpenRequests();
+
+    @Query("UPDATE blood_requests SET status = 'Accepted', acceptedByUid = :uid, "
+            + "acceptedByName = :name WHERE id = :requestId AND status = 'Open'")
+    int acceptRequest(int requestId, String uid, String name);
 
     @Query("SELECT COUNT(*) FROM blood_requests")
     int count();

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +14,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.databinding.FragmentLoginBinding;
-import com.shasthobondhu.app.ui.fragments.home.HomeFragment;
 import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.util.ValidationUtils;
 import com.shasthobondhu.app.util.constants.AppConstants;
@@ -28,7 +26,6 @@ public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
     private AuthViewModel viewModel;
-    private String expectedRole;
 
     @Nullable
     @Override
@@ -43,10 +40,10 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        expectedRole = getArguments() == null
-                ? null : getArguments().getString(HomeFragment.ARG_OWNER_ROLE);
-
-        configureOwnerMode();
+        if (SessionManager.isSignedIn(requireContext())) {
+            navigateAfterLogin();
+            return;
+        }
 
         binding.btnEmailLogin.setOnClickListener(v -> loginWithEmail());
         binding.tvForgotPassword.setOnClickListener(v ->
@@ -54,19 +51,6 @@ public class LoginFragment extends Fragment {
         binding.tvRegister.setOnClickListener(v -> openRegister());
 
         observeViewModel();
-    }
-
-    private void configureOwnerMode() {
-        if (expectedRole == null) {
-            return;
-        }
-        String label = SessionManager.roleLabel(requireContext(), expectedRole);
-        binding.tvOwnerNotice.setVisibility(View.VISIBLE);
-        binding.tvOwnerNotice.setText(getString(R.string.owner_role_notice, label));
-        binding.tvDemoAccounts.setVisibility(View.VISIBLE);
-        binding.tvDemoAccounts.setText(getString(R.string.demo_accounts_value,
-                getString(R.string.demo_accounts_title),
-                getString(R.string.demo_accounts_note)));
     }
 
     private void observeViewModel() {
@@ -112,19 +96,6 @@ public class LoginFragment extends Fragment {
             return;
         }
         String role = SessionManager.getRole(requireContext());
-        if (expectedRole != null && !expectedRole.equals(role)) {
-            if (AppConstants.ROLE_PHARMACY.equals(role)
-                    || AppConstants.ROLE_HOSPITAL.equals(role)) {
-                Toast.makeText(requireContext(),
-                        getString(R.string.owner_role_changed,
-                                SessionManager.roleLabel(requireContext(), role)),
-                        Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(requireContext(), R.string.error_owner_only,
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-
         int destination;
         if (AppConstants.ROLE_PHARMACY.equals(role)) {
             destination = R.id.nav_pharmacy_dashboard;
@@ -142,11 +113,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void openRegister() {
-        Bundle args = new Bundle();
-        if (expectedRole != null) {
-            args.putString(HomeFragment.ARG_OWNER_ROLE, expectedRole);
-        }
-        NavHostFragment.findNavController(this).navigate(R.id.nav_register, args);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_register);
     }
 
     private void showError(String message) {

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,15 +17,12 @@ import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.LabComponentsActivity;
 import com.shasthobondhu.app.databinding.FragmentHomeBinding;
 import com.shasthobondhu.app.util.SessionManager;
-import com.shasthobondhu.app.util.constants.AppConstants;
 import com.shasthobondhu.app.viewmodel.AuthViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class HomeFragment extends Fragment {
-
-    public static final String ARG_OWNER_ROLE = "ownerRole";
 
     private FragmentHomeBinding binding;
     private AuthViewModel authViewModel;
@@ -56,20 +52,13 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        binding.btnLogin.setOnClickListener(v -> openLogin(null));
-        binding.btnRegister.setOnClickListener(v -> openRegister(null));
-        binding.btnForgotPassword.setOnClickListener(v -> navigate(R.id.nav_forgot_password));
-
-        binding.btnPharmacyOwner.setOnClickListener(v ->
-                openOwnerArea(AppConstants.ROLE_PHARMACY));
-        binding.btnHospitalOwner.setOnClickListener(v ->
-                openOwnerArea(AppConstants.ROLE_HOSPITAL));
-
-        binding.btnOpenDashboard.setOnClickListener(v -> openDashboard());
         binding.btnSignOut.setOnClickListener(v -> {
             authViewModel.logout();
-            refreshAccount();
-            Toast.makeText(requireContext(), R.string.sign_out, Toast.LENGTH_SHORT).show();
+            NavOptions options = new NavOptions.Builder()
+                    .setPopUpTo(R.id.nav_home, true)
+                    .setLaunchSingleTop(true)
+                    .build();
+            NavHostFragment.findNavController(this).navigate(R.id.nav_login, null, options);
         });
     }
 
@@ -84,13 +73,6 @@ public class HomeFragment extends Fragment {
             return;
         }
         boolean signedIn = SessionManager.isSignedIn(requireContext());
-        boolean owner = SessionManager.isPharmacyOwner(requireContext())
-                || SessionManager.isHospitalOwner(requireContext());
-
-        binding.btnLogin.setVisibility(signedIn ? View.GONE : View.VISIBLE);
-        binding.btnRegister.setVisibility(signedIn ? View.GONE : View.VISIBLE);
-        binding.btnForgotPassword.setVisibility(signedIn ? View.GONE : View.VISIBLE);
-        binding.btnOpenDashboard.setVisibility(signedIn && owner ? View.VISIBLE : View.GONE);
         binding.btnSignOut.setVisibility(signedIn ? View.VISIBLE : View.GONE);
         binding.tvLocalModeNotice.setVisibility(
                 signedIn && SessionManager.isLocalMode(requireContext())
@@ -106,59 +88,8 @@ public class HomeFragment extends Fragment {
                     SessionManager.roleLabel(requireContext(),
                             SessionManager.getRole(requireContext()))));
         } else {
-            binding.tvAccountTitle.setText(R.string.account_guest_title);
-            binding.tvAccountNote.setText(R.string.account_guest_note);
+            NavHostFragment.findNavController(this).navigate(R.id.nav_login);
         }
-    }
-
-    private void openOwnerArea(String role) {
-        if (!SessionManager.isSignedIn(requireContext())) {
-            openLogin(role);
-            return;
-        }
-        String currentRole = SessionManager.getRole(requireContext());
-        if (role.equals(currentRole)) {
-            openDashboard();
-            return;
-        }
-        if (SessionManager.isPharmacyOwner(requireContext())
-                || SessionManager.isHospitalOwner(requireContext())) {
-            Toast.makeText(requireContext(),
-                    getString(R.string.owner_role_changed,
-                            SessionManager.roleLabel(requireContext(), currentRole)),
-                    Toast.LENGTH_LONG).show();
-            openDashboard();
-            return;
-        }
-        // A general user cannot own a facility; sign in with an owner account.
-        openLogin(role);
-    }
-
-    private void openDashboard() {
-        String role = SessionManager.getRole(requireContext());
-        if (AppConstants.ROLE_PHARMACY.equals(role)) {
-            navigate(R.id.nav_pharmacy_dashboard);
-        } else if (AppConstants.ROLE_HOSPITAL.equals(role)) {
-            navigate(R.id.nav_hospital_dashboard);
-        } else {
-            Toast.makeText(requireContext(), R.string.error_owner_only, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void openLogin(String role) {
-        Bundle args = new Bundle();
-        if (role != null) {
-            args.putString(ARG_OWNER_ROLE, role);
-        }
-        NavHostFragment.findNavController(this).navigate(R.id.nav_login, args);
-    }
-
-    private void openRegister(String role) {
-        Bundle args = new Bundle();
-        if (role != null) {
-            args.putString(ARG_OWNER_ROLE, role);
-        }
-        NavHostFragment.findNavController(this).navigate(R.id.nav_register, args);
     }
 
     private void navigate(int destination) {

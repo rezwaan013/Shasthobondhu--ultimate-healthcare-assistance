@@ -27,6 +27,10 @@ public class DonorRepository {
         return donorDao.getAllDonors();
     }
 
+    public LiveData<DonorEntity> getMyProfile(String ownerUid) {
+        return donorDao.observeByOwnerUid(ownerUid == null ? "" : ownerUid);
+    }
+
     public void addDonor(DonorEntity donor) {
         AppExecutors.io(() -> donorDao.insert(donor));
     }
@@ -34,6 +38,23 @@ public class DonorRepository {
     public void addDonorAndNotify(DonorEntity donor, Runnable onSaved) {
         AppExecutors.io(() -> {
             donorDao.insert(donor);
+            AppExecutors.main(onSaved);
+        });
+    }
+
+    public void saveDonorAndNotify(DonorEntity donor, Runnable onSaved) {
+        AppExecutors.io(() -> {
+            if (donor.id == 0 && donor.ownerUid != null) {
+                DonorEntity existing = donorDao.getByOwnerUid(donor.ownerUid);
+                if (existing != null) {
+                    donor.id = existing.id;
+                }
+            }
+            if (donor.id > 0) {
+                donorDao.update(donor);
+            } else {
+                donorDao.insert(donor);
+            }
             AppExecutors.main(onSaved);
         });
     }

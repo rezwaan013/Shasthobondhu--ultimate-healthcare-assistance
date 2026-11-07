@@ -38,15 +38,15 @@
 
     <!-- Registration -->
     <string name="register_title">Create account</string>
-    <string name="register_subtitle">Join the healthcare network</string>
+    <string name="register_subtitle">Choose your role and create your account</string>
     <string name="hint_full_name">Full name</string>
     <string name="hint_role">Account type</string>
-    <string name="role_user">General user</string>
-    <string name="role_pharmacy">Pharmacy owner</string>
-    <string name="role_hospital">Hospital owner</string>
+    <string name="role_user">General user / blood donor</string>
+    <string name="role_pharmacy">Medicine shop owner</string>
+    <string name="role_hospital">Clinic owner</string>
     <string name="role_user_desc">Donate blood, request blood, find hospitals and medicines.</string>
-    <string name="role_pharmacy_desc">Create your pharmacy and keep medicine stock up to date.</string>
-    <string name="role_hospital_desc">Create your hospital and list available tests and services.</string>
+    <string name="role_pharmacy_desc">Create your medicine shop and keep medicine stock up to date.</string>
+    <string name="role_hospital_desc">Create your clinic and list available tests and services.</string>
     <string name="already_have_account">Already have an account? </string>
     <string name="register_success">Account created successfully</string>
 
@@ -123,6 +123,8 @@
     <string name="hint_last_donation">Last donation date (optional)</string>
     <string name="switch_available">I am available to donate</string>
     <string name="action_save_donor">Save donor profile</string>
+    <string name="action_update_donor">Update donor profile</string>
+    <string name="manage_donor_profile">Availability &amp; donation profile</string>
     <string name="donor_saved">You are now listed as a donor.</string>
     <string name="donor_location_format">%1$s, %2$s</string>
     <string name="donors_empty">No donors matched this area and blood group yet.</string>
@@ -132,7 +134,7 @@
     <string name="create_request_subtitle">Share the patient details so nearby donors can respond.</string>
     <string name="hint_patient_name">Patient name</string>
     <string name="hint_units">Units needed</string>
-    <string name="hint_hospital_name">Hospital name</string>
+    <string name="hint_hospital_name">Clinic or hospital name</string>
     <string name="hint_location">Area or district</string>
     <string name="hint_contact_phone">Contact phone number</string>
     <string name="hint_urgency">Urgency</string>
@@ -144,6 +146,12 @@
     <string name="request_hospital_location">%1$s · %2$s</string>
     <string name="requests_empty">No open requests in this area yet.</string>
     <string name="call_requester">Call requester</string>
+    <string name="accept_blood_request">Accept request</string>
+    <string name="accepted_by">Accepted by %1$s</string>
+    <string name="general_donor">a donor</string>
+    <string name="request_accepted">Blood request accepted. Please contact the requester.</string>
+    <string name="request_already_accepted">This request was already accepted.</string>
+    <string name="cannot_accept_own_request">You cannot accept your own blood request.</string>
 
     <string name="hospitals_empty">No hospitals matched. Try another test, service or area.</string>
     <string name="hospital_tests_label">Tests and services</string>
@@ -158,15 +166,15 @@
     <string name="change_stock">Change</string>
 
     <!-- Owner dashboards -->
-    <string name="pharmacy_dashboard_title">Pharmacy dashboard</string>
-    <string name="pharmacy_dashboard_subtitle">Create your pharmacy, then keep your medicine list and stock current.</string>
-    <string name="create_pharmacy_title">Create your pharmacy</string>
-    <string name="hint_pharmacy_name">Pharmacy name</string>
+    <string name="pharmacy_dashboard_title">Medicine shop dashboard</string>
+    <string name="pharmacy_dashboard_subtitle">Create your medicine shop, then keep the medicine list and stock current.</string>
+    <string name="create_pharmacy_title">Create your medicine shop</string>
+    <string name="hint_pharmacy_name">Medicine shop name</string>
     <string name="hint_pharmacy_address">Street address</string>
     <string name="hint_pharmacy_phone">Pharmacy phone</string>
     <string name="hint_open_hours">Opening hours (e.g. 8 AM – 11 PM)</string>
-    <string name="action_create_pharmacy">Create pharmacy</string>
-    <string name="pharmacy_created">Pharmacy created. You can add medicines now.</string>
+    <string name="action_create_pharmacy">Create medicine shop</string>
+    <string name="pharmacy_created">Medicine shop created. You can add medicines now.</string>
     <string name="your_medicines">Medicines you list</string>
     <string name="add_medicine_title">Add a medicine</string>
     <string name="hint_medicine_name">Medicine name</string>
@@ -179,12 +187,12 @@
     <string name="no_medicines_yet">No medicines listed yet. Add the first one above.</string>
     <string name="pharmacy_details">%1$s · %2$s</string>
 
-    <string name="hospital_dashboard_title">Hospital dashboard</string>
-    <string name="hospital_dashboard_subtitle">Create your hospital, then list the tests and services you offer.</string>
-    <string name="create_hospital_title">Create your hospital</string>
+    <string name="hospital_dashboard_title">Clinic dashboard</string>
+    <string name="hospital_dashboard_subtitle">Create your clinic, then list the tests and services you offer.</string>
+    <string name="create_hospital_title">Create your clinic</string>
     <string name="hint_hospital_phone">Hospital phone</string>
-    <string name="action_create_hospital">Create hospital</string>
-    <string name="hospital_created">Hospital created. You can add tests and services now.</string>
+    <string name="action_create_hospital">Create clinic</string>
+    <string name="hospital_created">Clinic created. You can add tests and services now.</string>
     <string name="available_tests_title">Available tests and services</string>
     <string name="hint_service_name">Test or service (CBC, X-Ray, ICU…)</string>
     <string name="action_add_service">Add test or service</string>
@@ -203,7 +211,7 @@
     <string name="error_sign_in">Sign in failed. Please try again.</string>
     <string name="error_registration">Registration failed. Please try again.</string>
     <string name="error_firebase_not_configured">Firebase Email/Password sign-in is not enabled. Create an account in the app to use offline mode.</string>
-    <string name="error_owner_only">Sign in with a pharmacy owner or hospital owner account.</string>
+    <string name="error_owner_only">Sign in with a medicine shop owner or clinic owner account.</string>
 
     <!-- Lab demonstration and Android components -->
     <string name="lab_home_title">Android components lab</string>

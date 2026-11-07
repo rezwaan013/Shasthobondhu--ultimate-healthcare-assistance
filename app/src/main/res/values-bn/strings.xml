@@ -38,15 +38,15 @@
 
     <!-- Registration -->
     <string name="register_title">অ্যাকাউন্ট তৈরি করুন</string>
-    <string name="register_subtitle">স্বাস্থ্যসেবা নেটওয়ার্কে যোগ দিন</string>
+    <string name="register_subtitle">আপনার ভূমিকা বেছে নিয়ে অ্যাকাউন্ট তৈরি করুন</string>
     <string name="hint_full_name">পূর্ণ নাম</string>
     <string name="hint_role">অ্যাকাউন্টের ধরন</string>
-    <string name="role_user">সাধারণ ব্যবহারকারী</string>
-    <string name="role_pharmacy">ফার্মেসি মালিক</string>
-    <string name="role_hospital">হাসপাতাল মালিক</string>
+    <string name="role_user">সাধারণ ব্যবহারকারী / রক্তদাতা</string>
+    <string name="role_pharmacy">ঔষধের দোকান মালিক</string>
+    <string name="role_hospital">ক্লিনিক মালিক</string>
     <string name="role_user_desc">রক্ত দিন, রক্ত চান, হাসপাতাল ও ঔষধ খুঁজুন।</string>
-    <string name="role_pharmacy_desc">আপনার ফার্মেসি তৈরি করুন এবং ঔষধের স্টক হালনাগাদ রাখুন।</string>
-    <string name="role_hospital_desc">আপনার হাসপাতাল তৈরি করুন এবং উপলব্ধ টেস্ট ও সেবা যোগ করুন।</string>
+    <string name="role_pharmacy_desc">আপনার ঔষধের দোকান তৈরি করুন এবং ঔষধের স্টক হালনাগাদ রাখুন।</string>
+    <string name="role_hospital_desc">আপনার ক্লিনিক তৈরি করুন এবং উপলব্ধ টেস্ট ও সেবা যোগ করুন।</string>
     <string name="already_have_account">অ্যাকাউন্ট আছে? </string>
     <string name="register_success">অ্যাকাউন্ট তৈরি হয়েছে</string>
 
@@ -123,6 +123,8 @@
     <string name="hint_last_donation">শেষ রক্তদানের তারিখ (ঐচ্ছিক)</string>
     <string name="switch_available">আমি রক্তদানের জন্য প্রস্তুত</string>
     <string name="action_save_donor">রক্তদাতা প্রোফাইল সংরক্ষণ করুন</string>
+    <string name="action_update_donor">রক্তদাতা প্রোফাইল হালনাগাদ করুন</string>
+    <string name="manage_donor_profile">উপলব্ধতা ও রক্তদানের প্রোফাইল</string>
     <string name="donor_saved">আপনি এখন রক্তদাতা হিসেবে তালিকাভুক্ত।</string>
     <string name="donor_location_format">%1$s, %2$s</string>
     <string name="donors_empty">এই এলাকা ও রক্তের গ্রুপে কোনো রক্তদাতা পাওয়া যায়নি।</string>
@@ -132,7 +134,7 @@
     <string name="create_request_subtitle">রোগীর তথ্য দিন যাতে কাছের রক্তদাতারা সাড়া দিতে পারেন।</string>
     <string name="hint_patient_name">রোগীর নাম</string>
     <string name="hint_units">প্রয়োজনীয় ইউনিট</string>
-    <string name="hint_hospital_name">হাসপাতালের নাম</string>
+    <string name="hint_hospital_name">ক্লিনিক বা হাসপাতালের নাম</string>
     <string name="hint_location">এলাকা বা জেলা</string>
     <string name="hint_contact_phone">যোগাযোগের ফোন নম্বর</string>
     <string name="hint_urgency">জরুরি অবস্থা</string>
@@ -144,6 +146,12 @@
     <string name="request_hospital_location">%1$s · %2$s</string>
     <string name="requests_empty">এই এলাকায় এখন কোনো খোলা আবেদন নেই।</string>
     <string name="call_requester">আবেদনকারীকে কল করুন</string>
+    <string name="accept_blood_request">আবেদন গ্রহণ করুন</string>
+    <string name="accepted_by">গ্রহণ করেছেন: %1$s</string>
+    <string name="general_donor">একজন রক্তদাতা</string>
+    <string name="request_accepted">রক্তের আবেদন গ্রহণ করা হয়েছে। আবেদনকারীর সাথে যোগাযোগ করুন।</string>
+    <string name="request_already_accepted">এই আবেদনটি ইতিমধ্যে গ্রহণ করা হয়েছে।</string>
+    <string name="cannot_accept_own_request">নিজের রক্তের আবেদন গ্রহণ করা যাবে না।</string>
 
     <string name="hospitals_empty">কোনো হাসপাতাল পাওয়া যায়নি। অন্য টেস্ট, সেবা বা এলাকা চেষ্টা করুন।</string>
     <string name="hospital_tests_label">টেস্ট ও সেবা</string>
@@ -158,15 +166,15 @@
     <string name="change_stock">পরিবর্তন</string>
 
     <!-- Owner dashboards -->
-    <string name="pharmacy_dashboard_title">ফার্মেসি ড্যাশবোর্ড</string>
-    <string name="pharmacy_dashboard_subtitle">আপনার ফার্মেসি তৈরি করুন, তারপর ঔষধের তালিকা ও স্টক হালনাগাদ রাখুন।</string>
-    <string name="create_pharmacy_title">আপনার ফার্মেসি তৈরি করুন</string>
-    <string name="hint_pharmacy_name">ফার্মেসির নাম</string>
+    <string name="pharmacy_dashboard_title">ঔষধের দোকান ড্যাশবোর্ড</string>
+    <string name="pharmacy_dashboard_subtitle">আপনার ঔষধের দোকান তৈরি করুন, তারপর ঔষধের তালিকা ও স্টক হালনাগাদ রাখুন।</string>
+    <string name="create_pharmacy_title">আপনার ঔষধের দোকান তৈরি করুন</string>
+    <string name="hint_pharmacy_name">ঔষধের দোকানের নাম</string>
     <string name="hint_pharmacy_address">রাস্তার ঠিকানা</string>
     <string name="hint_pharmacy_phone">ফার্মেসির ফোন</string>
     <string name="hint_open_hours">খোলার সময় (যেমন সকাল ৮টা – রাত ১১টা)</string>
-    <string name="action_create_pharmacy">ফার্মেসি তৈরি করুন</string>
-    <string name="pharmacy_created">ফার্মেসি তৈরি হয়েছে। এখন ঔষধ যোগ করতে পারেন।</string>
+    <string name="action_create_pharmacy">ঔষধের দোকান তৈরি করুন</string>
+    <string name="pharmacy_created">ঔষধের দোকান তৈরি হয়েছে। এখন ঔষধ যোগ করতে পারেন।</string>
     <string name="your_medicines">আপনার তালিকাভুক্ত ঔষধ</string>
     <string name="add_medicine_title">ঔষধ যোগ করুন</string>
     <string name="hint_medicine_name">ঔষধের নাম</string>
@@ -179,12 +187,12 @@
     <string name="no_medicines_yet">এখনো কোনো ঔষধ যোগ করা হয়নি। উপরে প্রথমটি যোগ করুন।</string>
     <string name="pharmacy_details">%1$s · %2$s</string>
 
-    <string name="hospital_dashboard_title">হাসপাতাল ড্যাশবোর্ড</string>
-    <string name="hospital_dashboard_subtitle">আপনার হাসপাতাল তৈরি করুন, তারপর উপলব্ধ টেস্ট ও সেবা তালিকাভুক্ত করুন।</string>
-    <string name="create_hospital_title">আপনার হাসপাতাল তৈরি করুন</string>
+    <string name="hospital_dashboard_title">ক্লিনিক ড্যাশবোর্ড</string>
+    <string name="hospital_dashboard_subtitle">আপনার ক্লিনিক তৈরি করুন, তারপর উপলব্ধ টেস্ট ও সেবা তালিকাভুক্ত করুন।</string>
+    <string name="create_hospital_title">আপনার ক্লিনিক তৈরি করুন</string>
     <string name="hint_hospital_phone">হাসপাতালের ফোন</string>
-    <string name="action_create_hospital">হাসপাতাল তৈরি করুন</string>
-    <string name="hospital_created">হাসপাতাল তৈরি হয়েছে। এখন টেস্ট ও সেবা যোগ করতে পারেন।</string>
+    <string name="action_create_hospital">ক্লিনিক তৈরি করুন</string>
+    <string name="hospital_created">ক্লিনিক তৈরি হয়েছে। এখন টেস্ট ও সেবা যোগ করতে পারেন।</string>
     <string name="available_tests_title">উপলব্ধ টেস্ট ও সেবা</string>
     <string name="hint_service_name">টেস্ট বা সেবা (CBC, X-Ray, ICU…)</string>
     <string name="action_add_service">টেস্ট বা সেবা যোগ করুন</string>
@@ -203,7 +211,7 @@
     <string name="error_sign_in">লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
     <string name="error_registration">নিবন্ধন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
     <string name="error_firebase_not_configured">ফায়ারবেস ইমেইল লগইন চালু নেই। অফলাইন মোড ব্যবহার করতে অ্যাপে অ্যাকাউন্ট তৈরি করুন।</string>
-    <string name="error_owner_only">ফার্মেসি মালিক বা হাসপাতাল মালিক অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
+    <string name="error_owner_only">ঔষধের দোকান মালিক বা ক্লিনিক মালিক অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
 
     <!-- Lab demonstration and Android components -->
     <string name="lab_home_title">অ্যান্ড্রয়েড কম্পোনেন্টস ল্যাব</string>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,8 @@ import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.databinding.FragmentRequestsBinding;
 import com.shasthobondhu.app.ui.adapters.RequestAdapter;
 import com.shasthobondhu.app.viewmodel.RequestViewModel;
+import com.shasthobondhu.app.util.SessionManager;
+import com.shasthobondhu.app.data.local.entities.RequestEntity;
 
 import java.util.ArrayList;
 
@@ -41,7 +44,7 @@ public class RequestFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RequestViewModel.class);
 
-        adapter = new RequestAdapter(new ArrayList<>());
+        adapter = createAdapter(new ArrayList<>());
         binding.rvRequests.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvRequests.setAdapter(adapter);
 
@@ -49,10 +52,30 @@ public class RequestFragment extends Fragment {
                 NavHostFragment.findNavController(this).navigate(R.id.nav_create_request));
 
         viewModel.getAllOpenRequests().observe(getViewLifecycleOwner(), requests -> {
-            adapter = new RequestAdapter(requests == null ? new ArrayList<>() : requests);
+            adapter = createAdapter(requests == null ? new ArrayList<>() : requests);
             binding.rvRequests.setAdapter(adapter);
             boolean empty = requests == null || requests.isEmpty();
             binding.tvEmptyRequests.setVisibility(empty ? View.VISIBLE : View.GONE);
+        });
+    }
+
+    private RequestAdapter createAdapter(java.util.List<RequestEntity> requests) {
+        return new RequestAdapter(requests, request -> {
+            String uid = SessionManager.getUid(requireContext());
+            if (uid.equals(request.requesterUid)) {
+                Toast.makeText(requireContext(), R.string.cannot_accept_own_request,
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            viewModel.acceptRequest(request.id, uid,
+                    SessionManager.getName(requireContext()), accepted -> {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(), accepted
+                                            ? R.string.request_accepted
+                                            : R.string.request_already_accepted,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 

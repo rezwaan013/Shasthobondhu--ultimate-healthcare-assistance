@@ -64,11 +64,15 @@ public class DonorViewModel extends ViewModel {
         return donors;
     }
 
+    public LiveData<DonorEntity> getMyProfile(String ownerUid) {
+        return repository.getMyProfile(ownerUid);
+    }
+
     public LiveData<Boolean> getSaved() {
         return saved;
     }
 
     public void registerDonor(DonorEntity donor) {
-        repository.addDonorAndNotify(donor, () -> saved.setValue(true));
+        repository.saveDonorAndNotify(donor, () -> saved.setValue(true));
     }
 }

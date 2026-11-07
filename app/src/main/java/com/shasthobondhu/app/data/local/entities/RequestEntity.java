@@ -17,6 +17,8 @@ public class RequestEntity {
     public String contactPhone;
     public String status; // Open, Accepted, Fulfilled
     public String requesterUid;
+    public String acceptedByUid;
+    public String acceptedByName;
 
     @Ignore
     public RequestEntity(String patientName, String bloodGroup, int units,

@@ -33,4 +33,9 @@ public class RequestViewModel extends ViewModel {
     public void createRequest(RequestEntity request, Runnable onSaved) {
         repository.createRequestAndNotify(request, onSaved);
     }
+
+    public void acceptRequest(int requestId, String uid, String name,
+                              RequestRepository.AcceptCallback callback) {
+        repository.acceptRequest(requestId, uid, name, callback);
+    }
 }

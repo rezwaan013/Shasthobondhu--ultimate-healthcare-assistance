@@ -19,9 +19,7 @@ import com.google.android.material.chip.Chip;
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.data.local.entities.HospitalEntity;
 import com.shasthobondhu.app.databinding.FragmentHospitalDashboardBinding;
-import com.shasthobondhu.app.ui.fragments.home.HomeFragment;
 import com.shasthobondhu.app.util.SessionManager;
-import com.shasthobondhu.app.util.constants.AppConstants;
 import com.shasthobondhu.app.viewmodel.AuthViewModel;
 import com.shasthobondhu.app.viewmodel.OwnerViewModel;
 
@@ -205,10 +203,10 @@ public class HospitalDashboardFragment extends Fragment {
     private void signOut() {
         authViewModel.logout();
         NavOptions options = new NavOptions.Builder()
-                .setPopUpTo(R.id.nav_home, true)
+                .setPopUpTo(R.id.nav_login, true)
                 .setLaunchSingleTop(true)
                 .build();
-        NavHostFragment.findNavController(this).navigate(R.id.nav_home, null, options);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_login, null, options);
     }
 
     private void redirectToCorrectArea() {
@@ -216,9 +214,7 @@ public class HospitalDashboardFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_pharmacy_dashboard);
             return;
         }
-        Bundle args = new Bundle();
-        args.putString(HomeFragment.ARG_OWNER_ROLE, AppConstants.ROLE_HOSPITAL);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_login, args);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_login);
     }
 
     private String text(android.widget.EditText field) {

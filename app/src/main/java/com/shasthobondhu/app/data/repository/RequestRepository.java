@@ -36,4 +36,16 @@ public class RequestRepository {
             AppExecutors.main(onSaved);
         });
     }
+
+    public void acceptRequest(int requestId, String uid, String name,
+                              AcceptCallback callback) {
+        AppExecutors.io(() -> {
+            boolean accepted = requestDao.acceptRequest(requestId, uid, name) > 0;
+            AppExecutors.main(() -> callback.onComplete(accepted));
+        });
+    }
+
+    public interface AcceptCallback {
+        void onComplete(boolean accepted);
+    }
 }

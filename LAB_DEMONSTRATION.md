@@ -29,10 +29,11 @@ No user picture or media is stored by this app, so Firebase Storage is intention
 
 Demonstrate the three roles:
 
-- **General user:** register as a blood donor, post a blood request, search hospitals by
-  available test/service, search medicines by nearby pharmacy, call contacts, and navigate.
-- **Pharmacy owner:** create a pharmacy and add, remove, or change medicine stock.
-- **Hospital owner:** create a hospital and add or remove tests and services.
+- **General user / blood donor:** complete donor details, update availability and last donation,
+  post a blood request, accept another user's request, search clinics by test/service, search
+  medicines by nearby shop, call contacts, and navigate.
+- **Medicine shop owner:** create a medicine shop and add, remove, or change medicine stock.
+- **Clinic owner:** create a clinic and add or remove tests and services.
 
 ## 2. Architecture and navigation
 

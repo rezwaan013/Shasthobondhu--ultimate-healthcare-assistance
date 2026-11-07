@@ -55,6 +55,7 @@ public class DonorFragment extends Fragment {
 
         binding.btnBecomeDonor.setOnClickListener(v ->
                 NavHostFragment.findNavController(this).navigate(R.id.nav_donor_register));
+        binding.btnBecomeDonor.setText(R.string.manage_donor_profile);
 
         viewModel.getDonors().observe(getViewLifecycleOwner(), donors -> {
             adapter.submit(donors);

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -29,10 +30,15 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DonorRegisterFragment extends Fragment {
 
+    public static final String ARG_ONBOARDING = "donorOnboarding";
+
     private FragmentDonorRegisterBinding binding;
     private DonorViewModel viewModel;
     private String selectedDivision = "";
     private String selectedDistrict = "";
+    private DonorEntity existingProfile;
+    private boolean onboarding;
+    private List<AreaDataset.Area> areaDivisions;
 
     @Nullable
     @Override
@@ -46,15 +52,38 @@ public class DonorRegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DonorViewModel.class);
+        onboarding = getArguments() != null
+                && getArguments().getBoolean(ARG_ONBOARDING, false);
 
         setupBloodGroups();
         setupAreas();
+        binding.etDonorName.setText(SessionManager.getName(requireContext()));
+        binding.etDonorPhone.setText(SessionManager.getPhone(requireContext()));
+
+        if (SessionManager.isSignedIn(requireContext())) {
+            viewModel.getMyProfile(SessionManager.getUid(requireContext()))
+                    .observe(getViewLifecycleOwner(), profile -> {
+                        if (profile != null && existingProfile == null) {
+                            existingProfile = profile;
+                            populateProfile(profile);
+                        }
+                    });
+        }
 
         binding.btnSaveDonor.setOnClickListener(v -> saveDonor());
         viewModel.getSaved().observe(getViewLifecycleOwner(), saved -> {
             if (saved != null && saved && isAdded()) {
                 Toast.makeText(requireContext(), R.string.donor_saved, Toast.LENGTH_SHORT).show();
-                NavHostFragment.findNavController(this).popBackStack();
+                if (onboarding) {
+                    NavOptions options = new NavOptions.Builder()
+                            .setPopUpTo(R.id.nav_login, true)
+                            .setLaunchSingleTop(true)
+                            .build();
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.nav_home, null, options);
+                } else {
+                    NavHostFragment.findNavController(this).popBackStack();
+                }
             }
         });
     }
@@ -67,9 +96,9 @@ public class DonorRegisterFragment extends Fragment {
     }
 
     private void setupAreas() {
-        List<AreaDataset.Area> divisions = AreaDataset.getDivisions();
+        areaDivisions = AreaDataset.getDivisions();
         List<String> divisionNames = new ArrayList<>();
-        for (AreaDataset.Area division : divisions) {
+        for (AreaDataset.Area division : areaDivisions) {
             divisionNames.add(division.name);
         }
         binding.spinnerDivision.setAdapter(new ArrayAdapter<>(requireContext(),
@@ -78,7 +107,7 @@ public class DonorRegisterFragment extends Fragment {
             selectedDivision = divisionNames.get(position);
             selectedDistrict = "";
             binding.spinnerDistrict.setText("", false);
-            List<AreaDataset.Area> districts = divisions.get(position).children;
+            List<AreaDataset.Area> districts = areaDivisions.get(position).children;
             List<String> districtNames = new ArrayList<>();
             for (AreaDataset.Area district : districts) {
                 districtNames.add(district.name);
@@ -88,6 +117,33 @@ public class DonorRegisterFragment extends Fragment {
         });
         binding.spinnerDistrict.setOnItemClickListener((parent, view, position, id) ->
                 selectedDistrict = binding.spinnerDistrict.getText().toString().trim());
+    }
+
+    private void populateProfile(DonorEntity profile) {
+        binding.etDonorName.setText(profile.name);
+        binding.etDonorPhone.setText(profile.phone);
+        binding.spinnerBloodGroup.setText(profile.bloodGroup, false);
+        binding.spinnerDivision.setText(profile.division, false);
+        selectedDivision = profile.division == null ? "" : profile.division;
+        selectedDistrict = profile.district == null ? "" : profile.district;
+
+        List<String> districtNames = new ArrayList<>();
+        for (AreaDataset.Area division : areaDivisions) {
+            if (division.name.equals(selectedDivision)) {
+                for (AreaDataset.Area district : division.children) {
+                    districtNames.add(district.name);
+                }
+                break;
+            }
+        }
+        binding.spinnerDistrict.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_list_item_1, districtNames));
+        binding.spinnerDistrict.setText(profile.district, false);
+        binding.etUpazila.setText(profile.upazila);
+        binding.etLastDonation.setText("Not shared".equals(profile.lastDonationDate)
+                ? "" : profile.lastDonationDate);
+        binding.switchAvailable.setChecked(profile.isAvailable);
+        binding.btnSaveDonor.setText(R.string.action_update_donor);
     }
 
     private void saveDonor() {
@@ -120,6 +176,9 @@ public class DonorRegisterFragment extends Fragment {
         DonorEntity donor = new DonorEntity(name, phone, bloodGroup, selectedDivision,
                 selectedDistrict, upazila, lastDonation.isEmpty() ? "Not shared" : lastDonation,
                 binding.switchAvailable.isChecked(), ownerUid);
+        if (existingProfile != null) {
+            donor.id = existingProfile.id;
+        }
         binding.btnSaveDonor.setEnabled(false);
         viewModel.registerDonor(donor);
     }

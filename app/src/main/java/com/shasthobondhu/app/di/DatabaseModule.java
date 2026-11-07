@@ -3,6 +3,9 @@ package com.shasthobondhu.app.di;
 import android.content.Context;
 
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.annotation.NonNull;
 
 import com.shasthobondhu.app.data.local.AppDatabase;
 import com.shasthobondhu.app.data.local.dao.*;
@@ -19,10 +22,19 @@ import dagger.hilt.components.SingletonComponent;
 @InstallIn(SingletonComponent.class)
 public class DatabaseModule {
 
+    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE blood_requests ADD COLUMN acceptedByUid TEXT");
+            database.execSQL("ALTER TABLE blood_requests ADD COLUMN acceptedByName TEXT");
+        }
+    };
+
     @Provides
     @Singleton
     public AppDatabase provideDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "shastho_bondhu_db")
+                .addMigrations(MIGRATION_2_3)
                 .fallbackToDestructiveMigration()
                 .build();
     }

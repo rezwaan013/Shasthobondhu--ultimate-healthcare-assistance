@@ -116,14 +116,16 @@ fingerprint, or app secret. Firebase handles token generation, expiration and pa
   last donation date and availability. Search **by blood group and by area**
   (any level of the hierarchy), then call the donor.
 * **Emergency requests** — create a request (patient, group, units, hospital, location,
-  urgency, contact), see the open-request feed and call the requester.
+  urgency, contact), accept another user's request, see who accepted, and call the requester.
 * **Hospitals & clinics** — search by name, area, test or service; call or launch
   turn-by-turn Google Maps navigation.
-* **Medicines** — search a medicine and see participating pharmacies with
-  **In Stock / Low / Out of Stock**; pharmacy owners update stock and users can navigate
+* **Medicines** — search a medicine and see participating medicine shops with
+  **In Stock / Low / Out of Stock**; shop owners update stock and users can navigate
   to the pharmacy in Google Maps.
-* **Auth and roles** — email/password authentication with **General user**,
-  **Pharmacy owner**, and **Hospital owner** dashboards. A salted local fallback keeps
+* **Auth-first role flow** — the app opens only to Login/Register. Registration chooses
+  **General user / blood donor**, **Medicine shop owner**, or **Clinic owner**. General users
+  complete and later edit availability/last-donation details; owners route directly to their
+  management dashboard. A salted local fallback keeps
   the roles testable when Firebase Email/Password is not enabled.
 * **Offline first** — Room caches everything; screens expose loading / empty / error states.
 * **Localisation** — complete English (`values/`) and Bangla (`values-bn/`) string sets.

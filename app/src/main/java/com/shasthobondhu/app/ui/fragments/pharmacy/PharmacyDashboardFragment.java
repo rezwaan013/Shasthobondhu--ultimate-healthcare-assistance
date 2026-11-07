@@ -21,7 +21,6 @@ import com.shasthobondhu.app.data.local.entities.MedicineEntity;
 import com.shasthobondhu.app.data.local.entities.PharmacyEntity;
 import com.shasthobondhu.app.databinding.FragmentPharmacyDashboardBinding;
 import com.shasthobondhu.app.databinding.ItemOwnerMedicineBinding;
-import com.shasthobondhu.app.ui.fragments.home.HomeFragment;
 import com.shasthobondhu.app.util.DisplayUtils;
 import com.shasthobondhu.app.util.SessionManager;
 import com.shasthobondhu.app.util.constants.AppConstants;
@@ -196,10 +195,10 @@ public class PharmacyDashboardFragment extends Fragment {
     private void signOut() {
         authViewModel.logout();
         NavOptions options = new NavOptions.Builder()
-                .setPopUpTo(R.id.nav_home, true)
+                .setPopUpTo(R.id.nav_login, true)
                 .setLaunchSingleTop(true)
                 .build();
-        NavHostFragment.findNavController(this).navigate(R.id.nav_home, null, options);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_login, null, options);
     }
 
     private void redirectToCorrectArea() {
@@ -207,9 +206,7 @@ public class PharmacyDashboardFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_hospital_dashboard);
             return;
         }
-        Bundle args = new Bundle();
-        args.putString(HomeFragment.ARG_OWNER_ROLE, AppConstants.ROLE_PHARMACY);
-        NavHostFragment.findNavController(this).navigate(R.id.nav_login, args);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_login);
     }
 
     private String stockFromLabel(String label) {
