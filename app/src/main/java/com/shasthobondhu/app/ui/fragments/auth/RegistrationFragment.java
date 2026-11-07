@@ -8,12 +8,14 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.shasthobondhu.app.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.shasthobondhu.app.databinding.FragmentRegistrationBinding;
 import com.shasthobondhu.app.ui.fragments.donors.DonorRegisterFragment;
 import com.shasthobondhu.app.util.SessionManager;
@@ -28,6 +30,7 @@ public class RegistrationFragment extends Fragment {
 
     private FragmentRegistrationBinding binding;
     private AuthViewModel viewModel;
+    private AlertDialog verificationDialog;
 
     private String selectedRole = AppConstants.ROLE_USER;
 
@@ -54,12 +57,15 @@ public class RegistrationFragment extends Fragment {
         setupRoleDropdown();
 
         binding.btnRegister.setOnClickListener(v -> submit());
+        binding.btnResendVerification.setOnClickListener(v ->
+                viewModel.resendVerificationEmail());
         binding.tvLogin.setOnClickListener(v -> NavHostFragment.findNavController(this).popBackStack());
 
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
             boolean busy = loading != null && loading;
             binding.progress.setVisibility(busy ? View.VISIBLE : View.GONE);
             binding.btnRegister.setEnabled(!busy);
+            binding.btnResendVerification.setEnabled(!busy);
         });
 
         viewModel.getAuthError().observe(getViewLifecycleOwner(), error -> {
@@ -72,10 +78,41 @@ public class RegistrationFragment extends Fragment {
         });
 
         viewModel.isRegistered().observe(getViewLifecycleOwner(), registered -> {
-            if (registered != null && registered && isAdded()) {
+            if (registered != null && registered && isAdded()
+                    && SessionManager.isLocalMode(requireContext())) {
                 navigateAfterRegistration();
             }
         });
+
+        viewModel.getCanResendVerification().observe(getViewLifecycleOwner(), canResend ->
+                binding.btnResendVerification.setVisibility(
+                        Boolean.TRUE.equals(canResend) ? View.VISIBLE : View.GONE));
+
+        viewModel.getVerificationEmailSent().observe(getViewLifecycleOwner(), email -> {
+            if (email != null && isAdded()) {
+                showVerificationSent(email);
+            }
+        });
+    }
+
+    private void showVerificationSent(String email) {
+        if (verificationDialog != null && verificationDialog.isShowing()) {
+            return;
+        }
+        verificationDialog = new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.verification_email_sent_title)
+                .setMessage(getString(R.string.verification_email_sent_message, email))
+                .setCancelable(false)
+                .setPositiveButton(R.string.action_back_to_login, (dialog, which) -> {
+                    viewModel.consumeVerificationNotice();
+                    if (!NavHostFragment.findNavController(this)
+                            .popBackStack(R.id.nav_login, false)) {
+                        NavHostFragment.findNavController(this).navigate(R.id.nav_login);
+                    }
+                })
+                .create();
+        verificationDialog.setOnDismissListener(dialog -> verificationDialog = null);
+        verificationDialog.show();
     }
 
     private void setupRoleDropdown() {
@@ -165,6 +202,10 @@ public class RegistrationFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        if (verificationDialog != null) {
+            verificationDialog.dismiss();
+            verificationDialog = null;
+        }
         super.onDestroyView();
         binding = null;
     }

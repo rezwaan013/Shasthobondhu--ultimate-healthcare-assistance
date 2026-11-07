@@ -43,6 +43,8 @@ public class AuthViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isLoginSuccess = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> isRegistered = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> localMode = new MutableLiveData<>(false);
+    private final MutableLiveData<String> verificationEmailSent = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> canResendVerification = new MutableLiveData<>(false);
 
     @Inject
     public AuthViewModel(FirebaseService firebaseService, LocalUserDao localUserDao,
@@ -72,6 +74,14 @@ public class AuthViewModel extends ViewModel {
 
     public LiveData<Boolean> isLocalMode() {
         return localMode;
+    }
+
+    public LiveData<String> getVerificationEmailSent() {
+        return verificationEmailSent;
+    }
+
+    public LiveData<Boolean> getCanResendVerification() {
+        return canResendVerification;
     }
 
     public void loginWithEmail(String email, String password) {
@@ -106,7 +116,7 @@ public class AuthViewModel extends ViewModel {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && auth.getCurrentUser() != null) {
-                        completeFirebaseLogin(auth.getCurrentUser());
+                        validateVerifiedFirebaseLogin(auth.getCurrentUser());
                     } else {
                         Exception error = task.getException();
                         if (isBackendUnavailable(error)) {
@@ -122,6 +132,9 @@ public class AuthViewModel extends ViewModel {
     public void register(String name, String email, String password, String phone, String role) {
         loading.setValue(true);
         authError.setValue(null);
+        isRegistered.setValue(false);
+        verificationEmailSent.setValue(null);
+        canResendVerification.setValue(false);
         String safeRole = SessionManager.normalizeRole(role);
 
         auth.createUserWithEmailAndPassword(email, password)
@@ -147,7 +160,6 @@ public class AuthViewModel extends ViewModel {
                     UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
                             .setDisplayName(name)
                             .build();
-                    user.updateProfile(profile);
 
                     Map<String, Object> document = new HashMap<>();
                     document.put("uid", user.getUid());
@@ -158,15 +170,30 @@ public class AuthViewModel extends ViewModel {
                     document.put("createdAt", System.currentTimeMillis());
 
                     SessionManager.cacheRole(context, email, safeRole);
+                    // Update the display name first so Firebase can use it in the email template.
+                    user.updateProfile(profile).addOnCompleteListener(profileTask ->
+                            sendRegistrationVerification(user, email));
+                    // Profile persistence is independent; it must never delay verification mail.
                     db.collection(AppConstants.COLLECTION_USERS)
                             .document(user.getUid())
-                            .set(document)
-                            .addOnCompleteListener(saveTask -> {
-                                // A failed profile save should not block a created account.
-                                finishSignIn(user.getUid(), name, email, phone, safeRole, false);
-                                isRegistered.setValue(true);
-                            });
+                            .set(document);
                 });
+    }
+
+    public void resendVerificationEmail() {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null || user.getEmail() == null) {
+            canResendVerification.setValue(false);
+            authError.setValue(context.getString(R.string.error_verification_session_expired));
+            return;
+        }
+        loading.setValue(true);
+        authError.setValue(null);
+        sendRegistrationVerification(user, user.getEmail());
+    }
+
+    public void consumeVerificationNotice() {
+        verificationEmailSent.setValue(null);
     }
 
     public void logout() {
@@ -182,6 +209,47 @@ public class AuthViewModel extends ViewModel {
     // ---------------------------------------------------------------------
     // Firebase completion
     // ---------------------------------------------------------------------
+
+    private void validateVerifiedFirebaseLogin(FirebaseUser user) {
+        user.reload().addOnCompleteListener(reloadTask -> {
+            FirebaseUser refreshed = auth.getCurrentUser();
+            if (!reloadTask.isSuccessful() || refreshed == null) {
+                loading.setValue(false);
+                authError.setValue(context.getString(R.string.error_sign_in));
+                return;
+            }
+            if (!refreshed.isEmailVerified()) {
+                refreshed.sendEmailVerification().addOnCompleteListener(sendTask -> {
+                    auth.signOut();
+                    SessionManager.signOut(context);
+                    loading.setValue(false);
+                    authError.setValue(context.getString(sendTask.isSuccessful()
+                            ? R.string.error_email_not_verified_resent
+                            : R.string.error_email_not_verified));
+                });
+                return;
+            }
+            completeFirebaseLogin(refreshed);
+        });
+    }
+
+    private void sendRegistrationVerification(FirebaseUser user, String email) {
+        user.sendEmailVerification().addOnCompleteListener(task -> {
+            loading.setValue(false);
+            if (!task.isSuccessful()) {
+                canResendVerification.setValue(true);
+                authError.setValue(message(task.getException(),
+                        R.string.error_verification_email));
+                return;
+            }
+            canResendVerification.setValue(false);
+            auth.signOut();
+            SessionManager.signOut(context);
+            localMode.setValue(false);
+            isRegistered.setValue(true);
+            verificationEmailSent.setValue(email == null ? "" : email);
+        });
+    }
 
     private void completeFirebaseLogin(FirebaseUser user) {
         String email = user.getEmail() == null ? "" : user.getEmail();

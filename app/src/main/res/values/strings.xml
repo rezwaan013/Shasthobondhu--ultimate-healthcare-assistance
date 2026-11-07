@@ -49,6 +49,9 @@
     <string name="role_hospital_desc">Create your clinic and list available tests and services.</string>
     <string name="already_have_account">Already have an account? </string>
     <string name="register_success">Account created successfully</string>
+    <string name="resend_verification_email">Resend verification email</string>
+    <string name="verification_email_sent_title">Verify your email address</string>
+    <string name="verification_email_sent_message">Firebase sent a verification link to %1$s. Open the link before signing in. If it is not in your inbox, check Spam or Promotions.</string>
 
     <!-- Forgot password -->
     <string name="forgot_title">Reset password</string>
@@ -345,6 +348,10 @@
     <string name="error_wrong_password">Incorrect password.</string>
     <string name="error_sign_in">Sign in failed. Please try again.</string>
     <string name="error_registration">Registration failed. Please try again.</string>
+    <string name="error_verification_email">Your account was created, but the verification email could not be sent. Check your connection and tap “Resend verification email.”</string>
+    <string name="error_verification_session_expired">Sign in again to request another verification email.</string>
+    <string name="error_email_not_verified">Verify your email address before signing in. Check your inbox or Spam folder.</string>
+    <string name="error_email_not_verified_resent">Your email is not verified. A new verification link was sent; check your inbox and Spam folder.</string>
     <string name="error_firebase_not_configured">Firebase Email/Password sign-in is not enabled. Create an account in the app to use offline mode.</string>
     <string name="error_owner_only">Sign in with a medicine shop owner or clinic owner account.</string>
 

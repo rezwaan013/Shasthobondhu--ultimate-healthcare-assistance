@@ -49,6 +49,9 @@
     <string name="role_hospital_desc">আপনার ক্লিনিক তৈরি করুন এবং উপলব্ধ টেস্ট ও সেবা যোগ করুন।</string>
     <string name="already_have_account">অ্যাকাউন্ট আছে? </string>
     <string name="register_success">অ্যাকাউন্ট তৈরি হয়েছে</string>
+    <string name="resend_verification_email">যাচাইকরণ ইমেইল আবার পাঠান</string>
+    <string name="verification_email_sent_title">আপনার ইমেইল ঠিকানা যাচাই করুন</string>
+    <string name="verification_email_sent_message">Firebase %1$s ঠিকানায় একটি যাচাইকরণ লিংক পাঠিয়েছে। লগইনের আগে লিংকটি খুলুন। ইনবক্সে না থাকলে Spam বা Promotions দেখুন।</string>
 
     <!-- Forgot password -->
     <string name="forgot_title">পাসওয়ার্ড রিসেট</string>
@@ -345,6 +348,10 @@
     <string name="error_wrong_password">পাসওয়ার্ড ভুল।</string>
     <string name="error_sign_in">লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
     <string name="error_registration">নিবন্ধন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
+    <string name="error_verification_email">অ্যাকাউন্ট তৈরি হয়েছে, কিন্তু যাচাইকরণ ইমেইল পাঠানো যায়নি। সংযোগ দেখে “যাচাইকরণ ইমেইল আবার পাঠান” চাপুন।</string>
+    <string name="error_verification_session_expired">আরেকটি যাচাইকরণ ইমেইল পেতে আবার লগইন করুন।</string>
+    <string name="error_email_not_verified">লগইনের আগে আপনার ইমেইল ঠিকানা যাচাই করুন। ইনবক্স বা Spam ফোল্ডার দেখুন।</string>
+    <string name="error_email_not_verified_resent">আপনার ইমেইল যাচাই হয়নি। নতুন যাচাইকরণ লিংক পাঠানো হয়েছে; ইনবক্স ও Spam ফোল্ডার দেখুন।</string>
     <string name="error_firebase_not_configured">ফায়ারবেস ইমেইল লগইন চালু নেই। অফলাইন মোড ব্যবহার করতে অ্যাপে অ্যাকাউন্ট তৈরি করুন।</string>
     <string name="error_owner_only">ঔষধের দোকান মালিক বা ক্লিনিক মালিক অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
 
