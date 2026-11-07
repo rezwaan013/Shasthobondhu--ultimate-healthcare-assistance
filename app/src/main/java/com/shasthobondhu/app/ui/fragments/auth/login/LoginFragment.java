@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.shasthobondhu.app.R;
 import com.shasthobondhu.app.databinding.FragmentLoginBinding;
 import com.shasthobondhu.app.ui.fragments.home.HomeFragment;
@@ -48,18 +46,8 @@ public class LoginFragment extends Fragment {
         expectedRole = getArguments() == null
                 ? null : getArguments().getString(HomeFragment.ARG_OWNER_ROLE);
 
-        binding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (!isChecked) {
-                return;
-            }
-            boolean phoneMode = checkedId == R.id.btnPhoneTab;
-            binding.groupPhone.setVisibility(phoneMode ? View.VISIBLE : View.GONE);
-            binding.groupEmail.setVisibility(phoneMode ? View.GONE : View.VISIBLE);
-            hideError();
-        });
         configureOwnerMode();
 
-        binding.btnSendOtp.setOnClickListener(v -> sendOtp());
         binding.btnEmailLogin.setOnClickListener(v -> loginWithEmail());
         binding.tvForgotPassword.setOnClickListener(v ->
                 NavHostFragment.findNavController(this).navigate(R.id.nav_forgot_password));
@@ -78,14 +66,12 @@ public class LoginFragment extends Fragment {
         binding.tvDemoAccounts.setVisibility(View.VISIBLE);
         binding.tvDemoAccounts.setText(getString(R.string.demo_accounts_title)
                 + "\n" + getString(R.string.demo_accounts_note));
-        binding.toggleGroup.check(R.id.btnEmailTab);
     }
 
     private void observeViewModel() {
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
             boolean busy = loading != null && loading;
             binding.progress.setVisibility(busy ? View.VISIBLE : View.GONE);
-            binding.btnSendOtp.setEnabled(!busy);
             binding.btnEmailLogin.setEnabled(!busy);
         });
 
@@ -103,41 +89,6 @@ public class LoginFragment extends Fragment {
                 navigateAfterLogin();
             }
         });
-    }
-
-    private void sendOtp() {
-        String phone = text(binding.etPhone);
-        if (phone.length() < 11) {
-            showError(getString(R.string.hint_phone));
-            return;
-        }
-        hideError();
-        viewModel.sendOtp(requireActivity(), phone,
-                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    @Override
-                    public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-                        viewModel.signInWithCredential(credential);
-                    }
-
-                    @Override
-                    public void onVerificationFailed(@NonNull com.google.firebase.FirebaseException e) {
-                        showError(e.getMessage() != null ? e.getMessage() : getString(R.string.error_generic));
-                    }
-
-                    @Override
-                    public void onCodeSent(@NonNull String verificationId,
-                                           @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                        if (!isAdded()) {
-                            return;
-                        }
-                        Toast.makeText(requireContext(), R.string.otp_sent, Toast.LENGTH_SHORT).show();
-                        Bundle args = new Bundle();
-                        args.putString(OtpVerifyFragment.ARG_VERIFICATION_ID, verificationId);
-                        args.putString(OtpVerifyFragment.ARG_PHONE, phone);
-                        NavHostFragment.findNavController(LoginFragment.this)
-                                .navigate(R.id.nav_otp_verify, args);
-                    }
-                });
     }
 
     private void loginWithEmail() {

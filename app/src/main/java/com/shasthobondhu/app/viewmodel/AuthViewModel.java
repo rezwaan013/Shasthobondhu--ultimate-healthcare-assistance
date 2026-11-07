@@ -1,18 +1,13 @@
 package com.shasthobondhu.app.viewmodel;
 
-import android.app.Activity;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.shasthobondhu.app.R;
@@ -27,7 +22,6 @@ import com.shasthobondhu.app.util.constants.AppConstants;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -78,57 +72,35 @@ public class AuthViewModel extends ViewModel {
         return localMode;
     }
 
-    /** Sends a phone OTP. An Activity is required by Firebase for reCAPTCHA fallback. */
-    public void sendOtp(@NonNull Activity activity, String phone,
-                        PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks) {
-        loading.setValue(true);
-        authError.setValue(null);
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber(phone)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(activity)
-                .setCallbacks(callbacks)
-                .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-    }
-
-    /** Used when Firebase verifies the number instantly (no code entry required). */
-    public void signInWithCredential(PhoneAuthCredential credential) {
-        loading.setValue(true);
-        authError.setValue(null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
-                        completePhoneLogin(auth.getCurrentUser());
-                    } else {
-                        loading.setValue(false);
-                        authError.setValue(message(task.getException(), R.string.error_generic));
-                    }
-                });
-    }
-
-    public void verifyOtp(String otp, String verificationId) {
-        if (verificationId == null || verificationId.isEmpty()) {
-            authError.setValue(context.getString(R.string.error_otp_expired));
-            return;
-        }
-        loading.setValue(true);
-        authError.setValue(null);
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, otp);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
-                        completePhoneLogin(auth.getCurrentUser());
-                    } else {
-                        loading.setValue(false);
-                        authError.setValue(message(task.getException(), R.string.error_invalid_otp));
-                    }
-                });
-    }
-
     public void loginWithEmail(String email, String password) {
         loading.setValue(true);
         authError.setValue(null);
+        // Preserve seeded/offline accounts even after Firebase Email/Password is enabled.
+        AppExecutors.io(() -> {
+            LocalUserEntity localUser = localUserDao.findByEmail(email);
+            if (localUser != null) {
+                if (!PasswordHasher.matches(password, localUser.passwordSalt,
+                        localUser.passwordHash)) {
+                    AppExecutors.main(() -> {
+                        loading.setValue(false);
+                        authError.setValue(context.getString(R.string.error_wrong_password));
+                    });
+                    return;
+                }
+                AppExecutors.main(() -> {
+                    SessionManager.signIn(context, localUser.uid, localUser.name,
+                            localUser.email, localUser.phone, localUser.role, true);
+                    localMode.setValue(true);
+                    loading.setValue(false);
+                    isLoginSuccess.setValue(true);
+                });
+                return;
+            }
+            AppExecutors.main(() -> loginWithFirebase(email, password));
+        });
+    }
+
+    private void loginWithFirebase(String email, String password) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && auth.getCurrentUser() != null) {
@@ -208,14 +180,6 @@ public class AuthViewModel extends ViewModel {
     // ---------------------------------------------------------------------
     // Firebase completion
     // ---------------------------------------------------------------------
-
-    private void completePhoneLogin(FirebaseUser user) {
-        String phone = user.getPhoneNumber() == null ? "" : user.getPhoneNumber();
-        String name = user.getDisplayName() == null || user.getDisplayName().isEmpty()
-                ? phone : user.getDisplayName();
-        finishSignIn(user.getUid(), name, user.getEmail() == null ? "" : user.getEmail(),
-                phone, AppConstants.ROLE_USER, false);
-    }
 
     private void completeFirebaseLogin(FirebaseUser user) {
         String email = user.getEmail() == null ? "" : user.getEmail();

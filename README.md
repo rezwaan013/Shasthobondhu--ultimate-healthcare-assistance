@@ -39,7 +39,7 @@ app/src/main/java/com/shasthobondhu/app/
 │   ├── adapters/                  # ViewBinding RecyclerView adapters
 │   └── fragments/
 │       ├── auth/                  # Registration, ForgotPassword
-│       ├── auth/login/            # Login, OtpVerify
+│       ├── auth/login/            # Email/password login
 │       ├── home/ donors/ requests/ hospitals/ medicines/
 ├── util/                          # AreaDataset, ValidationUtils, DataSeeder, constants
 └── viewmodel/                     # Auth, ForgotPassword, Donor, Request, Hospital, Medicine
@@ -60,19 +60,12 @@ app/src/main/res/
 2. Add an Android app with package name **`com.shasthobondhu.app`**.
 3. Download `google-services.json` and put it in **`app/google-services.json`**
    (it must be inside `app/`, not the project root).
-4. Enable **Authentication → Sign-in method**:
-   * **Phone** — used by the OTP login screen.
-   * **Email/Password** — used by registration and the forgot-password flow.
-   * **Anonymous** — used by the one-button Firebase lab verification.
+4. Enable **Authentication → Sign-in method → Email/Password**. No SHA fingerprint is
+   required because this app does not use Phone or Google Authentication.
 5. Create a **Cloud Firestore** database.
 6. Create a **Realtime Database** in the same Firebase project.
    If Firebase gives it a regional URL, place that URL in `gradle.properties`:
    `FIREBASE_DATABASE_URL=https://your-database-url/`.
-7. Add your debug **SHA-1 / SHA-256** fingerprints (required for Phone Auth):
-   ```
-   ./gradlew signingReport
-   ```
-   then paste the values into *Project settings → Your apps*.
 
 Deploy the Firestore rules included in this repo:
 
@@ -171,7 +164,7 @@ Nothing secret is stored in the app: Gmail credentials live only in the Cloud Fu
 * **Medicines** — search a medicine and see participating pharmacies with
   **In Stock / Low / Out of Stock**; pharmacy owners update stock and users can navigate
   to the pharmacy in Google Maps.
-* **Auth and roles** — phone OTP plus email/password, with **General user**,
+* **Auth and roles** — email/password authentication with **General user**,
   **Pharmacy owner**, and **Hospital owner** dashboards. A salted local fallback keeps
   the roles testable when Firebase Email/Password is not enabled.
 * **Offline first** — Room caches everything; screens expose loading / empty / error states.

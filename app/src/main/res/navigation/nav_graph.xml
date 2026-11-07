@@ -12,21 +12,12 @@
         android:label="@string/action_login"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_login_to_otp"
-            app:destination="@id/nav_otp_verify" />
-        <action
             android:id="@+id/action_login_to_register"
             app:destination="@id/nav_register" />
         <action
             android:id="@+id/action_login_to_forgot"
             app:destination="@id/nav_forgot_password" />
     </fragment>
-
-    <fragment
-        android:id="@+id/nav_otp_verify"
-        android:name="com.shasthobondhu.app.ui.fragments.auth.login.OtpVerifyFragment"
-        android:label="@string/otp_title"
-        tools:layout="@layout/fragment_otp_verify" />
 
     <fragment
         android:id="@+id/nav_register"

@@ -34,20 +34,12 @@ public class FirebaseDemoRepository {
 
     public void runCloudCheck(ResultCallback callback) {
         FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            writeToBothDatabases(currentUser, callback);
+        if (currentUser == null || currentUser.isAnonymous()) {
+            callback.onError("Sign in with an Email/Password Firebase account first. "
+                    + "Local demo accounts cannot write to the cloud.");
             return;
         }
-
-        auth.signInAnonymously().addOnCompleteListener(task -> {
-            FirebaseUser user = auth.getCurrentUser();
-            if (!task.isSuccessful() || user == null) {
-                callback.onError("Firebase Authentication failed. Enable Anonymous sign-in "
-                        + "in Firebase Console. " + errorMessage(task.getException()));
-                return;
-            }
-            writeToBothDatabases(user, callback);
-        });
+        writeToBothDatabases(currentUser, callback);
     }
 
     private void writeToBothDatabases(FirebaseUser user, ResultCallback callback) {

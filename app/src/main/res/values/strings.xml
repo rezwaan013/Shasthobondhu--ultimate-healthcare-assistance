@@ -29,22 +29,12 @@
     <!-- Login -->
     <string name="login_title">Welcome back</string>
     <string name="login_subtitle">Sign in to continue to ShasthoBondhu</string>
-    <string name="login_with_phone">Phone</string>
-    <string name="login_with_email">Email</string>
     <string name="hint_phone">Phone number (e.g. +8801XXXXXXXXX)</string>
     <string name="hint_email">Email address</string>
     <string name="hint_password">Password</string>
-    <string name="send_otp">Send OTP</string>
     <string name="email_login">Sign in</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="no_account">Don\'t have an account? </string>
-    <string name="otp_sent">We sent a 6-digit OTP to your phone.</string>
-
-    <!-- OTP -->
-    <string name="otp_title">Verify OTP</string>
-    <string name="otp_subtitle">Enter the 6-digit code sent to your phone</string>
-    <string name="hint_otp">6-digit code</string>
-    <string name="verify_and_login">Verify &amp; Login</string>
 
     <!-- Registration -->
     <string name="register_title">Create account</string>
@@ -224,8 +214,6 @@
     <string name="error_wrong_password">Incorrect password.</string>
     <string name="error_sign_in">Sign in failed. Please try again.</string>
     <string name="error_registration">Registration failed. Please try again.</string>
-    <string name="error_otp_expired">Verification session expired. Please request a new code.</string>
-    <string name="error_invalid_otp">Invalid OTP</string>
     <string name="error_firebase_not_configured">Firebase Email/Password sign-in is not enabled. Create an account in the app to use offline mode.</string>
     <string name="error_owner_only">Sign in with a pharmacy owner or hospital owner account.</string>
 
@@ -283,7 +271,7 @@
     <string name="load_health_api">Load Dhaka health conditions</string>
 
     <string name="firebase_demo_title">Firebase cloud verification</string>
-    <string name="firebase_ready">Runs Anonymous Authentication, then writes the same event to Firestore and Realtime Database.</string>
+    <string name="firebase_ready">Sign in with Email/Password first. This check then writes the same authenticated event to Firestore and Realtime Database.</string>
     <string name="firebase_running">Connecting to Firebase services…</string>
     <string name="firebase_success">All three Firebase services succeeded. UID: %1$s</string>
     <string name="firebase_error">Firebase check needs attention: %1$s</string>

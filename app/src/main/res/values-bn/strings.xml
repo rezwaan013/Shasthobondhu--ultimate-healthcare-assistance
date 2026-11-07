@@ -29,22 +29,12 @@
     <!-- Login -->
     <string name="login_title">স্বাগতম</string>
     <string name="login_subtitle">চালিয়ে যেতে লগইন করুন</string>
-    <string name="login_with_phone">ফোন</string>
-    <string name="login_with_email">ইমেইল</string>
     <string name="hint_phone">ফোন নম্বর (যেমন +৮৮০১XXXXXXXXX)</string>
     <string name="hint_email">ইমেইল ঠিকানা</string>
     <string name="hint_password">পাসওয়ার্ড</string>
-    <string name="send_otp">OTP পাঠান</string>
     <string name="email_login">লগইন</string>
     <string name="forgot_password">পাসওয়ার্ড ভুলে গেছেন?</string>
     <string name="no_account">অ্যাকাউন্ট নেই? </string>
-    <string name="otp_sent">আপনার ফোনে ৬ ডিজিটের OTP পাঠানো হয়েছে।</string>
-
-    <!-- OTP -->
-    <string name="otp_title">OTP যাচাই</string>
-    <string name="otp_subtitle">ফোনে পাঠানো ৬ ডিজিটের কোড দিন</string>
-    <string name="hint_otp">৬ ডিজিটের কোড</string>
-    <string name="verify_and_login">যাচাই করে লগইন</string>
 
     <!-- Registration -->
     <string name="register_title">অ্যাকাউন্ট তৈরি করুন</string>
@@ -224,8 +214,6 @@
     <string name="error_wrong_password">পাসওয়ার্ড ভুল।</string>
     <string name="error_sign_in">লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
     <string name="error_registration">নিবন্ধন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।</string>
-    <string name="error_otp_expired">যাচাইয়ের সময় শেষ। নতুন কোড নিন।</string>
-    <string name="error_invalid_otp">ভুল OTP</string>
     <string name="error_firebase_not_configured">ফায়ারবেস ইমেইল লগইন চালু নেই। অফলাইন মোড ব্যবহার করতে অ্যাপে অ্যাকাউন্ট তৈরি করুন।</string>
     <string name="error_owner_only">ফার্মেসি মালিক বা হাসপাতাল মালিক অ্যাকাউন্ট দিয়ে লগইন করুন।</string>
 
@@ -283,7 +271,7 @@
     <string name="load_health_api">ঢাকার স্বাস্থ্য-আবহাওয়া লোড করুন</string>
 
     <string name="firebase_demo_title">Firebase ক্লাউড যাচাই</string>
-    <string name="firebase_ready">Anonymous Authentication চালিয়ে একই ইভেন্ট Firestore ও Realtime Database-এ লেখা হবে।</string>
+    <string name="firebase_ready">আগে Email/Password দিয়ে লগইন করুন। এরপর একই যাচাইকৃত ইভেন্ট Firestore ও Realtime Database-এ লেখা হবে।</string>
     <string name="firebase_running">Firebase সার্ভিসে সংযোগ হচ্ছে…</string>
     <string name="firebase_success">তিনটি Firebase সার্ভিসই সফল। UID: %1$s</string>
     <string name="firebase_error">Firebase যাচাইয়ে সমস্যা: %1$s</string>

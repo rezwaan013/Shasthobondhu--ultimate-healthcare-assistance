@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
             int id = destination.getId();
             boolean isAuthScreen = id == R.id.nav_login
                     || id == R.id.nav_register
-                    || id == R.id.nav_otp_verify
                     || id == R.id.nav_forgot_password
                     || id == R.id.nav_donor_register
                     || id == R.id.nav_create_request

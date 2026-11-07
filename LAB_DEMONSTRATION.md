@@ -4,7 +4,8 @@ This guide maps every instructor requirement to a visible app action and its sou
 
 ## Before the live demonstration
 
-1. In Firebase Console, enable **Email/Password**, **Phone**, and **Anonymous** Authentication.
+1. In Firebase Console, enable **Email/Password** Authentication. Phone and Anonymous
+   providers are intentionally not used, so SHA fingerprints are not required.
 2. Create both **Cloud Firestore** and **Realtime Database** in project
    `shasthobondhu-d5bdf`.
    If the Realtime Database uses a regional URL, set
@@ -120,10 +121,14 @@ objects through Retrofit/OkHttp.
 
 Press **Run Firebase cloud check**. The app:
 
-1. reuses the current Firebase user or performs Anonymous Authentication;
+1. reuses the currently signed-in Firebase Email/Password user;
 2. writes an authenticated event to Firestore collection `lab_demo_events`;
 3. writes the same event to Realtime Database path `lab_demo_status/{uid}`;
 4. displays success only when both writes complete.
+
+Register a fresh account in the app after enabling Firebase Email/Password, or sign in with an
+existing Firebase email account, before running this check. Offline demo-owner accounts remain
+local and cannot write to Firebase.
 
 Source:
 
