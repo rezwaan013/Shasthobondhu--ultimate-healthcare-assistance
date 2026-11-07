@@ -9,7 +9,7 @@ notifications, and practical emergency tools in Bangla and English.
 [**Download ShasthoBondhu v1.1.0 APK**](https://github.com/rezwaan013/Shasthobondhu--ultimate-healthcare-assistance/releases/download/v1.1.0/ShasthoBondhu-v1.1.0.apk)
 
 ```text
-SHA-256: F3D1D1CE237F398B9103922AABF6B43E0CD5BE5E0F5EBFBD200BF1E7C5C35D99
+SHA-256: E47452B1A14132DCFC3AF4EAD0357EBF0A7F56DFB5C7B3260508B2F25AD71DF3
 ```
 
 > The downloadable file is a debug build intended for coursework, demonstration, and testing.
