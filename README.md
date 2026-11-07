@@ -6,7 +6,7 @@ notifications, and practical emergency tools in Bangla and English.
 
 ## Download
 
-[**Download the latest debug APK**](releases/ShasthoBondhu-v1.0-debug.apk)
+[**Download ShasthoBondhu v1.1.0 APK**](https://github.com/rezwaan013/Shasthobondhu--ultimate-healthcare-assistance/releases/download/v1.1.0/ShasthoBondhu-v1.1.0.apk)
 
 ```text
 SHA-256: F3D1D1CE237F398B9103922AABF6B43E0CD5BE5E0F5EBFBD200BF1E7C5C35D99
