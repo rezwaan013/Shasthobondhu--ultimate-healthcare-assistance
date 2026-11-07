@@ -7,52 +7,51 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.SystemClock;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.shasthobondhu.app.LabComponentsActivity;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.shasthobondhu.app.MainActivity;
 import com.shasthobondhu.app.R;
+import com.shasthobondhu.app.data.remote.FirebaseService;
+import com.shasthobondhu.app.data.repository.MonitorPreferences;
+import com.shasthobondhu.app.util.constants.AppConstants;
 
-/** Foreground service with a notification that refreshes its runtime and battery reading. */
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+/** Foreground monitor for open Firestore blood requests matching the donor's alert profile. */
+@AndroidEntryPoint
 public class HealthMonitorService extends Service {
 
     public static final String ACTION_START =
-            "com.shasthobondhu.app.action.START_HEALTH_MONITOR";
+            "com.shasthobondhu.app.action.START_EMERGENCY_MONITOR";
     public static final String ACTION_STOP =
-            "com.shasthobondhu.app.action.STOP_HEALTH_MONITOR";
+            "com.shasthobondhu.app.action.STOP_EMERGENCY_MONITOR";
+    public static final String EXTRA_BLOOD_GROUP = "monitor_blood_group";
+    public static final String EXTRA_DISTRICT = "monitor_district";
 
-    private static final String CHANNEL_ID = "health_monitor_channel";
-    private static final int NOTIFICATION_ID = 2207;
-    private static final long UPDATE_INTERVAL_MS = 15_000L;
-    private static final String PREFS = "health_monitor_state";
-    private static final String KEY_RUNNING = "running";
+    private static final String CHANNEL_ID = "emergency_request_monitor";
+    private static final int NOTIFICATION_ID = 2401;
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private long startedAt;
+    @Inject
+    FirebaseService firebaseService;
 
-    private final Runnable updateTask = new Runnable() {
-        @Override
-        public void run() {
-            NotificationManager manager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (manager != null) {
-                manager.notify(NOTIFICATION_ID, buildNotification());
-            }
-            handler.postDelayed(this, UPDATE_INTERVAL_MS);
-        }
-    };
+    private ListenerRegistration requestListener;
+    private String bloodGroup = "";
+    private String district = "";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        createChannel();
+        createNotificationChannel();
     }
 
     @Override
@@ -62,52 +61,98 @@ public class HealthMonitorService extends Service {
             return START_NOT_STICKY;
         }
 
-        if (startedAt == 0L) {
-            startedAt = SystemClock.elapsedRealtime();
-        }
-        setRunning(true);
-        startForeground(NOTIFICATION_ID, buildNotification());
-        handler.removeCallbacks(updateTask);
-        handler.postDelayed(updateTask, UPDATE_INTERVAL_MS);
+        bloodGroup = intent == null ? MonitorPreferences.getBloodGroup(this)
+                : safe(intent.getStringExtra(EXTRA_BLOOD_GROUP));
+        district = intent == null ? MonitorPreferences.getDistrict(this)
+                : safe(intent.getStringExtra(EXTRA_DISTRICT));
+        MonitorPreferences.setRunning(this, true, bloodGroup, district);
+
+        startForeground(NOTIFICATION_ID, buildNotification(-1, 0));
+        attachRequestListener();
         return START_STICKY;
     }
 
-    private Notification buildNotification() {
-        long elapsedSeconds = startedAt == 0L ? 0L
-                : (SystemClock.elapsedRealtime() - startedAt) / 1000L;
-        BatteryManager batteryManager =
-                (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
-        int battery = batteryManager == null ? -1
-                : batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+    private void attachRequestListener() {
+        if (requestListener != null) {
+            requestListener.remove();
+        }
+        requestListener = firebaseService.getDb()
+                .collection(AppConstants.COLLECTION_REQUESTS)
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null || snapshot == null) {
+                        updateNotification(-1, 0);
+                        return;
+                    }
+                    int matching = 0;
+                    int urgent = 0;
+                    for (DocumentSnapshot document : snapshot.getDocuments()) {
+                        if (!"Open".equalsIgnoreCase(safe(document.getString("status")))) {
+                            continue;
+                        }
+                        String requestBlood = safe(document.getString("bloodGroup"));
+                        String requestLocation = safe(document.getString("location"));
+                        if (!matches(bloodGroup, requestBlood)
+                                || !containsIgnoreCase(requestLocation, district)) {
+                            continue;
+                        }
+                        matching++;
+                        String urgency = safe(document.getString("urgency"));
+                        if (AppConstants.URGENCY_CRITICAL.equalsIgnoreCase(urgency)
+                                || AppConstants.URGENCY_URGENT.equalsIgnoreCase(urgency)) {
+                            urgent++;
+                        }
+                    }
+                    updateNotification(matching, urgent);
+                });
+    }
 
-        Intent openIntent = new Intent(this, LabComponentsActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this,
-                0,
-                openIntent,
+    private boolean matches(String expected, String actual) {
+        return expected.isEmpty() || expected.equalsIgnoreCase(actual);
+    }
+
+    private boolean containsIgnoreCase(String value, String filter) {
+        return filter.isEmpty() || value.toLowerCase(Locale.ROOT)
+                .contains(filter.toLowerCase(Locale.ROOT));
+    }
+
+    private void updateNotification(int count, int urgent) {
+        NotificationManager manager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.notify(NOTIFICATION_ID, buildNotification(count, urgent));
+        }
+    }
+
+    private Notification buildNotification(int count, int urgent) {
+        Intent openRequests = new Intent(this, MainActivity.class)
+                .putExtra(MainActivity.EXTRA_DESTINATION, R.id.nav_requests)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, openRequests,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        int elapsedQuantity = elapsedSeconds > Integer.MAX_VALUE
-                ? Integer.MAX_VALUE : (int) elapsedSeconds;
-        String detail = getResources().getQuantityString(
-                R.plurals.monitor_notification_detail,
-                elapsedQuantity,
-                battery < 0 ? "--" : String.valueOf(battery),
-                elapsedSeconds);
-
+        String body;
+        if (count < 0) {
+            body = getString(R.string.monitor_notification_connecting);
+        } else {
+            body = getResources().getQuantityString(R.plurals.monitor_notification_count,
+                    count, count, bloodGroup.isEmpty() ? getString(R.string.any_blood_group)
+                            : bloodGroup, district.isEmpty()
+                            ? getString(R.string.any_district) : district, urgent);
+        }
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_app_logo)
                 .setContentTitle(getString(R.string.monitor_notification_title))
-                .setContentText(detail)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(detail))
+                .setContentText(body)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .build();
     }
 
-    private void createChannel() {
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return;
         }
@@ -116,30 +161,19 @@ public class HealthMonitorService extends Service {
         if (manager == null) {
             return;
         }
-        NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID,
-                getString(R.string.monitor_channel_name),
-                NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                getString(R.string.monitor_channel_name), NotificationManager.IMPORTANCE_LOW);
         channel.setDescription(getString(R.string.monitor_channel_description));
         manager.createNotificationChannel(channel);
     }
 
-    private void setRunning(boolean running) {
-        getSharedPreferences(PREFS, MODE_PRIVATE)
-                .edit()
-                .putBoolean(KEY_RUNNING, running)
-                .apply();
-    }
-
-    public static boolean isRunning(Context context) {
-        return context.getSharedPreferences(PREFS, MODE_PRIVATE)
-                .getBoolean(KEY_RUNNING, false);
-    }
-
     @Override
     public void onDestroy() {
-        handler.removeCallbacks(updateTask);
-        setRunning(false);
+        if (requestListener != null) {
+            requestListener.remove();
+            requestListener = null;
+        }
+        MonitorPreferences.setRunning(this, false, bloodGroup, district);
         super.onDestroy();
     }
 
@@ -147,5 +181,9 @@ public class HealthMonitorService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    private static String safe(String value) {
+        return value == null ? "" : value.trim();
     }
 }
