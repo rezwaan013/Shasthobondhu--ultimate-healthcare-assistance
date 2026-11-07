@@ -3,9 +3,12 @@ package com.shasthobondhu.app.system;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.PowerManager;
+import android.provider.Settings;
 
-/** Dynamic receiver used by the lab screen to display live Android system broadcasts. */
+/** Dynamic-only receiver for conditions that can disrupt emergency request delivery. */
 public class SystemEventReceiver extends BroadcastReceiver {
 
     private final Listener listener;
@@ -20,26 +23,52 @@ public class SystemEventReceiver extends BroadcastReceiver {
             return;
         }
         String action = intent.getAction();
+        boolean enabled = false;
         if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)) {
-            listener.onSystemEvent(action, intent.getBooleanExtra("state", false), -1);
-            return;
-        }
-        if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGED.equals(action)) {
+            enabled = intent.getBooleanExtra("state", false);
+        } else if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGED.equals(action)) {
             PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            listener.onSystemEvent(action, manager != null && manager.isPowerSaveMode(), -1);
+            enabled = manager != null && manager.isPowerSaveMode();
+        }
+        SystemEvent event = SystemEventMapper.map(action, enabled);
+        if (event != null) {
+            listener.onSystemEvent(event);
+        }
+    }
+
+    public void publishCurrentWarnings(Context context) {
+        if (listener == null) {
             return;
         }
-        if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
-            int level = intent.getIntExtra("level", -1);
-            int scale = intent.getIntExtra("scale", 100);
-            int percentage = level < 0 || scale <= 0 ? -1 : Math.round(level * 100f / scale);
-            listener.onSystemEvent(action, false, percentage);
+        boolean airplane = Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) == 1;
+        if (airplane) {
+            listener.onSystemEvent(SystemEvent.airplane(true));
             return;
         }
-        listener.onSystemEvent(action, Intent.ACTION_BATTERY_OKAY.equals(action), -1);
+        PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (power != null && power.isPowerSaveMode()) {
+            listener.onSystemEvent(SystemEvent.powerSave(true));
+            return;
+        }
+        BatteryManager battery = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+        int level = battery == null ? -1
+                : battery.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        if (level >= 0 && level <= 15) {
+            listener.onSystemEvent(SystemEvent.batteryLow(true));
+        }
+    }
+
+    public static IntentFilter createIntentFilter() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        filter.addAction(Intent.ACTION_BATTERY_LOW);
+        filter.addAction(Intent.ACTION_BATTERY_OKAY);
+        filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
+        return filter;
     }
 
     public interface Listener {
-        void onSystemEvent(String action, boolean enabled, int batteryPercentage);
+        void onSystemEvent(SystemEvent event);
     }
 }
