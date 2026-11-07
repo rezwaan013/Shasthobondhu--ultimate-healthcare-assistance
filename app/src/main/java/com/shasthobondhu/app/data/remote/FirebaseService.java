@@ -3,7 +3,6 @@ package com.shasthobondhu.app.data.remote;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.shasthobondhu.app.BuildConfig;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -17,7 +16,13 @@ public class FirebaseService {
     public FirebaseService() {
         this.auth = FirebaseAuth.getInstance();
         this.db = FirebaseFirestore.getInstance();
-        this.realtimeDb = FirebaseDatabase.getInstance(BuildConfig.FIREBASE_DATABASE_URL);
+        FirebaseDatabase configuredDatabase = null;
+        try {
+            configuredDatabase = FirebaseDatabase.getInstance();
+        } catch (RuntimeException ignored) {
+            // google-services.json has no firebase_url yet. Presence remains disabled safely.
+        }
+        this.realtimeDb = configuredDatabase;
     }
 
     public FirebaseAuth getAuth() { return auth; }

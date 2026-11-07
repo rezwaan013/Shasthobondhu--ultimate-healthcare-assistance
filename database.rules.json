@@ -1,13 +1,24 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false,
-    "lab_demo_status": {
+    "presence": {
+      ".read": "auth != null",
       "$uid": {
-        ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid",
-        ".validate": "newData.hasChildren(['uid', 'source', 'message', 'timestamp']) && newData.child('uid').val() === auth.uid && newData.child('source').val() === 'android_lab_demo'"
+        ".validate": "newData.hasChildren(['available', 'lastSeen'])",
+        "available": {
+          ".validate": "newData.isBoolean()"
+        },
+        "lastSeen": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
       }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
     }
   }
 }

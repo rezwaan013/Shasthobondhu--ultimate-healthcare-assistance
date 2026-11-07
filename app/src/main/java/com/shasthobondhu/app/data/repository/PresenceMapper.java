@@ -1,0 +1,24 @@
+package com.shasthobondhu.app.data.repository;
+
+import com.shasthobondhu.app.data.model.DonorPresence;
+
+import java.util.Map;
+
+/** Pure, defensive mapper for loosely typed RTDB presence values. */
+public final class PresenceMapper {
+
+    private PresenceMapper() {
+    }
+
+    public static DonorPresence fromMap(Map<String, Object> values) {
+        if (values == null) {
+            return null;
+        }
+        Object availableValue = values.get("available");
+        Object lastSeenValue = values.get("lastSeen");
+        boolean available = availableValue instanceof Boolean && (Boolean) availableValue;
+        long lastSeen = lastSeenValue instanceof Number
+                ? ((Number) lastSeenValue).longValue() : 0L;
+        return new DonorPresence(available, lastSeen);
+    }
+}
