@@ -27,7 +27,4 @@ public final class ValidationUtils {
                 && HAS_DIGIT.matcher(password).matches();
     }
 
-    public static boolean isSixDigitCode(String code) {
-        return code != null && code.trim().matches("\\d{6}");
-    }
 }

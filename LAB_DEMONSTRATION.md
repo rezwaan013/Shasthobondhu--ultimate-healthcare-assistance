@@ -118,9 +118,6 @@ Source:
 - `repository/PublicHealthRepository.java`
 - `di/NetworkModule.java`
 
-The password-reset feature separately demonstrates JSON `POST` requests with request and response
-objects through Retrofit/OkHttp.
-
 ### Authentication, Firestore and Realtime Database
 
 Press **Run Firebase cloud check**. The app:

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.shasthobondhu.app.BuildConfig;
 import com.shasthobondhu.app.data.remote.FirebaseService;
-import com.shasthobondhu.app.data.remote.PasswordResetApi;
 import com.shasthobondhu.app.data.remote.PublicHealthApi;
 
 import java.util.concurrent.TimeUnit;
@@ -22,8 +21,6 @@ import javax.inject.Singleton;
 @Module
 @InstallIn(SingletonComponent.class)
 public class NetworkModule {
-
-    private static final String PLACEHOLDER_BASE_URL = "https://shasthobondhu.invalid/";
 
     @Provides
     @Singleton
@@ -50,29 +47,6 @@ public class NetworkModule {
                 .readTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .build();
-    }
-
-    @Provides
-    @Singleton
-    public Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
-        String baseUrl = BuildConfig.PASSWORD_RESET_BASE_URL;
-        if (baseUrl == null || baseUrl.trim().isEmpty()) {
-            baseUrl = PLACEHOLDER_BASE_URL;
-        }
-        if (!baseUrl.endsWith("/")) {
-            baseUrl = baseUrl + "/";
-        }
-        return new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    public PasswordResetApi providePasswordResetApi(Retrofit retrofit) {
-        return retrofit.create(PasswordResetApi.class);
     }
 
     @Provides

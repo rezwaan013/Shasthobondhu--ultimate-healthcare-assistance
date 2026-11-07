@@ -32,9 +32,5 @@ service cloud.firestore {
       allow write: if signedIn();
     }
 
-    // Only the Cloud Functions service account may touch reset codes.
-    match /password_resets/{docId} {
-      allow read, write: if false;
-    }
   }
 }

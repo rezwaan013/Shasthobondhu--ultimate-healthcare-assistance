@@ -32,7 +32,7 @@ app/src/main/java/com/shasthobondhu/app/
 ├── LabComponentsActivity.java     # second activity + Android/Firebase live demos
 ├── data/
 │   ├── local/                     # Room: AppDatabase, entities, dao
-│   ├── remote/                    # FirebaseService, PasswordResetApi, FCM service, DTOs
+│   ├── remote/                    # FirebaseService, public health API, FCM service, DTOs
 │   └── repository/                # Donor, Request, Hospital, Medicine, PasswordReset
 ├── di/                            # DatabaseModule, NetworkModule (Hilt)
 ├── ui/
@@ -79,63 +79,17 @@ permission error.
 
 ---
 
-## Forgot password (6-digit code by Gmail)
+## Forgot password
 
-The screen is at **Login → Forgot password?** and runs in three steps:
+The screen at **Login → Forgot password?** uses Firebase Authentication's hosted,
+expiring reset link:
 
 1. Enter the account email.
-2. Receive a **6-digit code** (valid 10 minutes, max 5 attempts).
-3. Enter the code + a new password.
+2. Firebase sends a secure password-reset email.
+3. Open the link, choose a new password, and return to the app to sign in.
 
-Because Firebase's client SDK cannot change another user's password, the code is
-issued and verified by a small trusted backend. A ready-to-deploy implementation
-lives in `functions/index.js` (Node 20, Firebase Admin + Nodemailer over Gmail SMTP).
-
-### 1. Configure Gmail
-
-Create a Google **App Password** (<https://myaccount.google.com/apppasswords>;
-requires 2-Step Verification):
-
-```bash
-firebase functions:config:set \
-  gmail.user="youraccount@gmail.com" \
-  gmail.app_password="your-16-char-app-password"
-```
-
-### 2. Deploy
-
-```bash
-cd functions && npm install && cd ..
-firebase deploy --only functions
-```
-
-Functions are deployed to `asia-south1`. Your endpoint base URL is:
-
-```
-https://asia-south1-<project-id>.cloudfunctions.net/
-```
-
-### 3. Point the app at it
-
-Add this line to `gradle.properties` (or pass `-PSHASSTHO_RESET_URL=...`):
-
-```properties
-SHASSTHO_RESET_URL=https://asia-south1-<project-id>.cloudfunctions.net/
-```
-
-Rebuild. The app now calls `POST /sendCode` and `POST /resetPassword`, and the
-6-digit code arrives in the user's Gmail inbox.
-
-### Demo mode (no backend configured)
-
-If `SHASSTHO_RESET_URL` is empty the app still runs the full UI:
-
-* the code is generated locally and displayed on the screen (and in Logcat),
-* after the code verifies, the app calls Firebase's `sendPasswordResetEmail`
-  so you receive a real, secure reset link.
-
-**Send a secure reset link instead** on the first step does exactly that at any time.
-Nothing secret is stored in the app: Gmail credentials live only in the Cloud Function.
+This requires no custom server, Gmail credential, Cloud Function, billing plan, SHA
+fingerprint, or app secret. Firebase handles token generation, expiration and password update.
 
 ---
 

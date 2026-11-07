@@ -52,31 +52,14 @@
 
     <!-- Forgot password -->
     <string name="forgot_title">পাসওয়ার্ড রিসেট</string>
-    <string name="forgot_subtitle">আপনার জিমেইল ঠিকানায় ৬ ডিজিটের যাচাই কোড পাঠানো হবে।</string>
+    <string name="forgot_subtitle">অ্যাকাউন্টের ইমেইল দিন। Firebase একটি নিরাপদ ও মেয়াদযুক্ত রিসেট লিংক পাঠাবে।</string>
     <string name="forgot_email_step">আপনার অ্যাকাউন্টের ইমেইল</string>
-    <string name="send_reset_code">৬ ডিজিটের কোড পাঠান</string>
-    <string name="send_reset_link">পরিবর্তে নিরাপদ রিসেট লিংক পাঠান</string>
-    <string name="reset_code_step">কোড এবং নতুন পাসওয়ার্ড দিন</string>
-    <string name="hint_verification_code">ইমেইলে পাওয়া ৬ ডিজিটের কোড</string>
-    <string name="hint_new_password">নতুন পাসওয়ার্ড</string>
-    <string name="hint_confirm_password">নতুন পাসওয়ার্ড নিশ্চিত করুন</string>
-    <string name="action_reset_password">পাসওয়ার্ড রিসেট করুন</string>
-    <string name="resend_code">আবার কোড পাঠান</string>
-    <string name="resend_in">%1$d সেকেন্ড পরে আবার পাঠান</string>
-    <string name="reset_success_title">পাসওয়ার্ড পরিবর্তিত হয়েছে</string>
+    <string name="send_reset_link">পাসওয়ার্ড রিসেট ইমেইল পাঠান</string>
     <string name="reset_link_sent_title">রিসেট লিংক পাঠানো হয়েছে</string>
-    <string name="reset_success_message">আপনার পাসওয়ার্ড পরিবর্তন করা হয়েছে। এখন নতুন পাসওয়ার্ড দিয়ে লগইন করুন।</string>
     <string name="action_back_to_login">লগইনে ফিরে যান</string>
-    <string name="code_sent_message">%1$s ঠিকানায় পাঠানো ৬ ডিজিটের কোড দিন</string>
     <string name="link_sent_message">অ্যাকাউন্ট থাকলে %1$s ঠিকানায় একটি নিরাপদ লিংক পাঠানো হয়েছে।</string>
-    <string name="demo_code_label">ডেমো মোড — ইমেইল ব্যাকএন্ড কনফিগার করা নেই, তাই কোডটি এখানে দেখানো হচ্ছে:</string>
-    <string name="demo_code_value">%1$s\n%2$s</string>
     <string name="err_invalid_email">সঠিক ইমেইল ঠিকানা দিন</string>
     <string name="err_invalid_password">পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে এবং একটি অক্ষর ও একটি সংখ্যা থাকতে হবে</string>
-    <string name="err_password_mismatch">পাসওয়ার্ড মিলছে না</string>
-    <string name="err_invalid_code">৬ ডিজিটের কোড দিন</string>
-    <string name="err_wrong_code">ভুল বা মেয়াদোত্তীর্ণ কোড। আবার চেষ্টা করুন।</string>
-    <string name="err_too_many_attempts">অনেকবার ভুল হয়েছে। নতুন কোড নিন।</string>
 
     <!-- Home -->
     <string name="home_greeting">আপনার স্বাস্থ্য, এক ট্যাপ দূরে</string>

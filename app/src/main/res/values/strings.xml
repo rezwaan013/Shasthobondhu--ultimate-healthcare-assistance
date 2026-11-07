@@ -52,31 +52,14 @@
 
     <!-- Forgot password -->
     <string name="forgot_title">Reset password</string>
-    <string name="forgot_subtitle">We will email a 6-digit verification code to your Gmail address.</string>
+    <string name="forgot_subtitle">Enter your account email and Firebase will send a secure, expiring reset link.</string>
     <string name="forgot_email_step">Your account email</string>
-    <string name="send_reset_code">Send 6-digit code</string>
-    <string name="send_reset_link">Send a secure reset link instead</string>
-    <string name="reset_code_step">Enter the code and your new password</string>
-    <string name="hint_verification_code">6-digit code from your email</string>
-    <string name="hint_new_password">New password</string>
-    <string name="hint_confirm_password">Confirm new password</string>
-    <string name="action_reset_password">Reset password</string>
-    <string name="resend_code">Resend code</string>
-    <string name="resend_in">Resend in %1$d s</string>
-    <string name="reset_success_title">Password updated</string>
+    <string name="send_reset_link">Send password reset email</string>
     <string name="reset_link_sent_title">Reset link sent</string>
-    <string name="reset_success_message">Your password has been changed. You can now sign in with your new password.</string>
     <string name="action_back_to_login">Back to login</string>
-    <string name="code_sent_message">Enter the 6-digit code we sent to %1$s</string>
     <string name="link_sent_message">If an account exists for %1$s, a secure reset link is on its way.</string>
-    <string name="demo_code_label">Demo mode — the email backend is not configured, so your code is shown here:</string>
-    <string name="demo_code_value">%1$s\n%2$s</string>
     <string name="err_invalid_email">Enter a valid email address</string>
     <string name="err_invalid_password">Password must be at least 8 characters and include a letter and a number</string>
-    <string name="err_password_mismatch">Passwords do not match</string>
-    <string name="err_invalid_code">Enter the 6-digit code</string>
-    <string name="err_wrong_code">Incorrect or expired code. Please try again.</string>
-    <string name="err_too_many_attempts">Too many incorrect attempts. Request a new code.</string>
 
     <!-- Home -->
     <string name="home_greeting">Your health, one tap away</string>

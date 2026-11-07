@@ -17,12 +17,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Base URL of the password-reset backend (see functions/index.js).
-        // Leave empty to use demo mode: the 6-digit code is generated locally and shown on screen.
-        // Override per machine with:  -PSHASSTHO_RESET_URL=https://your-host/  (or in gradle.properties)
-        def resetBaseUrl = project.findProperty("SHASSTHO_RESET_URL") ?: ""
-        buildConfigField "String", "PASSWORD_RESET_BASE_URL", "\"${resetBaseUrl}\""
-
         // Override this if Firebase Console creates the database in another region.
         def realtimeDatabaseUrl = project.findProperty("FIREBASE_DATABASE_URL")
                 ?: "https://shasthobondhu-d5bdf-default-rtdb.asia-southeast1.firebasedatabase.app/"
